@@ -1,0 +1,4 @@
+remove the unneeded network stuff
+make the service start correctly
+mount the external directory
+daemon mode

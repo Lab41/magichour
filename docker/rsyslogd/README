@@ -1,0 +1,15 @@
+if you need to fight the openstack
+docker ps
+docker inspect <docker container id> | grep IPAddress
+iptables -t nat -A DOCKER -p upd --dport 514 -j DNAT --to-destination openStackIP:514
+
+other docker nice:
+newgrp docker
+
+docker build -f ./Dockerfile -t ubuntu:15.10 .
+docker run -i -t ubuntu:15.10 /bin/bash
+
+docker rmi $(docker images -a | cut  -b40-52 | grep -v ID)
+docker rm -v $(docker ps -a -q -f status=exited)
+
+
