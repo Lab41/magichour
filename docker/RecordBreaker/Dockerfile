@@ -1,6 +1,6 @@
 FROM ubuntu:15.10
 
-run MAINTAINER dgrossman
+MAINTAINER dgrossman
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -32,5 +32,5 @@ RUN apt-get update && \
   mvn package 
 
 #booboo bandaid for running the software with the correct classpath
-ADD ./learnstrucutre /root/RecordBreaker/bin/learnstructure
+ADD ./learnstrucutre /root/work/RecordBreaker/bin/learnstructure
 
