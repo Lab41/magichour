@@ -1,0 +1,281 @@
+#!/usr/bin/env /bin/bash
+
+##
+# This script runs core learnstructure commands.  It sets up the jar files, paths, etc.
+#
+#
+function usage {
+  echo "usage: learnstructure command [args...]"
+  echo "Commands include: "
+  echo " <learn>             Learn the schema for a given datafile"
+  echo " <analyzefile>       Analyze a file, using schema-learning if needed."
+  ecoo " <analyzefs>         Analyze a directory (or more) of files."
+  echo " <fisheye>           Start the FishEye server."
+  exit -1
+}
+
+CMDPATH=`dirname $0`
+# name of path
+CMDPATH=`dirname $CMDPATH`
+
+LEARNSTRUCTURE=$CMDPATH/bin/learnstructure
+
+CMD="$1"
+if [ -z "$CMD" ]; then
+    usage
+fi
+
+cygwin=false
+pathsep=":"
+case "`uname`" in
+    CYGWIN*)
+        cygwin=true
+        pathsep=";"
+        ;;
+esac
+
+function append_jars_onto_classpath() {
+    local JARS
+    JARS=`find . -name \*.jar -follow 2> /dev/null || true`
+    for i in $JARS; do
+        #echo $i
+        if [ -n "$CLASSPATH" ]; then
+            CLASSPATH+=${pathsep}${i}
+        else
+            CLASSPATH=${i}
+        fi
+    done
+}
+
+# name of script
+BINPATH=`dirname $0`
+# name of path
+CMDPATH=`dirname $BINPATH`
+
+if [ -f "${BINPATH}/schemadict-env.sh" ]; then
+    source "$BINPATH/schemadict-env.sh"
+fi
+
+if [ -z "RECORDBREAKER_HOME" ]; then
+    export RECORDBREAKER_HOME="$CMDPATH"
+fi
+
+if [ "$cygwin" == false ] ; then
+  # unix and "unix-like" setup
+  # pick user override, or check for dev env, or check for install
+  # conf dir first in the class path in order to ensure we get flume log4j.properties
+  CLASSPATH=""
+
+  if [ -n "RECORDBREAKER_CLASSPATH" ]; then
+      CLASSPATH+=":${RECORDBREAKER_CLASSPATH}"
+  fi
+
+  JOPTS+="-Djava.library.path=$CMDPATH/target/test:$CMDPATH/target"
+  UOPTS+="-Djava.security.krb5.realm=OX.AC.UK -Djava.security.krb5.kdc=kdc0.ox.ac.uk:kdc1.ox.ac.uk"
+
+  append_jars_onto_classpath "$CMDPATH/target/lib"
+  append_jars_onto_classpath "$CMDPATH/target"
+
+  CLASSPATH+=":$JAVA_HOME/lib/tools.jar"
+  CLASSPATH+=":$CMDPATH/target/test"
+  CLASSPATH+=":$CMDPATH/target/classes"
+  CLASSPATH+=":$CMDPATH/target/classes/web"
+  CLASSPATH+=":$CMDPATH/target/classes/web/fisheye"  
+  CLASSPATH+=":$CMDPATH/conf"  
+
+  append_jars_onto_classpath "${CMDPATH}/target"
+  append_jars_onto_classpath "${CMDPATH}/target/test"
+  append_jars_onto_classpath "${CMDPATH}/target/dependency"
+  append_jars_onto_classpath "${RECORDBREAKER_HOME}"
+else
+  # windows with cygwin
+  JOPTS+="-Djava.library.path=`cygpath -d $CMDPATH/lib` "
+
+  CLASSPATH="$JAVA_HOME/lib/tools.jar"
+
+  append_jars_onto_classpath "$CMDPATH/lib"
+  append_jars_onto_classpath "$CMDPATH/libtest"
+
+  if [ "$FLUME_DEVMODE" == true ] ; then
+    # allow Jetty to compile servlets in dev mode
+    append_jars_onto_classpath "$CMDPATH/libbuild"
+  fi
+
+fi
+
+export CLASSPATH
+
+shift
+
+if [ "$CMD" = "-h" ] ; then
+  usage
+elif [ "$CMD" = "learn" ] ; then
+  exec java $JOPTS $UOPTS -classpath "$CLASSPATH" com.cloudera.recordbreaker.learnstructure.LearnStructure "$@"
+elif [ "$CMD" = "analyzefile" ] ; then
+  exec java $JOPTS $UOPTS -classpath "$CLASSPATH" com.cloudera.recordbreaker.analyzer.FormatAnalyzer "$@"
+elif [ "$CMD" = "analyzefs" ] ; then
+  exec java $JOPTS $UOPTS -classpath "$CLASSPATH" com.cloudera.recordbreaker.analyzer.FSAnalyzer "$@"
+elif [ "$CMD" = "fisheye" ] ; then
+  exec java $JOPTS $UOPTS -classpath "$CLASSPATH" com.cloudera.recordbreaker.fisheye.FishEye "$@"
+elif [ "$CMD" = "class" ]; then
+  # Just do a java class with the environment setup
+  exec java $JOPTS $UOPTS -classpath "$CLASSPATH" "$@"
+elif [ "$CMD" = "classpath" ];  then
+  echo $CLASSPATH
+  echo "--"
+  echo $JOPTS
+  echo "--"
+  echo $UOPTS
+else
+  usage
+fi
+
+root@1e57247115f2:~/work/RecordBreaker/bin# ls /root/.m2
+repository
+root@1e57247115f2:~/work/RecordBreaker/bin# ls /root/.m2/repository/
+antlr             classworlds        commons-cli          commons-configuration  commons-digester    commons-io       commons-net   io    javax       junit   net  stax
+asm               com                commons-codec        commons-daemon         commons-el          commons-lang     commons-pool  it    javolution  log4j   org  tomcat
+avalon-framework  commons-beanutils  commons-collections  commons-dbcp           commons-httpclient  commons-logging  doxia         jars  jline       logkit  oro  xmlenc
+root@1e57247115f2:~/work/RecordBreaker/bin# ls
+learnstructure  schemadict
+root@1e57247115f2:~/work/RecordBreaker/bin# cd .. 
+root@1e57247115f2:~/work/RecordBreaker# ls -la jars
+lrwxrwxrwx 1 root root 21 Nov 13 19:24 jars -> /root/.m2/repository/
+root@1e57247115f2:~/work/RecordBreaker# ls
+LICENSE.txt  NOTICE.txt  README.md  bin  jars  outDir  pom.xml  src  target
+root@1e57247115f2:~/work/RecordBreaker# cd bin
+root@1e57247115f2:~/work/RecordBreaker/bin# ls
+learnstructure  schemadict
+root@1e57247115f2:~/work/RecordBreaker/bin# cat learnstructure 
+#!/usr/bin/env /bin/bash
+
+##
+# This script runs core learnstructure commands.  It sets up the jar files, paths, etc.
+#
+#
+function usage {
+  echo "usage: learnstructure command [args...]"
+  echo "Commands include: "
+  echo " <learn>             Learn the schema for a given datafile"
+  echo " <analyzefile>       Analyze a file, using schema-learning if needed."
+  echo " <analyzefs>         Analyze a directory (or more) of files."
+  echo " <fisheye>           Start the FishEye server."
+  exit -1
+}
+
+CMDPATH=`dirname $0`
+# name of path
+CMDPATH=`dirname $CMDPATH`
+
+LEARNSTRUCTURE=$CMDPATH/bin/learnstructure
+
+CMD="$1"
+if [ -z "$CMD" ]; then
+    usage
+fi
+
+cygwin=false
+pathsep=":"
+case "`uname`" in
+    CYGWIN*)
+        cygwin=true
+        pathsep=";"
+        ;;
+esac
+
+function append_jars_onto_classpath() {
+    echo "appending local jars"
+    local JARS
+    JARS=`find . -name \*.jar -follow 2> /dev/null || true`
+    for i in $JARS; do
+        #echo $i
+        if [ -n "$CLASSPATH" ]; then
+            CLASSPATH+=${pathsep}${i}
+        else
+            CLASSPATH=${i}
+        fi
+    done
+}
+
+# name of script
+BINPATH=`dirname $0`
+# name of path
+CMDPATH=`dirname $BINPATH`
+
+if [ -f "${BINPATH}/schemadict-env.sh" ]; then
+    source "$BINPATH/schemadict-env.sh"
+fi
+
+if [ -z "RECORDBREAKER_HOME" ]; then
+    export RECORDBREAKER_HOME="$CMDPATH"
+fi
+
+if [ "$cygwin" == false ] ; then
+  # unix and "unix-like" setup
+  # pick user override, or check for dev env, or check for install
+  # conf dir first in the class path in order to ensure we get flume log4j.properties
+  CLASSPATH=""
+
+  if [ -n "RECORDBREAKER_CLASSPATH" ]; then
+      CLASSPATH+=":${RECORDBREAKER_CLASSPATH}"
+  fi
+
+  JOPTS+="-Djava.library.path=$CMDPATH/target/test:$CMDPATH/target"
+  UOPTS+="-Djava.security.krb5.realm=OX.AC.UK -Djava.security.krb5.kdc=kdc0.ox.ac.uk:kdc1.ox.ac.uk"
+
+  append_jars_onto_classpath "$CMDPATH/target/lib"
+  append_jars_onto_classpath "$CMDPATH/target"
+
+  CLASSPATH+=":$JAVA_HOME/lib/tools.jar"
+  CLASSPATH+=":$CMDPATH/target/test"
+  CLASSPATH+=":$CMDPATH/target/classes"
+  CLASSPATH+=":$CMDPATH/target/classes/web"
+  CLASSPATH+=":$CMDPATH/target/classes/web/fisheye"  
+  CLASSPATH+=":$CMDPATH/conf"  
+
+  append_jars_onto_classpath "${CMDPATH}/target"
+  append_jars_onto_classpath "${CMDPATH}/target/test"
+  append_jars_onto_classpath "${CMDPATH}/target/dependency"
+  append_jars_onto_classpath "${RECORDBREAKER_HOME}"
+else
+  # windows with cygwin
+  JOPTS+="-Djava.library.path=`cygpath -d $CMDPATH/lib` "
+
+  CLASSPATH="$JAVA_HOME/lib/tools.jar"
+
+  append_jars_onto_classpath "$CMDPATH/lib"
+  append_jars_onto_classpath "$CMDPATH/libtest"
+
+  if [ "$FLUME_DEVMODE" == true ] ; then
+    # allow Jetty to compile servlets in dev mode
+    append_jars_onto_classpath "$CMDPATH/libbuild"
+  fi
+
+fi
+
+export CLASSPATH
+
+shift
+
+if [ "$CMD" = "-h" ] ; then
+  usage
+elif [ "$CMD" = "learn" ] ; then
+  exec java $JOPTS $UOPTS -classpath "$CLASSPATH" com.cloudera.recordbreaker.learnstructure.LearnStructure "$@"
+elif [ "$CMD" = "analyzefile" ] ; then
+  exec java $JOPTS $UOPTS -classpath "$CLASSPATH" com.cloudera.recordbreaker.analyzer.FormatAnalyzer "$@"
+elif [ "$CMD" = "analyzefs" ] ; then
+  exec java $JOPTS $UOPTS -classpath "$CLASSPATH" com.cloudera.recordbreaker.analyzer.FSAnalyzer "$@"
+elif [ "$CMD" = "fisheye" ] ; then
+  exec java $JOPTS $UOPTS -classpath "$CLASSPATH" com.cloudera.recordbreaker.fisheye.FishEye "$@"
+elif [ "$CMD" = "class" ]; then
+  # Just do a java class with the environment setup
+  exec java $JOPTS $UOPTS -classpath "$CLASSPATH" "$@"
+elif [ "$CMD" = "classpath" ];  then
+  echo $CLASSPATH
+  echo "--"
+  echo $JOPTS
+  echo "--"
+  echo $UOPTS
+else
+  usage
+fi
