@@ -1,4 +1,4 @@
-FROM ubuntu:15.10
+FROM phusion/baseimage:latest
 
 MAINTAINER dgrossman
 
@@ -28,4 +28,6 @@ RUN apt-get install -yq oracle-java6-installer oracle-java6-set-default && \
 
 #booboo bandaid for running the software with the correct classpath
 ADD ./learnstructure /root/work/RecordBreaker/bin/learnstructure
+
+RUN chmod 755 /root/work/RecordBreaker/bin/learnstructure
 
