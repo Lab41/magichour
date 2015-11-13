@@ -9,7 +9,7 @@ function usage {
   echo "Commands include: "
   echo " <learn>             Learn the schema for a given datafile"
   echo " <analyzefile>       Analyze a file, using schema-learning if needed."
-  ecoo " <analyzefs>         Analyze a directory (or more) of files."
+  echo " <analyzefs>         Analyze a directory (or more) of files."
   echo " <fisheye>           Start the FishEye server."
   exit -1
 }
