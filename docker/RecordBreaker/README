@@ -1,0 +1,4 @@
+To perform the RecordBreaker processing
+
+  cd /root/RecordBreaker
+	./bin/learnstructure <inputFile> <outputDirectory>
