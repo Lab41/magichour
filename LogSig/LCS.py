@@ -1,3 +1,8 @@
+import collections
+from itertools import permutations
+import hashlib
+
+
 # http://rosettacode.org/wiki/Longest_common_subsequence#Dynamic_Programming_7
 
 
@@ -34,13 +39,68 @@ def match(X, S):
     return 2 * LCS(X, S) - len(S)
 
 
-def crazyFunction(D):
+def potentialIncrease(D):
 
     # TODO fill in potential loss funciton
     return 4
 
 
+def makeHash(s):
+    m = hashlib.md5()
+    m.update(s)
+    return m.hexdigest()
+
+
+def getWeight(C):
+
+    retval = 0
+    for r, count in C:
+        retval = retval + count
+    return retval
+
+
+def argMaxPhiSimple(C, X, G):
+    # calculate the potential of X moving from cluster i to cluster j
+    # using the simplified form *sum(r e R(X), p(r,Cj)^2 -p(r,Ci)^2)
+    # using the cheat sum(p(r,Cdest))
+    numGroups = len(C)
+    retScore = 0.0
+    retval = 0.0
+
+    # make the tuples
+    Xr = collections.Counter(list(permutations(X.rstrip().split(), 2)))
+
+    # see which group X should be in to maximize
+    currentGroup = G[makeHash(X)]
+    for nextGroup in range(numGroups):
+        currentScore = 0.0
+
+        # dont consider transition to same group
+        if nextGroup == currentGroup:
+            continue
+
+        sum = 0.0
+        for r in Xr:
+            sum = sum + C[nextGroup].get(r)
+        # TODO make sure this is the correct way to calculate
+        sum = sum / getWeight(C[nextGroup])
+
+    # keep tabs of who is winning
+    if retScore < currentScore:
+        retScore = currentScore
+        retval = currentGroup
+
+    return retval
+
+
 def randomSeeds(D, k):
+    C = [set() for _ in range(k)]
+    counter = 0
+    for d in D:
+        counter = (counter + 1) % k
+        # place log lines into sets
+        C[counter].add(d)
+    return C
 
     # TODO fill in the partition randomization funciton
     return dict()
@@ -52,10 +112,10 @@ def union(a, b):
     return a
 
 
-def changePartition(C, G, Xj, i, jStar):
+def changePartition(C, Xj, G, i, jStar):
 
     # TODO fill in the change partition function
-    G[Xj] = jStar
+    G[makeHash(Xj)] = jStar
     C[i].remove(Xj)
     C[jStar].append(Xj)
 
@@ -66,22 +126,23 @@ def changePartition(C, G, Xj, i, jStar):
 def logSig_localSearch(D, k):
 
     C = randomSeeds(D, k)
-    CPrime = 0
+    CLast = 0
     # Create a map G to store messages group index
     G = dict()
 
     for i, Ci in enumerate(C):
         for Xj in Ci:
-            G[Xj] = i
+            G[makeHash(Xj)] = i
 
-    while C != CPrime:
-        CPrime = C
+# TODO should this be an energy measure instead of set?
+    while C != CLast:
+        CLast = C
         for Xj in D:
             i = G[Xj]
-            jStar = crazyFunction(D)
+            jStar = potentialIncrease(D, C, Xj)
             if i != jStar:
-                changePartition(C, G, Xj, i, jStar)
-#           endif
-#       endfor
-#   end while
+                changePartition(C, Xj, G, i, jStar)
+            # endif
+        # endfor
+    # end while
     return C
