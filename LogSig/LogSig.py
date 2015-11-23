@@ -3,6 +3,7 @@ from itertools import permutations
 import hashlib
 
 
+# make hash of a string
 def makeHash(s):
 
     m = hashlib.md5()
@@ -10,7 +11,8 @@ def makeHash(s):
     return m.hexdigest()
 
 
-def getWeight(C):
+# calculate the magnitude of a partition
+def getMagnitude(C):
 
     retval = 0
     for r, count in C:
@@ -18,10 +20,10 @@ def getWeight(C):
     return retval
 
 
+# calculate the potential of X moving from cluster i to cluster j
+# using the simplified form *sum(r e R(X), p(r,Cj)^2 -p(r,Ci)^2)
+# using the cheat sum(p(r,Cdest))
 def argMaxPhiSimple(C, X, G):
-    # calculate the potential of X moving from cluster i to cluster j
-    # using the simplified form *sum(r e R(X), p(r,Cj)^2 -p(r,Ci)^2)
-    # using the cheat sum(p(r,Cdest))
 
     numGroups = len(C)
 
@@ -45,7 +47,7 @@ def argMaxPhiSimple(C, X, G):
             currentScore = currentScore + C[nextGroup].get(r)
 
         # TODO make sure this is the correct way to calculate
-        currentScore = currentScore / getWeight(C[nextGroup])
+        currentScore = currentScore / getMagnitude(C[nextGroup])
 
     # keep tabs of who is winning
     if retScore < currentScore:
@@ -54,12 +56,11 @@ def argMaxPhiSimple(C, X, G):
 
     return retval
 
+
 # store the data histograms
 # in each parition
-
-
+# g
 def randomSeeds(D, k):
-    # g
 
     C = [dict() for _ in range(k)]
     partition = 0
@@ -76,9 +77,8 @@ def randomSeeds(D, k):
     return C
 
 
+# move X from C[i] to C[j]
 def changePartition(C, X, G, i, j):
-
-    # move X from C[i] to C[j]
 
     # TODO would a binary version of this be sufficient?
 
@@ -97,6 +97,8 @@ def changePartition(C, X, G, i, j):
         C[j][r] = C[j][r] + count
 
 
+# comare two lists of dictionaryies for equality
+# dictionaries assumed to be the same length
 def listDictEqual(C, CLast):
     for i, s in enumerate(C):
         if s != CLast[i]:
