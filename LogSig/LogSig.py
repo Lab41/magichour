@@ -1,11 +1,9 @@
-import collections
+from collections import Counter
 from itertools import permutations
 import hashlib
 
 
 # http://rosettacode.org/wiki/Longest_common_subsequence#Dynamic_Programming_7
-
-
 def LCS(X, S):
 
     lengths = [[0 for j in range(len(S)+1)] for i in range(len(X)+1)]
@@ -39,12 +37,6 @@ def match(X, S):
     return 2 * LCS(X, S) - len(S)
 
 
-def potentialIncrease(D):
-
-    # TODO fill in potential loss funciton
-    return 4
-
-
 def makeHash(s):
     m = hashlib.md5()
     m.update(s)
@@ -68,7 +60,7 @@ def argMaxPhiSimple(C, X, G):
     retval = 0.0
 
     # make the tuples
-    Xr = collections.Counter(list(permutations(X.rstrip().split(), 2)))
+    Xr = Counter(list(permutations(X.rstrip().split(), 2)))
 
     # see which group X should be in to maximize
     currentGroup = G[makeHash(X)]
@@ -106,18 +98,24 @@ def randomSeeds(D, k):
     return dict()
 
 
-def union(a, b):
+def changePartition(C, X, G, i, jStar):
 
-    # TODO fillk in the partition union function
-    return a
+    G[makeHash(X)] = jStar
+    Xr = Counter(list(permutations(X.rstrip().split(), 2)))
+
+    for r, count in Xr:
+        C[i][r] = C[i][r] - count
+        if r not in C[jStar]:
+            C[jStar][r] = 0
+
+        C[jStar][r] = C[jStar][r] + count
 
 
-def changePartition(C, Xj, G, i, jStar):
-
-    # TODO fill in the change partition function
-    G[makeHash(Xj)] = jStar
-    C[i].remove(Xj)
-    C[jStar].append(Xj)
+def listSetEqual(C, Clast):
+    for i, s in enumerate(C):
+        if s != Clast[i]:
+            return False
+    return True
 
 
 # D : log message set
@@ -126,20 +124,28 @@ def changePartition(C, Xj, G, i, jStar):
 def logSig_localSearch(D, k):
 
     C = randomSeeds(D, k)
-    CLast = 0
+    CLast = [set() for _ in range(k)]
+
     # Create a map G to store messages group index
     G = dict()
 
-    for i, Ci in enumerate(C):
-        for Xj in Ci:
-            G[makeHash(Xj)] = i
+    # place each logline into a set
+    # TODO see if this would be better to conserve memory
+    # by making this a k way lookup
 
-# TODO should this be an energy measure instead of set?
-    while C != CLast:
-        CLast = C
+    for i, Ci in enumerate(C):
+        for X in Ci:
+            G[makeHash(X)] = i
+
+# TODO should this be an energy measure instead of dict?
+    while not listSetEqual(C, CLast):
+
+        CLast.deepcopy(C)
+
         for Xj in D:
-            i = G[Xj]
-            jStar = potentialIncrease(D, C, Xj)
+            i = G[makeHash(Xj)]
+            jStar = argMaxPhiSimple(C, X, G)
+
             if i != jStar:
                 changePartition(C, Xj, G, i, jStar)
             # endif
