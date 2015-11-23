@@ -3,7 +3,7 @@ from itertools import permutations
 import hashlib
 
 
-# make hash of a string
+# return a md5 string representation of input string
 def makeHash(s):
 
     m = hashlib.md5()
@@ -20,8 +20,7 @@ def getMagnitude(C):
     return retval
 
 
-# calculate the potential of X moving from cluster i to cluster j
-# using the simplified form *sum(r e R(X), p(r,Cj)^2 -p(r,Ci)^2)
+# calculate the best partition for X to be in
 # using the cheat sum(p(r,Cdest))
 def argMaxPhiSimple(C, X, G):
 
@@ -59,7 +58,6 @@ def argMaxPhiSimple(C, X, G):
 
 # store the data histograms
 # in each parition
-# g
 def randomSeeds(D, k):
 
     C = [dict() for _ in range(k)]
@@ -77,7 +75,7 @@ def randomSeeds(D, k):
     return C
 
 
-# move X from C[i] to C[j]
+# move X from partition i to partition j
 def changePartition(C, X, G, i, j):
 
     # TODO would a binary version of this be sufficient?
@@ -97,7 +95,7 @@ def changePartition(C, X, G, i, j):
         C[j][r] = C[j][r] + count
 
 
-# comare two lists of dictionaryies for equality
+# comare two lists of dictionaries for equality
 # dictionaries assumed to be the same length
 def listDictEqual(C, CLast):
     for i, s in enumerate(C):
@@ -108,7 +106,7 @@ def listDictEqual(C, CLast):
 
 # D : log message set
 # k : number of groups to partition
-# returns: C: log message partition
+# returns: C: partitions
 def logSig_localSearch(D, k):
 
     CLast = [dict() for _ in range(k)]
