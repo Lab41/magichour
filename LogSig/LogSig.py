@@ -1,5 +1,5 @@
 from collections import Counter
-from itertools import permutations
+from itertools import combinations
 import hashlib
 import copy
 
@@ -32,7 +32,7 @@ def argMaxPhiSimple(C, X, G):
     retval = currentGroup
 
     # make the tuples
-    Xr = Counter(list(permutations(X.rstrip().split(), 2)))
+    Xr = Counter(list(combinations(X.rstrip().split(), 2)))
 
     for nextGroup in range(numGroups):
         print 'Grouploop'
@@ -68,7 +68,7 @@ def randomSeeds(D, k, G):
         # TODO make sure that is is correct way of
         # assigning groups to a message
         G[makeHash(d)] = partition
-        Xr = Counter(list(permutations(d.strip().split(), 2)))
+        Xr = Counter(list(combinations(d.strip().split(), 2)))
 
         for key, count in Xr.iteritems():
             if key not in C[partition]:
@@ -86,7 +86,7 @@ def changePartition(C, X, G, i, j):
 
     G[makeHash(X)] = j
 
-    Xr = Counter(list(permutations(X.rstrip().split(), 2)))
+    Xr = Counter(list(combinations(X.rstrip().split(), 2)))
 
     for r, count in Xr.iteritems():
         # remove from i
