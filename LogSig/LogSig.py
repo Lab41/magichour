@@ -114,10 +114,10 @@ def listDictEqual(C, CLast):
 # D : log message set
 # k : number of groups to partition
 # returns: C: partitions
-def logSig_localSearch(D, k):
+def logSig_localSearch(D, G, k):
 
     # Create a map G to store messages group index
-    G = dict()
+    # G = dict()
 
     CLast = [dict() for _ in range(k)]
     C = randomSeeds(D, k, G)
@@ -163,13 +163,19 @@ def main():
 
     a = open('testFiles/logFile', 'r')
     D = list()
+    G = dict()
     for l in a.readlines():
         print 'reading', l.strip()
         D.append(l.strip())
-    out = logSig_localSearch(D, 3)
-    for i in out:
-        print ('output %s' % i)
+    out = logSig_localSearch(D, G, 3)
+
+    print 'Partition |    Logline'
+    print '__________+__________________________________________'
+
+    for d in D:
+        print ' %03i      | %s' % (G[makeHash(d)], d)
 
 
 if __name__ == "__main__":
+
     main()
