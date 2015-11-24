@@ -14,7 +14,7 @@ def makeHash(s):
 
 # calculate the magnitude of a partition
 def getMagnitude(C):
-    retval = 0
+    retval = 1
     for key, count in C.iteritems():
         retval = retval + int(count)
     return retval
@@ -92,6 +92,9 @@ def changePartition(C, X, G, i, j):
         # remove from i
         C[i][r] = C[i][r] - count
 
+        if C[i][r] == 0:
+            C[i].pop(r)
+
         # add to j
         if r not in C[j]:
             C[j][r] = 0
@@ -135,8 +138,9 @@ def logSig_localSearch(D, k):
     # instead of dict comp?
     limit = 0
     while not listDictEqual(C, CLast) and limit < 1000:
-        print 'looping'
+        print 'looping', limit
 
+        # TODO is this the best way?
         CLast = copy.deepcopy(C)
 
         for X in D:
@@ -151,6 +155,7 @@ def logSig_localSearch(D, k):
         # endfor
         limit = limit + 1
     # end while
+    print 'iterated %i times' % (limit)
     return C
 
 
