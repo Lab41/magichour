@@ -1,6 +1,7 @@
 from collections import Counter
 from itertools import permutations
 import hashlib
+import copy
 
 
 # return a md5 string representation of input string
@@ -34,23 +35,24 @@ def argMaxPhiSimple(C, X, G):
     Xr = Counter(list(permutations(X.rstrip().split(), 2)))
 
     for nextGroup in range(numGroups):
-
+        print 'Grouploop'
         # dont consider transition to same group
         if nextGroup == currentGroup:
             continue
 
         currentScore = 0.0
-        for r in Xr:
+        for r, count in Xr.iteritems():
             if r in C[nextGroup]:
                 currentScore = currentScore + C[nextGroup].get(r)
 
         # TODO make sure this is the correct way to calculate
         currentScore = currentScore / getMagnitude(C[nextGroup])
+        print 'ng', nextGroup, 'cs', currentScore
 
-    # keep tabs of who is winning
-    if retScore < currentScore:
-        retScore = currentScore
-        retval = currentGroup
+        # keep tabs of who is winning
+        if retScore < currentScore:
+            retScore = currentScore
+            retval = nextGroup
 
     return retval
 
@@ -62,7 +64,6 @@ def randomSeeds(D, k, G):
     C = [dict() for _ in range(k)]
     partition = 0
     for d in D:
-        partition = (partition + 1) % k
         # make histograms of loglines
         # TODO make sure that is is correct way of
         # assigning groups to a message
@@ -74,6 +75,7 @@ def randomSeeds(D, k, G):
                 C[partition][key] = 0
             C[partition][key] = C[partition][key] + int(count)
 
+        partition = (partition + 1) % k
     return C
 
 
@@ -86,7 +88,7 @@ def changePartition(C, X, G, i, j):
 
     Xr = Counter(list(permutations(X.rstrip().split(), 2)))
 
-    for r, count in Xr:
+    for r, count in Xr.iteritems():
         # remove from i
         C[i][r] = C[i][r] - count
 
@@ -117,6 +119,9 @@ def logSig_localSearch(D, k):
     CLast = [dict() for _ in range(k)]
     C = randomSeeds(D, k, G)
 
+    print 'C', len(C)
+    print 'CLast', len(CLast)
+
     # place each logline into a set
     # TODO see if this would be better to conserve memory
     # by making this a k way lookup
@@ -128,20 +133,23 @@ def logSig_localSearch(D, k):
 
     # TODO should this be an energy measure
     # instead of dict comp?
-    while not listDictEqual(C, CLast):
+    limit = 0
+    while not listDictEqual(C, CLast) and limit < 1000:
         print 'looping'
 
-        CLast = C
+        CLast = copy.deepcopy(C)
 
-        for Xj in D:
-            i = G[makeHash(Xj)]
-            jStar = argMaxPhiSimple(C, Xj, G)
+        for X in D:
+            print 'x', X
+            i = G[makeHash(X)]
+            jStar = argMaxPhiSimple(C, X, G)
             print 'i = %i, jStar= %i' % (i, jStar)
             if i != jStar:
-                print 'moving %s from %i to %i' % (Xj, i, jStar)
-                changePartition(C, Xj, G, i, jStar)
+                print 'moving %s from %i to %i' % (X, i, jStar)
+                changePartition(C, X, G, i, jStar)
             # endif
         # endfor
+        limit = limit + 1
     # end while
     return C
 
@@ -149,7 +157,10 @@ def logSig_localSearch(D, k):
 def main():
 
     a = open('testFiles/logFile', 'r')
-    D = a.readlines()
+    D = list()
+    for l in a.readlines():
+        print 'reading', l.strip()
+        D.append(l.strip())
     out = logSig_localSearch(D, 3)
     for i in out:
         print ('output %s' % i)
