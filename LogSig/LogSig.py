@@ -1,4 +1,5 @@
 from collections import Counter
+from functools32 import lru_cache
 from itertools import combinations
 import hashlib
 import copy
@@ -7,11 +8,25 @@ import time
 
 
 # return a md5 string representation of input string
+@lru_cache()
 def makeHash(s):
 
     m = hashlib.md5()
     m.update(s)
     return m.hexdigest()
+
+
+@lru_cache()
+def makeStr(a):
+
+    return '%s%s' % a
+
+
+@lru_cache()
+def makeCounter(X):
+
+    # return Counter(list(combinations(X.rstrip().split(), 2)))
+    return Counter(map(makeStr, list(combinations(X.rstrip().split(), 2))))
 
 
 # calculate the magnitude of a partition
@@ -34,7 +49,8 @@ def argMaxPhiSimple(C, X, G):
     retval = currentGroup
 
     # make the tuples
-    Xr = Counter(list(combinations(X.rstrip().split(), 2)))
+    # Xr = Counter(list(combinations(X.rstrip().split(), 2)))
+    Xr = makeCounter(X)
 
     for nextGroup in range(numGroups):
         # print 'Grouploop'
@@ -44,7 +60,7 @@ def argMaxPhiSimple(C, X, G):
 
         currentScore = 0.0
         # TODO make sure that this is not 0 in a better way
-        denominator = sum(C[nextGroup].values()) + 0.00000000001
+        denominator = sum(C[nextGroup].values())  # + 0.00000000001
 
         numerator = 0.0
         for r, count in Xr.iteritems():
@@ -74,7 +90,8 @@ def randomSeeds(D, k, G):
         # TODO make sure that is is correct way of
         # assigning groups to a message
         G[makeHash(d)] = partition
-        Xr = Counter(list(combinations(d.strip().split(), 2)))
+        # Xr = Counter(list(combinations(d.strip().split(), 2)))
+        Xr = makeCounter(d)
 
         # Do things the Counter way
         C[partition].update(Xr)
@@ -90,16 +107,20 @@ def changePartition(C, X, G, i, j):
     G[makeHash(X)] = j
 
     # TODO memorization
-    Xr = Counter(list(combinations(X.rstrip().split(), 2)))
+    # Xr = Counter(list(combinations(X.rstrip().split(), 2)))
+    Xr = makeCounter(X)
 
     # do things the Counter way
     # C[i] = C[i] - Xr
 
     # fastar than the counter way..
     for key, count in Xr.iteritems():
-        C[i][key] = C[i][key] - count
-        if C[i][key] == 0:
-            C[i].pop(key)
+        if key in C[i]:
+            temp = C[i][key] - count
+            if temp <= 0:
+                C[i].pop(key)
+            else:
+                C[i][key] = temp
 
     C[j].update(Xr)
 
@@ -124,7 +145,7 @@ def logSig_localSearch(D, G, k):
     limit = 0
     # while not listDictEqual(C, CLast) and limit < 1000:
     print "Starting Run\n"
-    while C != CLast and limit < 1000:
+    while C != CLast and limit < 10000:
         start = time.time()
         # TODO is this the best way?
         CLast = copy.deepcopy(C)
@@ -141,7 +162,7 @@ def logSig_localSearch(D, G, k):
         # endfor
         limit = limit + 1
         finish = time.time()
-        print 'looping iteration %i time=%s (sec)' % (limit, finish - start)
+        print 'looping iteration %i time=%3.4f (sec)' % (limit, finish - start)
     # end while
     print '\niterated %i times' % (limit)
     return C
@@ -165,7 +186,7 @@ def main(argv):
     a.close()
 
     print 'Read %i items' % readCount
-    logSig_localSearch(D, G, 3)
+    logSig_localSearch(D, G, int(argv[1]))
 
     print 'Partition |    Logline'
     print '__________+__________________________________________'

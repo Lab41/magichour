@@ -1,5 +1,5 @@
 to profile:
-python -m cProfile ./LogSig.py ../../small.log 
+python -m cProfile ./LogSig.py  3 ../../small.log 
 
 otherwise
-python ./LogSig.py logfiles
+python ./LogSig.py logfile  numBins
