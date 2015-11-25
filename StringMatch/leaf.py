@@ -2,10 +2,11 @@ from __future__ import division
 from collections import defaultdict
 from math import floor, sqrt, log10
 
+from cluster import Cluster
 from utils import *
 
 
-class Leaf:
+class Leaf(object):
     def __init__(self, log_line, index=None, index_val=None):
         self.log_lines = []
         self.log_lines.append(log_line)
@@ -14,8 +15,8 @@ class Leaf:
         self.index = index
         self.index_val = index_val
 
-    def check_for_match(self, line, threshold, skip_count):
-        if cosine_sim(self.template_line, line, skip_count) >= threshold:
+    def check_for_match(self, line_split, threshold, skip_count, verbose=False):
+        if cosine_sim(self.template_line_split, line_split, skip_count) >= threshold:
             #print cosine_sim(self.template_line, line, skip_count)
             #print line
             #print self.template_line
@@ -26,7 +27,8 @@ class Leaf:
                 if self.index_val is None:
                     #print 2
                     return True # Case: The "other" category
-                elif self.template_line_split[skip_count:][self.index_val] == line.split()[skip_count:][self.index_val]:
+                elif len(line_split) > self.index + skip_count and \
+                                self.index_val == line_split[skip_count + self.index]:
                     #print 3
                     return True # Case: Match in the specific leaf
                 else:
@@ -44,14 +46,21 @@ class Leaf:
     def get_num_lines(self):
         return len(self.log_lines)
 
-    def split_leaf(self, skip_count, min_word_pos_entropy, min_percent):
+    def print_template_lines(self, indent):
+        print '--'*indent, self.get_num_lines(), self.index_val#, self.get_template_line()
+
+    def split_leaf(self, min_items_for_split, skip_count, min_word_pos_entropy, min_percent):
         '''
         Split this leaf into multiple leaves
 
         TODO: This function is gross clean it up!
         '''
+
+        if self.get_num_lines() < min_items_for_split:
+            return None
+
         # use line length of first line as a hack for max line length
-        line_length = len(self.log_lines[0].split())
+        line_length = max([len(self.log_lines[i].split()) for i in range(len(self.log_lines))])
         # Build position dependent word counter
         word_counts = [defaultdict(int) for i in range(line_length)]
 
@@ -92,7 +101,10 @@ class Leaf:
         leafs = {}
         for line in self.log_lines:
             line_split = line.split()[skip_count:]
-            split_word = line_split[min_entropy_index]
+            try:
+                split_word = line_split[min_entropy_index]
+            except:
+                split_word = None # Handle the case where the field with the min entropy is at the end of the line
 
             if split_word not in split_words:
                 split_word = None # Handle the other case
@@ -104,6 +116,17 @@ class Leaf:
                 # We are adding this line to an existing cluster
                 leafs[split_word].add_to_leaf(line, None, None) # Threshold and skip count don't matter here?
 
+        # Make sure to add other to avoid trouble later
+        split_word = None
+        if split_word not in leafs:
+            leafs[split_word] = Leaf(line, index=min_entropy_index, index_val=split_word)
+
         print "Splitting Leaf: ", split_words
-        return [leafs[word] for word in leafs]
+        cluster = None
+        for word in leafs:
+            if cluster is None:
+                cluster = Cluster(leafs[word], index=min_entropy_index, index_val=None)
+            else:
+                cluster.add_leaf(leafs[word])
+        return cluster #[leafs[word] for word in leafs]
 
