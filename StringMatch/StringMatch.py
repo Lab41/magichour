@@ -1,6 +1,7 @@
 from __future__ import division
 import sys
 from optparse import OptionParser
+from itertools import islice
 import gzip
 from collections import defaultdict
 from math import floor, sqrt, log10
@@ -41,36 +42,43 @@ def main():
 
     total_lines_read = 0
     time_to_stop = False
+    clusters = []
+    prev_num_clusters = -1
     while total_lines_read < options.num_lines or (options.num_lines == -1 and not time_to_stop):
-        # Read in log files
-        lines = [fIn.readline().strip() for i in range(num_msgs)]
+        print total_lines_read
+        # Read in log lines
+        lines = [line.strip() for line in islice(fIn, num_msgs)]
+        print 'Done Reading'
+
         total_lines_read += len(lines)
         if len(lines) != num_msgs: # We got to the end of the file
+            print 'Stopping', len(lines), num_msgs
             time_to_stop = True
-
-        clusters = []
 
         # Process a set of log lines
         for line in lines:
-            if len(line.split()) > skip_count:
+            line_split = line.split()
+            if len(line_split) > skip_count:
                 has_matched = False
                 for i in range(len(clusters)):
-                    if clusters[i].check_for_match(line, threshold, skip_count):
+                    if clusters[i].check_for_match(line_split, threshold, skip_count):
                         clusters[i].add_to_leaf(line, threshold, skip_count)
                         has_matched = True
 
                 if not has_matched:
                     clusters.append(Cluster(Leaf(line)))    # Create a new cluster
 
-        print "Currently have %d clusters"%len(clusters)
+        print 'Done Processing, starting check for splits '
+        if prev_num_clusters != len(clusters):
+            print "Currently have %d clusters"%len(clusters)
+            prev_num_clusters = len(clusters)
 
         # Split leafs that are too large
         for i in range(len(clusters)):
             if clusters[i].get_num_lines() > MIN_SAMPLES_FOR_SPLIT:
-                clusters[i].split_leaf(MIN_SAMPLES_FOR_SPLIT, skip_count, min_word_pos_entropy=.0001, min_percent=.2)
-                print 'New Cluster Template Lines:'
-                clusters[i].print_template_lines()
-                print '---------'
+                clusters[i].split_leaf(MIN_SAMPLES_FOR_SPLIT, skip_count, min_word_pos_entropy=.0001, min_percent=.1)
+    for cluster in clusters:
+        cluster.print_template_lines(0)
 
 if __name__ == "__main__":
     main()

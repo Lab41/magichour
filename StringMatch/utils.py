@@ -3,8 +3,8 @@ from math import floor, sqrt, log10
 
 # Define our position aware cosine distance function
 def cosine_sim(l1, l2, skip_count = 0):
-    l1 = l1.split()
-    l2 = l2.split()
+    #l1 = l1.split()
+    #l2 = l2.split()
     num_common = 0
     for i in range(skip_count, min(len(l1), len(l2))):
         if l1[i] == l2[i]:
