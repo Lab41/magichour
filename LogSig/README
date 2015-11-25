@@ -1,0 +1,5 @@
+to profile:
+python -m cProfile ./LogSig.py ../../small.log 
+
+otherwise
+python ./LogSig.py logfiles

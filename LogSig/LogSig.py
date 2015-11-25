@@ -2,6 +2,8 @@ from collections import Counter
 from itertools import combinations
 import hashlib
 import copy
+import sys
+import time
 
 
 # return a md5 string representation of input string
@@ -35,20 +37,24 @@ def argMaxPhiSimple(C, X, G):
     Xr = Counter(list(combinations(X.rstrip().split(), 2)))
 
     for nextGroup in range(numGroups):
-        print 'Grouploop'
+        # print 'Grouploop'
         # dont consider transition to same group
         if nextGroup == currentGroup:
             continue
 
         currentScore = 0.0
+        # TODO make sure that this is not 0 in a better way
+        denominator = sum(C[nextGroup].values()) + 0.00000000001
+
+        numerator = 0.0
         for r, count in Xr.iteritems():
             if r in C[nextGroup]:
-                currentScore = currentScore + C[nextGroup].get(r)
+                numerator = numerator + C[nextGroup].get(r)
 
         # TODO make sure this is the correct way to calculate
-        currentScore = currentScore / getMagnitude(C[nextGroup])
-        print 'ng', nextGroup, 'cs', currentScore
+        currentScore = numerator / denominator
 
+        # print 'ng', nextGroup, 'cs', currentScore
         # keep tabs of who is winning
         if retScore < currentScore:
             retScore = currentScore
@@ -61,7 +67,7 @@ def argMaxPhiSimple(C, X, G):
 # in each parition
 def randomSeeds(D, k, G):
 
-    C = [dict() for _ in range(k)]
+    C = [Counter() for _ in range(k)]
     partition = 0
     for d in D:
         # make histograms of loglines
@@ -70,11 +76,8 @@ def randomSeeds(D, k, G):
         G[makeHash(d)] = partition
         Xr = Counter(list(combinations(d.strip().split(), 2)))
 
-        for key, count in Xr.iteritems():
-            if key not in C[partition]:
-                C[partition][key] = 0
-            C[partition][key] = C[partition][key] + int(count)
-
+        # Do things the Counter way
+        C[partition].update(Xr)
         partition = (partition + 1) % k
     return C
 
@@ -86,29 +89,19 @@ def changePartition(C, X, G, i, j):
 
     G[makeHash(X)] = j
 
+    # TODO memorization
     Xr = Counter(list(combinations(X.rstrip().split(), 2)))
 
-    for r, count in Xr.iteritems():
-        # remove from i
-        C[i][r] = C[i][r] - count
+    # do things the Counter way
+    # C[i] = C[i] - Xr
 
-        if C[i][r] == 0:
-            C[i].pop(r)
+    # fastar than the counter way..
+    for key, count in Xr.iteritems():
+        C[i][key] = C[i][key] - count
+        if C[i][key] == 0:
+            C[i].pop(key)
 
-        # add to j
-        if r not in C[j]:
-            C[j][r] = 0
-
-        C[j][r] = C[j][r] + count
-
-
-# comare two lists of dictionaries for equality
-# dictionaries assumed to be the same length
-def listDictEqual(C, CLast):
-    for i, s in enumerate(C):
-        if s != CLast[i]:
-            return False
-    return True
+    C[j].update(Xr)
 
 
 # D : log message set
@@ -119,63 +112,67 @@ def logSig_localSearch(D, G, k):
     # Create a map G to store messages group index
     # G = dict()
 
-    CLast = [dict() for _ in range(k)]
+    CLast = [Counter() for _ in range(k)]
     C = randomSeeds(D, k, G)
 
-    print 'C', len(C)
-    print 'CLast', len(CLast)
-
-    # place each logline into a set
-    # TODO see if this would be better to conserve memory
-    # by making this a k way lookup
-
-    # TODO lookup to see if this always returns the same way
-    # for i, Ci in enumerate(C):
-    #    for X in Ci:
-    #        G[makeHash(X)] = i
+    # print 'C', len(C)
+    # print 'CLast', len(CLast)
 
     # TODO should this be an energy measure
     # instead of dict comp?
-    limit = 0
-    while not listDictEqual(C, CLast) and limit < 1000:
-        print 'looping', limit
 
+    limit = 0
+    # while not listDictEqual(C, CLast) and limit < 1000:
+    print "Starting Run\n"
+    while C != CLast and limit < 1000:
+        start = time.time()
         # TODO is this the best way?
         CLast = copy.deepcopy(C)
 
         for X in D:
-            print 'x', X
+            # print 'x', X
             i = G[makeHash(X)]
             jStar = argMaxPhiSimple(C, X, G)
-            print 'i = %i, jStar= %i' % (i, jStar)
+            # print 'i = %i, jStar= %i' % (i, jStar)
             if i != jStar:
-                print 'moving %s from %i to %i' % (X, i, jStar)
+                # print 'moving %s from %i to %i' % (X, i, jStar)
                 changePartition(C, X, G, i, jStar)
             # endif
         # endfor
         limit = limit + 1
+        finish = time.time()
+        print 'looping iteration %i time=%s (sec)' % (limit, finish - start)
     # end while
-    print 'iterated %i times' % (limit)
+    print '\niterated %i times' % (limit)
     return C
 
 
-def main():
+def main(argv):
 
-    a = open('testFiles/logFile', 'r')
+    # a = open('testFiles/logFile', 'r')
+    print 'Attempting to open %s' % (argv[0])
+    a = open(argv[0], 'r')
     D = list()
     G = dict()
+    readCount = 0
     for l in a.readlines():
-        print 'reading', l.strip()
+        # print 'reading', l.strip()
+        readCount += 1
         D.append(l.strip())
-    out = logSig_localSearch(D, G, 3)
+        if readCount > 1000:
+            break
+
+    a.close()
+
+    print 'Read %i items' % readCount
+    logSig_localSearch(D, G, 3)
 
     print 'Partition |    Logline'
     print '__________+__________________________________________'
-
     for d in D:
         print ' %03i      | %s' % (G[makeHash(d)], d)
 
 
 if __name__ == "__main__":
 
-    main()
+    main(sys.argv[1:])
