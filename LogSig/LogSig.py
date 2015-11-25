@@ -170,6 +170,7 @@ def logSig_localSearch(D, G, k):
 
 def main(argv):
 
+    totalS = time.time()
     # a = open('testFiles/logFile', 'r')
     print 'Attempting to open %s' % (argv[0])
     a = open(argv[0], 'r')
@@ -187,7 +188,9 @@ def main(argv):
 
     print 'Read %i items' % readCount
     logSig_localSearch(D, G, int(argv[1]))
+    totalE = time.time()
 
+    print 'total execution time %s (sec)' % (totalE - totalS)
     print 'Partition |    Logline'
     print '__________+__________________________________________'
     for d in D:
