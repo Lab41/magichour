@@ -4,6 +4,16 @@ from itertools import combinations
 import hashlib
 import sys
 import time
+import signal
+
+
+globalStop = False
+
+
+def signal_handler(signal, frame):
+
+    global globalStop
+    globalStop = True
 
 
 # return a md5 string representation of input string
@@ -34,7 +44,7 @@ def str2Counter(X):
 
 # calculate the best partition for X to be in
 # using the cheat sum(p(r,Cdest))
-# ????
+# GOOD
 # @profile
 def argMaxPhiSimple(C, X, G):
     numGroups = len(C)
@@ -114,7 +124,10 @@ def partitionsNotEqual(C, CNext):
 # D : log message set
 # k : number of groups to partition
 # returns: C: partitions
+# GOOD
 def logSig_localSearch(D, G, k, maxIter):
+
+    global globalStop
 
     GNext = dict()
 
@@ -127,7 +140,7 @@ def logSig_localSearch(D, G, k, maxIter):
     # instead of dict comp?
 
     limit = 0
-    while partitionsNotEqual(C, CNext) and limit < maxIter:
+    while partitionsNotEqual(C, CNext) and (limit < maxIter) and not globalStop:
         start = time.time()
 
         for X in D:
@@ -184,5 +197,6 @@ def main(argv):
 
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, signal_handler)
 
     main(sys.argv[1:])
