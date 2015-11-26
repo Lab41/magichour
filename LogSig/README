@@ -1,5 +1,8 @@
 to profile:
-python -m cProfile ./LogSig.py  3 ../../small.log 
+python -m cProfile ./LogSig.py  ../../small.log 3  1000
 
 otherwise
-python ./LogSig.py logfile  numBins
+python ./LogSig.py logfile  numBins maxIterations
+
+or use decerator @profile
+kernprof -l -v ./LogSig.py logfile bins iterations

@@ -2,12 +2,12 @@ from collections import Counter
 from functools32 import lru_cache
 from itertools import combinations
 import hashlib
-import copy
 import sys
 import time
 
 
 # return a md5 string representation of input string
+# GOOD
 @lru_cache()
 def makeHash(s):
 
@@ -16,163 +16,151 @@ def makeHash(s):
     return m.hexdigest()
 
 
+# make a concatenation of a tuple
+# GOOD
 @lru_cache()
-def makeStr(a):
+def tuple2Str(a):
 
     return '%s%s' % a
 
 
+# make a counter object from a string
+# GOOD
 @lru_cache()
-def makeCounter(X):
+def str2Counter(X):
 
-    # return Counter(list(combinations(X.rstrip().split(), 2)))
-    return Counter(map(makeStr, list(combinations(X.rstrip().split(), 2))))
-
-
-# calculate the magnitude of a partition
-def getMagnitude(C):
-    retval = 1
-    for key, count in C.iteritems():
-        retval = retval + int(count)
-    return retval
+    return Counter(map(tuple2Str, list(combinations(X.rstrip().split(), 2))))
 
 
 # calculate the best partition for X to be in
 # using the cheat sum(p(r,Cdest))
+# ????
+# @profile
 def argMaxPhiSimple(C, X, G):
     numGroups = len(C)
 
     # see which group X should be in to maximize
-    currentGroup = G[makeHash(X)]
+    partition = G[makeHash(X)]
 
     retScore = 0.0
-    retval = currentGroup
+    retval = partition
 
-    # make the tuples
-    # Xr = Counter(list(combinations(X.rstrip().split(), 2)))
-    Xr = makeCounter(X)
+    Xr = str2Counter(X)
 
-    for nextGroup in range(numGroups):
-        # print 'Grouploop'
-        # dont consider transition to same group
-        if nextGroup == currentGroup:
-            continue
+    for partition in range(numGroups):
 
         currentScore = 0.0
-        # TODO make sure that this is not 0 in a better way
-        denominator = sum(C[nextGroup].values())  # + 0.00000000001
-
         numerator = 0.0
-        for r, count in Xr.iteritems():
-            if r in C[nextGroup]:
-                numerator = numerator + C[nextGroup].get(r)
+
+        #
+        # denominator = sum(C[partition].values())
+        denominator = len(C[partition])
+
+        for r in Xr.iterkeys():
+            numerator += C[partition].get(r, 0)
 
         # TODO make sure this is the correct way to calculate
-        currentScore = numerator / denominator
+        currentScore = numerator / (denominator + 0.00000000001)
+        currentScore = currentScore * currentScore
 
-        # print 'ng', nextGroup, 'cs', currentScore
         # keep tabs of who is winning
         if retScore < currentScore:
             retScore = currentScore
-            retval = nextGroup
+            retval = partition
 
     return retval
 
 
 # store the data histograms
 # in each parition
+# GOOD
 def randomSeeds(D, k, G):
 
     C = [Counter() for _ in range(k)]
     partition = 0
     for d in D:
-        # make histograms of loglines
-        # TODO make sure that is is correct way of
+
         # assigning groups to a message
         G[makeHash(d)] = partition
-        # Xr = Counter(list(combinations(d.strip().split(), 2)))
-        Xr = makeCounter(d)
 
         # Do things the Counter way
-        C[partition].update(Xr)
+        C[partition].update(str2Counter(d))
         partition = (partition + 1) % k
+
+    print 'UniqLogLines', len(G)
     return C
 
 
 # move X from partition i to partition j
-def changePartition(C, X, G, i, j):
+# GOOD
+def updatePartition(CNext, X, GNext, i, j):
+
+    GNext[makeHash(X)] = j
 
     # TODO would a binary version of this be sufficient?
+    CNext[j].update(str2Counter(X))
 
-    G[makeHash(X)] = j
 
-    # TODO memorization
-    # Xr = Counter(list(combinations(X.rstrip().split(), 2)))
-    Xr = makeCounter(X)
+# determine if array of dicts are equal
+# GOOD
+def partitionsNotEqual(C, CNext):
 
-    # do things the Counter way
-    # C[i] = C[i] - Xr
-
-    # fastar than the counter way..
-    for key, count in Xr.iteritems():
-        if key in C[i]:
-            temp = C[i][key] - count
-            if temp <= 0:
-                C[i].pop(key)
-            else:
-                C[i][key] = temp
-
-    C[j].update(Xr)
+    for i in range(len(C)):
+        if C[i] != CNext[i]:
+            return True
+    return False
 
 
 # D : log message set
 # k : number of groups to partition
 # returns: C: partitions
-def logSig_localSearch(D, G, k):
+def logSig_localSearch(D, G, k, maxIter):
 
-    # Create a map G to store messages group index
-    # G = dict()
+    GNext = dict()
 
-    CLast = [Counter() for _ in range(k)]
+    CNext = [Counter() for _ in range(k)]
     C = randomSeeds(D, k, G)
 
-    # print 'C', len(C)
-    # print 'CLast', len(CLast)
+    print "Starting Run\n"
 
     # TODO should this be an energy measure
     # instead of dict comp?
 
     limit = 0
-    # while not listDictEqual(C, CLast) and limit < 1000:
-    print "Starting Run\n"
-    while C != CLast and limit < 10000:
+    while partitionsNotEqual(C, CNext) and limit < maxIter:
         start = time.time()
-        # TODO is this the best way?
-        CLast = copy.deepcopy(C)
 
         for X in D:
-            # print 'x', X
             i = G[makeHash(X)]
-            jStar = argMaxPhiSimple(C, X, G)
-            # print 'i = %i, jStar= %i' % (i, jStar)
-            if i != jStar:
-                # print 'moving %s from %i to %i' % (X, i, jStar)
-                changePartition(C, X, G, i, jStar)
+            j = argMaxPhiSimple(C, X, G)
+            updatePartition(CNext, X, GNext, i, j)
             # endif
         # endfor
+
         limit = limit + 1
         finish = time.time()
+
+        # TODO is this the corret thing?
+        C = CNext
+        G = GNext
+
+        CNext = [Counter() for _ in range(k)]
+        GNext = dict()
+
         print 'looping iteration %i time=%3.4f (sec)' % (limit, finish - start)
     # end while
     print '\niterated %i times' % (limit)
     return C
 
 
+# GOOD
 def main(argv):
 
     totalS = time.time()
     # a = open('testFiles/logFile', 'r')
     print 'Attempting to open %s' % (argv[0])
+    print 'k = %i' % int(argv[1])
+    print 'maxIter = %i' % int(argv[2])
     a = open(argv[0], 'r')
     D = list()
     G = dict()
@@ -187,7 +175,7 @@ def main(argv):
     a.close()
 
     print 'Read %i items' % readCount
-    logSig_localSearch(D, G, int(argv[1]))
+    logSig_localSearch(D, G, int(argv[1]), int(argv[2]))
     totalE = time.time()
 
     print 'total execution time %s (sec)' % (totalE - totalS)
