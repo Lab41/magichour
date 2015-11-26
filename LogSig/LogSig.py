@@ -169,8 +169,6 @@ def main(argv):
         # print 'reading', l.strip()
         readCount += 1
         D.append(l.strip())
-        if readCount > 1000:
-            break
 
     a.close()
 
