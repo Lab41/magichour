@@ -185,16 +185,17 @@ def logSig_localSearch(D, G, k, maxIter):
 def main(argv):
 
     totalS = time.time()
-    # a = open('testFiles/logFile', 'r')
+
     print 'Attempting to open %s' % (argv[0])
     print 'k = %i' % int(argv[1])
     print 'maxIter = %i' % int(argv[2])
+
     a = open(argv[0], 'r')
     D = list()
     G = dict()
+
     readCount = 0
     for l in a.readlines():
-        # print 'reading', l.strip()
         readCount += 1
         D.append(l.strip())
 
