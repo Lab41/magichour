@@ -6,10 +6,12 @@ import sys
 import time
 import signal
 
-
+# Signal handler updates GLOBAL to stop processing
 globalStop = False
 
 
+# stop processing if CTRL-C pressed
+# GOOD
 def signal_handler(signal, frame):
 
     global globalStop
@@ -17,7 +19,7 @@ def signal_handler(signal, frame):
 
 
 # return a md5 string representation of input string
-# GOOD
+# TODO lookup faster hashes
 @lru_cache()
 def makeHash(s):
 
@@ -39,14 +41,18 @@ def tuple2Str(a):
 @lru_cache()
 def str2Counter(X):
 
-    return Counter(map(tuple2Str, list(combinations(X.rstrip().split(), 2))))
+    # set chosen to make membership of a tuple instead of count of tuple
+    # Counter is to track the number of DOCUMENTS containing the tuple
+    # not the count of the tuples in a DOCUMENT.
+    return Counter(map(tuple2Str, set(combinations(X.rstrip().split(), 2))))
 
 
 # calculate the best partition for X to be in
 # using the cheat sum(p(r,Cdest))
-# GOOD
+# TODO update with results from email to paper authors
+# TODO (global update, p(r,C) )
 # @profile
-def argMaxPhiSimple(C, X, G):
+def argMaxPhiSimple(C, X, G, denominator):
     numGroups = len(C)
 
     # see which group X should be in to maximize
@@ -62,15 +68,11 @@ def argMaxPhiSimple(C, X, G):
         currentScore = 0.0
         numerator = 0.0
 
-        #
-        # denominator = sum(C[partition].values())
-        denominator = len(C[partition])
-
         for r in Xr.iterkeys():
             numerator += C[partition].get(r, 0)
 
         # TODO make sure this is the correct way to calculate
-        currentScore = numerator / (denominator + 0.00000000001)
+        currentScore = numerator / denominator.get(partition, 0.00000000001)
         currentScore = currentScore * currentScore
 
         # keep tabs of who is winning
@@ -117,7 +119,10 @@ def partitionsNotEqual(C, CNext):
 
     for i in range(len(C)):
         if C[i] != CNext[i]:
+            # print '!=', C[i]
+            # print '!=', CNext[i]
             return True
+    # print '=='
     return False
 
 
@@ -133,36 +138,46 @@ def logSig_localSearch(D, G, k, maxIter):
 
     CNext = [Counter() for _ in range(k)]
     C = randomSeeds(D, k, G)
-
+    denominator = Counter(G.itervalues())
     print "Starting Run\n"
 
     # TODO should this be an energy measure
     # instead of dict comp?
 
     limit = 0
-    while partitionsNotEqual(C, CNext) and (limit < maxIter) and not globalStop:
+    partitionsNotSame = True
+    while partitionsNotSame and (limit < maxIter) and not globalStop:
         start = time.time()
 
         for X in D:
             i = G[makeHash(X)]
-            j = argMaxPhiSimple(C, X, G)
+            j = argMaxPhiSimple(C, X, G, denominator)
             updatePartition(CNext, X, GNext, i, j)
             # endif
         # endfor
 
-        limit = limit + 1
+        limit += 1
         finish = time.time()
+
+        # make sure to stop when partitions stable
+        partitionsNotSame = partitionsNotEqual(C, CNext)
 
         # TODO is this the corret thing?
         C = CNext
-        G = GNext
+
+        # update for passing back
+        G.clear()
+        G.update(GNext)
 
         CNext = [Counter() for _ in range(k)]
         GNext = dict()
 
+        denominator = Counter(G.itervalues())
+
         print 'looping iteration %i time=%3.4f (sec)' % (limit, finish - start)
     # end while
     print '\niterated %i times' % (limit)
+
     return C
 
 
@@ -189,14 +204,20 @@ def main(argv):
     logSig_localSearch(D, G, int(argv[1]), int(argv[2]))
     totalE = time.time()
 
+    partitions = sorted(set(G.itervalues()))
     print 'total execution time %s (sec)' % (totalE - totalS)
     print 'Partition |    Logline'
     print '__________+__________________________________________'
-    for d in D:
-        print ' %03i      | %s' % (G[makeHash(d)], d)
+
+    # print things in partition order at the expense of looping
+    for p in partitions:
+        for d in D:
+            if p == G[makeHash(d)]:
+                print ' %03i      | %s' % (G[makeHash(d)], d)
 
 
 if __name__ == "__main__":
+    # install the signal handler
     signal.signal(signal.SIGINT, signal_handler)
 
     main(sys.argv[1:])
