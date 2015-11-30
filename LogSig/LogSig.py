@@ -205,7 +205,13 @@ def main(argv):
     logSig_localSearch(D, G, int(argv[1]), int(argv[2]))
     totalE = time.time()
 
+    outHist = Counter(G.itervalues())
     partitions = sorted(set(G.itervalues()))
+
+    # print a histogram of partition sizes
+    for p in partitions:
+        print p, outHist[p]
+
     print 'total execution time %s (sec)' % (totalE - totalS)
     print 'Partition |    Logline'
     print '__________+__________________________________________'
