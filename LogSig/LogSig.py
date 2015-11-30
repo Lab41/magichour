@@ -30,6 +30,8 @@ def makeHash(s):
 
 # make a concatenation of a tuple
 # GOOD
+# can make multiple things alias to the same comparison..
+# 'a','aaa','aa','aa','aaa','a' all map to 'aaaa'
 @lru_cache()
 def tuple2Str(a):
 
@@ -71,9 +73,11 @@ def argMaxPhiSimple(C, X, G, denominator):
         for r in Xr.iterkeys():
             numerator += C[partition].get(r, 0)
 
+        currentScore += numerator * numerator
         # TODO make sure this is the correct way to calculate
-        currentScore = numerator / denominator.get(partition, 0.00000000001)
-        currentScore = currentScore * currentScore
+        d = denominator.get(partition, 0.000000000001)
+        d = d*d
+        currentScore = numerator / d
 
         # keep tabs of who is winning
         if retScore < currentScore:
