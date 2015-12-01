@@ -1,0 +1,11 @@
+source originally downloaded from:
+http://users.cis.fiu.edu/~ltang002/logmining.html
+
+check the GROSSMAN comments to see where I butchered things out
+
+
+nodeps:
+mvn package
+
+deps:
+mvn clean compile assembly:single 
