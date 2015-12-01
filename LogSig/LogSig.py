@@ -123,10 +123,7 @@ def partitionsNotEqual(C, CNext):
 
     for i in range(len(C)):
         if C[i] != CNext[i]:
-            # print '!=', C[i]
-            # print '!=', CNext[i]
             return True
-    # print '=='
     return False
 
 
@@ -213,8 +210,9 @@ def main(argv):
     partitions = sorted(set(G.itervalues()))
 
     # print a histogram of partition sizes
+    print 'cluster, number'
     for p in partitions:
-        print p, outHist[p]
+        print '%i, %i' % (p, outHist[p])
 
     print 'total execution time %s (sec)' % (totalE - totalS)
     print 'Partition |    Logline'
