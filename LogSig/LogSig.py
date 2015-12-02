@@ -109,7 +109,7 @@ def randomSeeds(D, k, G):
 
 # move X from partition i to partition j
 # GOOD
-def updatePartition(CNext, X, GNext, i, j):
+def updatePartition(CNext, X, GNext, j):
 
     GNext[makeHash(X)] = j
 
@@ -151,9 +151,8 @@ def logSig_localSearch(D, G, k, maxIter):
         start = time.time()
 
         for X in D:
-            i = G[makeHash(X)]
             j = argMaxPhiSimple(C, X, G, denominator)
-            updatePartition(CNext, X, GNext, i, j)
+            updatePartition(CNext, X, GNext, j)
             # endif
         # endfor
 
