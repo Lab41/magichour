@@ -6,3 +6,9 @@ python ./LogSig.py logfile  numBins maxIterations
 
 or use decerator @profile
 kernprof -l -v ./LogSig.py logfile bins iterations
+
+NOTE: input format should be of form
+date logline
+
+NOTE: output format currently in form
+epochTimestamp,clusterId,logline

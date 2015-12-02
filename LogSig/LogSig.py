@@ -1,69 +1,85 @@
 from collections import Counter
 from functools32 import lru_cache
 from itertools import combinations
+from collections import namedtuple
+import datetime
 import hashlib
 import sys
 import time
 import signal
 
+'''
+name some intermediate data structures
+'''
+LogLine = namedtuple('LogLine', ['ts', 'text'])
+DataRecord = namedtuple('DataRecord', ['line', 'md5hash', 'stats'])
+
 # Signal handler updates GLOBAL to stop processing
 globalStop = False
 
 
-# stop processing if CTRL-C pressed
 # GOOD
 def signal_handler(signal, frame):
+    '''
+         stop processing if CTRL-C pressed
+    '''
 
     global globalStop
     globalStop = True
 
 
-# return a md5 string representation of input string
 # TODO lookup faster hashes
 @lru_cache()
 def makeHash(s):
+    '''
+        make a md5 string rep of an input string
+    '''
 
     m = hashlib.md5()
     m.update(s)
     return m.hexdigest()
 
 
-# make a concatenation of a tuple
 # GOOD
-# can make multiple things alias to the same comparison..
-# 'a','aaa','aa','aa','aaa','a' all map to 'aaaa'
 @lru_cache()
 def tuple2Str(a):
+    '''
+         make a concatenation of a tuple
+         can make multiple things alias to the same comparison..
+         'a','aaa','aa','aa','aaa','a' all map to 'aaaa'
+    '''
 
     return '%s%s' % a
 
 
-# make a counter object from a string
 # GOOD
 @lru_cache()
 def str2Counter(X):
-
-    # set chosen to make membership of a tuple instead of count of tuple
-    # Counter is to track the number of DOCUMENTS containing the tuple
-    # not the count of the tuples in a DOCUMENT.
+    '''
+        make a counter object from a string
+        set chosen to make membership of a tuple instead of count of tuple
+        Counter is to track the number of DOCUMENTS containing the tuple
+        not the count of the tuples in a DOCUMENT.
+    '''
     return Counter(map(tuple2Str, set(combinations(X.rstrip().split(), 2))))
 
 
-# calculate the best partition for X to be in
-# using the cheat sum(p(r,Cdest))
 # TODO update with results from email to paper authors
-# TODO (global update, p(r,C) )
 # @profile
 def argMaxPhiSimple(C, X, G, denominator):
+    '''
+        calculate the best partition for X to be part of
+        return the number of the partition to caller
+    '''
     numGroups = len(C)
 
     # see which group X should be in to maximize
-    partition = G[makeHash(X)]
+    partition = G[X.md5hash]
 
     retScore = 0.0
     retval = partition
 
-    Xr = str2Counter(X)
+    Xr = X.stats
 
     for partition in range(numGroups):
 
@@ -74,7 +90,10 @@ def argMaxPhiSimple(C, X, G, denominator):
             numerator += C[partition].get(r, 0)
 
         currentScore += numerator * numerator
+
         # TODO make sure this is the correct way to calculate
+        # currentScore should be Sum(p(r,C)^2)
+
         d = denominator.get(partition, 0.000000000001)
         d = d*d
         currentScore = numerator / d
@@ -87,39 +106,46 @@ def argMaxPhiSimple(C, X, G, denominator):
     return retval
 
 
-# store the data histograms
-# in each parition
 # GOOD
 def randomSeeds(D, k, G):
+    '''
+        store the data histograms
+        in each parition
+    '''
 
     C = [Counter() for _ in range(k)]
     partition = 0
     for d in D:
 
         # assigning groups to a message
-        G[makeHash(d)] = partition
+        G[d.md5hash] = partition
 
         # Do things the Counter way
-        C[partition].update(str2Counter(d))
+        C[partition].update(d.stats)
         partition = (partition + 1) % k
 
     print 'UniqLogLines', len(G)
     return C
 
 
-# move X from partition i to partition j
 # GOOD
 def updatePartition(CNext, X, GNext, j):
+    '''
+        update CNext with statistics from X
+        update GNext with which group X belongs
+    '''
 
-    GNext[makeHash(X)] = j
+    GNext[X.md5hash] = j
 
     # TODO would a binary version of this be sufficient?
-    CNext[j].update(str2Counter(X))
+    CNext[j].update(X.stats)
 
 
-# determine if array of dicts are equal
 # GOOD
 def partitionsNotEqual(C, CNext):
+    '''
+        determine if array of dicts are equal
+    '''
 
     for i in range(len(C)):
         if C[i] != CNext[i]:
@@ -127,11 +153,13 @@ def partitionsNotEqual(C, CNext):
     return False
 
 
-# D : log message set
-# k : number of groups to partition
-# returns: C: partitions
 # GOOD
 def logSig_localSearch(D, G, k, maxIter):
+    '''
+        D : log message set
+        k : number of groups to partition
+        returns: C: partitions
+    '''
 
     global globalStop
 
@@ -175,10 +203,32 @@ def logSig_localSearch(D, G, k, maxIter):
         denominator = Counter(G.itervalues())
 
         print 'looping iteration %i time=%3.4f (sec)' % (limit, finish - start)
+        sys.stdout.flush()
     # end while
     print '\niterated %i times' % (limit)
 
     return C
+
+
+# GOOD
+def dataset_iterator(fIn, num_lines):
+    '''
+        Handle reading the data from file into a know form
+    '''
+    lines_read = 0
+    success_full = 0
+    while num_lines == -1 or lines_read < num_lines:
+        lines_read += 1
+        line = fIn.readline()
+        if len(line) == 0:
+            break
+        else:
+            try:
+                ts = datetime.datetime.strptime(line[:14], '%b %d %H:%M:%S')
+                yield LogLine(ts.replace(year=2015), line[15:].strip())
+                success_full += 1
+            except:
+                pass
 
 
 # GOOD
@@ -195,9 +245,12 @@ def main(argv):
     G = dict()
 
     readCount = 0
-    for l in a.readlines():
+
+    for r in dataset_iterator(a, -1):
+        h = makeHash(r.text)
+        s = str2Counter(r.text)
+        D.append(DataRecord(r, h, s))
         readCount += 1
-        D.append(l.strip())
 
     a.close()
 
@@ -209,20 +262,20 @@ def main(argv):
     partitions = sorted(set(G.itervalues()))
 
     # print a histogram of partition sizes
-    print 'cluster, number'
+    print 'cluster|number'
     for p in partitions:
-        print '%i, %i' % (p, outHist[p])
+        print '%4i|%4i' % (p, outHist[p])
 
-    print 'total execution time %s (sec)' % (totalE - totalS)
-    print 'Partition |    Logline'
-    print '__________+__________________________________________'
+    print 'total execution time %s (sec)\n' % (totalE - totalS)
 
     # print things in partition order at the expense of looping
     for p in partitions:
         for d in D:
-            if p == G[makeHash(d)]:
-                print ' %03i      | %s' % (G[makeHash(d)], d)
-
+            if p == G[d.md5hash]:
+                # print ' %03i      | %s' % (G[d.md5hash], d.line.text)
+                print '%s,%s,%s' % (time.mktime(d.line.ts.timetuple()),
+                                    G[d.md5hash],
+                                    d.line.text)
 
 if __name__ == "__main__":
     # install the signal handler
