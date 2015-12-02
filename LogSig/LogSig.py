@@ -268,13 +268,22 @@ def main(argv):
 
     print 'total execution time %s (sec)\n' % (totalE - totalS)
 
+    outSet = set()
+    outDict = dict()
+
+    for item in G.itervalues():
+        outSet.add(item)
+
+    for index, item in enumerate(outSet):
+        outDict[item] = index
+
     # print things in partition order at the expense of looping
     for p in partitions:
         for d in D:
             if p == G[d.md5hash]:
                 # print ' %03i      | %s' % (G[d.md5hash], d.line.text)
                 print '%s,%s,%s' % (time.mktime(d.line.ts.timetuple()),
-                                    G[d.md5hash],
+                                    outDict[G[d.md5hash]],
                                     d.line.text)
 
 if __name__ == "__main__":
