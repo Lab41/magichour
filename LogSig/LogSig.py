@@ -1,5 +1,4 @@
 from collections import Counter
-from functools32 import lru_cache
 from itertools import combinations
 from collections import namedtuple
 import datetime
@@ -29,7 +28,6 @@ def signal_handler(signal, frame):
 
 
 # TODO lookup faster hashes
-@lru_cache()
 def makeHash(s):
     '''
         make a md5 string rep of an input string
@@ -41,7 +39,6 @@ def makeHash(s):
 
 
 # GOOD
-@lru_cache()
 def tuple2Str(a):
     '''
          make a concatenation of a tuple
@@ -53,7 +50,6 @@ def tuple2Str(a):
 
 
 # GOOD
-@lru_cache()
 def str2Counter(X):
     '''
         make a counter object from a string
