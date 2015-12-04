@@ -5,6 +5,7 @@
 
 import logging
 import numpy as np
+import time
 
 from sklearn.base import BaseEstimator, ClusterMixin
 from sklearn.metrics.pairwise import pairwise_kernels
@@ -61,11 +62,15 @@ class KernelKMeans(BaseEstimator, ClusterMixin):
         n_samples = X.shape[0]
         
         if self.nystroem == -1:
-            logger.debug("Nystroem kernel approximation not enabled. Computing full kernel.")
+            logger.debug("Nystroem kernel approximation not enabled. Computing full kernel...")
+            start_time = time.time()
             K = self._get_kernel(X)
+            logger.debug("Duration: %s" % time.time()-start_time)
         else:
             logger.debug("Enabled Nystroem kernel approximation (num_components=%s)." % self.nystroem)
+            start_time = time.time()
             K = self._get_kernel_approx(X)
+            logger.debug("Duration: %s" % time.time()-start_time)
 
         sw = sample_weight if sample_weight else np.ones(n_samples)
         self.sample_weight_ = sw
