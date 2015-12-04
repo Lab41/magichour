@@ -91,7 +91,7 @@ def main():
     # May need to change this section depending on how you want to output the log file.
     for group, s in zip(kmeans.labels_, lines_w_times):
         epoch = timestamp = s[:options.num_skipchars]
-        #epoch = int(time.mktime(time.strptime(timestamp.strip()[1:-1], "%a %b %d %H:%M:%S %Y")))
+        epoch = int(time.mktime(time.strptime(timestamp.strip()[1:-1], "%a %b %d %H:%M:%S %Y")))
         msg = s[options.num_skipchars:]
         print "%s,%s,%s" % (epoch, group, msg.strip())
 
