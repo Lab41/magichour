@@ -35,7 +35,8 @@ def main():
     parser.add_option("--scheme", dest="scheme", type="choice", choices=scheme_choices, default=default_scheme,
             help="Scheme for constructing subsequences. Valid choices: %s. Default: %s" % (scheme_choices, default_scheme))
 
-    parser.add_option("--kernel", action="store_true", dest="kernel_kmeans", default=False)
+    parser.add_option("--kernel", action="store_true", dest="kernel_kmeans", default=False,
+            help="Flag for using KernelKMeans algorithm instead of KMeans.")
     parser.add_option("--nystroem", dest="nystroem", type=int, default=-1,
             help="Number of features to construct for approximating the kernel using the Nystroem method. Default: -1 (do not approximate kernel)")
     parser.add_option("--max_iterations", dest="max_iterations", type=int, default=1000,
