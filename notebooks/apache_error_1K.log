@@ -1,0 +1,1000 @@
+[Thu Apr 01 00:01:42 2010] [error] [client 207.46.204.180] File does not exist: /home/bear-008/users/khalils/public_html
+[Thu Apr 01 00:01:46 2010] [error] [client 174.96.98.132] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:01:46 2010] [error] [client 174.96.98.132] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:01:47 2010] [error] [client 174.96.98.132] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:01:47 2010] [error] [client 174.96.98.132] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:01:47 2010] [error] [client 174.96.98.132] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:01:48 2010] [error] [client 174.96.98.132] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:01:49 2010] [error] [client 174.96.98.132] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:01:50 2010] [error] [client 174.96.98.132] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:01:50 2010] [error] [client 174.96.98.132] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:01:51 2010] [error] [client 174.96.98.132] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:01:52 2010] [error] [client 174.96.98.132] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:02:07 2010] [error] [client 98.64.71.141] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 00:02:33 2010] [error] [client 98.64.71.141] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 00:05:10 2010] [error] [client 66.176.204.216] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:05:10 2010] [error] [client 66.176.204.216] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:05:13 2010] [error] [client 66.176.204.216] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:05:21 2010] [error] [client 66.176.204.216] File does not exist: /home/bear-008/users/smithjo/public_html/cop3804/computerScience.js, referer: http://users.cis.fiu.edu/~smithjo/cop3804/home.html
+[Thu Apr 01 00:05:43 2010] [error] [client 131.94.104.150] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:06:04 2010] [error] [client 65.34.234.183] sh: -c: line 0: unexpected EOF while looking for matching `"', referer: https://users.cs.fiu.edu/~downeyt/advisor/factsframe.html
+[Thu Apr 01 00:06:04 2010] [error] [client 65.34.234.183] sh: -c: line 1: syntax error: unexpected end of file, referer: https://users.cs.fiu.edu/~downeyt/advisor/factsframe.html
+[Thu Apr 01 00:06:06 2010] [error] [client 74.236.38.46] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:06:53 2010] [error] [client 119.63.198.30] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:07:31 2010] [error] [client 131.94.104.150] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:07:42 2010] [error] [client 24.239.156.234] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:09:03 2010] [error] [client 202.170.60.252] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cis.fiu.edu/~weiss/adspc++2/code/
+[Thu Apr 01 00:09:08 2010] [error] [client 76.242.29.95] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 00:09:10 2010] [error] [client 76.242.29.95] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:09:21 2010] [alert] [client 66.249.65.4] /home/hpdrc-demo/sdbtools/public_html/hpdrc2/.htaccess: AuthName takes one argument, The authentication realm (e.g. "Members Only")
+[Thu Apr 01 00:09:28 2010] [error] [client 98.64.71.141] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 00:09:32 2010] [error] [client 98.64.71.141] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:09:46 2010] [error] [client 65.6.206.170] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:09:46 2010] [error] [client 65.6.206.170] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:09:49 2010] [error] [client 65.6.206.170] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:10:41 2010] [error] [client 131.94.132.66] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:10:43 2010] [error] [client 207.46.13.142] File does not exist: /home/bear-001/users/acm/public_html/HScomp2008
+[Thu Apr 01 00:11:17 2010] [error] [client 131.94.104.150] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:11:20 2010] [error] [client 65.55.108.148] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:11:23 2010] [error] [client 98.254.128.20] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:11:28 2010] [error] [client 98.254.128.20] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:11:44 2010] [error] [client 76.242.29.95] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 00:11:45 2010] [error] [client 76.242.29.95] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:12:12 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/ege/public_html/LinuxMovie.avi
+[Thu Apr 01 00:12:32 2010] [error] [client 93.158.151.25] File does not exist: /home/bear-003/users/ovald002/public_html/research.html
+[Thu Apr 01 00:12:34 2010] [error] [client 207.46.194.40] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:12:44 2010] [error] [client 216.129.119.44] File does not exist: /home/bear-000/users/esj/public_html/cgs4990
+[Thu Apr 01 00:13:10 2010] [error] [client 76.109.85.169] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:13:12 2010] [error] [client 76.109.85.169] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:13:13 2010] [error] [client 72.130.184.3] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:13:13 2010] [error] [client 72.130.184.3] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:13:13 2010] [error] [client 76.109.85.169] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:13:18 2010] [error] [client 98.254.128.20] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:13:24 2010] [error] [client 98.67.161.191] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cis.fiu.edu/~esj/uwf/uwf8.htm
+[Thu Apr 01 00:13:41 2010] [error] [client 66.249.65.17] suexec policy violation: see suexec log for more details
+[Thu Apr 01 00:13:41 2010] [error] [client 66.249.65.17] Premature end of script headers: finger.pl
+[Thu Apr 01 00:13:59 2010] [error] [client 98.249.166.55] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:14:02 2010] [error] [client 98.249.166.55] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:15:07 2010] [error] [client 72.130.184.3] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 00:16:15 2010] [error] [client 207.46.204.181] script not found or unable to stat: /home/bear-008/users/downeyt/public_html/cgi-bin/submit_hw.cgi
+[Thu Apr 01 00:16:48 2010] [error] [client 111.68.99.22] (13)Permission denied: cannot read directory for multi: /home/bear-009/users/weiss/public_html/phc++/code/, referer: http://www.google.com.pk/url?sa=t&source=web&ct=res&cd=8&ved=0CBsQFjAH&url=http%3A%2F%2Fwww.cs.fiu.edu%2F~weiss%2Fphc%2B%2B%2Fcode&rct=j&q=OOP+C%2B%2B+Simple+Program+Strings+concatenation+in+class&ei=8B20S6H3G6L80wSZ35Uo&usg=AFQjCNEuAiZdfKbb6tfX0rC8wrBysUr4EQ
+[Thu Apr 01 00:16:49 2010] [error] [client 111.68.99.22] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:16:55 2010] [error] [client 95.136.106.245] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:16:57 2010] [error] [client 95.136.106.245] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:17:04 2010] [error] [client 68.52.142.24] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 00:17:04 2010] [error] [client 68.52.142.24] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 00:17:15 2010] [error] [client 207.46.194.120] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:18:04 2010] [error] [client 67.161.1.90] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:18:05 2010] [error] [client 66.249.65.17] suexec policy violation: see suexec log for more details
+[Thu Apr 01 00:18:05 2010] [error] [client 66.249.65.17] Premature end of script headers: mailto.pl
+[Thu Apr 01 00:18:13 2010] [error] [client 74.225.4.47] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:18:58 2010] [error] [client 70.124.18.191] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:19:16 2010] [error] [client 130.203.16.78] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:19:16 2010] [error] [client 130.203.16.78] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:19:39 2010] [error] [client 98.219.80.152] (13)Permission denied: file permissions deny server access: /home/bear-008/users/navlakha/public_html/3530/thinheadline.gif, referer: http://users.cis.fiu.edu/~navlakha/3530/ds.html
+[Thu Apr 01 00:19:41 2010] [error] [client 98.219.80.152] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:19:58 2010] [error] [client 98.64.71.141] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 00:20:03 2010] [error] [client 98.64.71.141] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 00:20:58 2010] [error] [client 68.193.165.205] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:21:01 2010] [error] [client 68.193.165.205] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:21:01 2010] [error] [client 210.212.45.144] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:21:13 2010] [error] [client 38.98.19.111] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:21:16 2010] [error] [client 201.223.225.130] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:21:19 2010] [error] [client 201.223.225.130] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:21:35 2010] [crit] [client 201.223.225.130] (13)Permission denied: /home/bear-008/users/downeyt/public_html/cop3402/old/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:22:27 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 00:22:27 2010] [error] [client 66.249.65.4] Premature end of script headers: cookie.get.pl
+[Thu Apr 01 00:22:40 2010] [error] [client 66.176.45.32] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:22:42 2010] [error] [client 66.176.45.32] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:22:45 2010] [error] [client 66.176.45.32] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:23:12 2010] [error] [client 66.176.45.32] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:23:50 2010] [error] [client 70.124.18.191] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:24:04 2010] [error] [client 189.141.129.248] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:24:33 2010] [error] [client 202.160.188.233] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:24:42 2010] [error] [client 207.46.13.144] File does not exist: /home/bear-006/users/mpill001/public_html/Articles/Dating-79.html
+[Thu Apr 01 00:24:42 2010] [error] [client 207.46.204.184] File does not exist: /home/bear-011/users/giri/public_html/teach/6936/F03
+[Thu Apr 01 00:25:49 2010] [error] [client 168.122.195.89] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cis.fiu.edu/~downeyt/cop3402/hamming.html
+[Thu Apr 01 00:26:17 2010] [error] [client 115.133.99.55] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:26:20 2010] [error] [client 115.133.99.55] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:26:29 2010] [error] [client 174.16.109.44] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:26:50 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 00:28:18 2010] [error] [client 115.113.50.144] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:28:27 2010] [error] [client 65.55.220.221] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:29:13 2010] [error] [client 207.46.204.232] (13)Permission denied: file permissions deny server access: /home/bear-008/users/taoli/public_html/pictures.html
+[Thu Apr 01 00:29:13 2010] [error] [client 207.46.204.197] (13)Permission denied: cannot read directory for multi: /home/bear-008/users/czhang/public_html/publication/
+[Thu Apr 01 00:29:40 2010] [error] [client 202.129.215.8] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:29:51 2010] [error] [client 66.176.204.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:29:52 2010] [error] [client 66.176.204.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:30:47 2010] [error] [client 174.48.25.193] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:31:05 2010] [error] [client 66.249.65.4] (13)Permission denied: cannot read directory for multi: /home/bear-006/users/osorioj/public_html/
+[Thu Apr 01 00:31:12 2010] [error] [client 66.249.65.17] suexec policy violation: see suexec log for more details
+[Thu Apr 01 00:31:12 2010] [error] [client 66.249.65.17] Premature end of script headers: cookie.get.restricted.CGI.pl
+[Thu Apr 01 00:31:52 2010] [error] [client 207.46.199.184] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:32:14 2010] [error] [client 72.153.114.145] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:32:18 2010] [error] [client 72.153.114.145] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:32:33 2010] [error] [client 66.249.65.4] (13)Permission denied: cannot read directory for multi: /home/bear-006/users/osorioj/public_html/
+[Thu Apr 01 00:32:46 2010] [error] [client 174.48.25.193] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:32:58 2010] [error] [client 64.183.65.106] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:33:09 2010] [error] [client 72.197.61.50] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:33:23 2010] [error] [client 115.113.50.144] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:34:22 2010] [error] [client 203.210.201.238] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://users.cs.fiu.edu/~mullerk/tech/
+[Thu Apr 01 00:34:23 2010] [error] [client 203.210.201.238] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://users.cs.fiu.edu/~mullerk/tech/
+[Thu Apr 01 00:34:24 2010] [error] [client 203.210.201.238] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso
+[Thu Apr 01 00:34:25 2010] [error] [client 203.210.201.238] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:34:25 2010] [error] [client 203.210.201.238] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://ddth.com/showthread.php?t=201613
+[Thu Apr 01 00:34:25 2010] [error] [client 203.210.201.238] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://ddth.com/showthread.php?t=201613
+[Thu Apr 01 00:34:26 2010] [error] [client 203.210.201.238] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://ddth.com/showthread.php?t=201613
+[Thu Apr 01 00:34:26 2010] [error] [client 203.210.201.238] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://ddth.com/showthread.php?t=201613
+[Thu Apr 01 00:34:29 2010] [error] [client 75.74.34.246] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:35:22 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-008/users/downeyt/public_html/c3423.shtml
+[Thu Apr 01 00:35:35 2010] [error] [client 66.249.65.17] suexec policy violation: see suexec log for more details
+[Thu Apr 01 00:35:35 2010] [error] [client 66.249.65.17] Premature end of script headers: error.pl
+[Thu Apr 01 00:35:36 2010] [error] [client 75.74.34.246] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:35:40 2010] [error] [client 75.74.34.246] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:36:09 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:36:26 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:36:47 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:37:06 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:37:12 2010] [error] [client 65.55.231.29] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:37:28 2010] [error] [client 66.249.65.4] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/scspage
+[Thu Apr 01 00:37:56 2010] [error] [client 69.169.132.34] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 00:37:57 2010] [error] [client 98.254.68.168] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:37:59 2010] [error] [client 98.254.68.168] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:38:03 2010] [error] [client 69.169.132.34] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:38:04 2010] [error] [client 98.254.68.168] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:38:04 2010] [error] [client 69.169.132.34] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:38:05 2010] [error] [client 98.254.68.168] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:38:06 2010] [error] [client 69.169.132.34] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:38:16 2010] [error] [client 98.254.68.168] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:38:19 2010] [error] [client 221.178.82.24] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:38:19 2010] [error] [client 221.178.82.24] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:38:33 2010] [error] [client 124.112.249.74] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:38:45 2010] [error] [client 207.46.13.90] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/home
+[Thu Apr 01 00:39:04 2010] [error] [client 65.55.215.92] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:39:15 2010] [error] [client 65.55.108.161] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:39:21 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-007/users/sanchezm/public_html/phialphatheta/main.html
+[Thu Apr 01 00:39:21 2010] [error] [client 220.181.94.224] 2010-04-01 00:39:21,914 WARNING MoinMoin.log:139 using logging configuration read from built-in fallback in MoinMoin.log module!
+[Thu Apr 01 00:39:23 2010] [error] [client 220.181.94.224] 2010-04-01 00:39:23,456 INFO MoinMoin.config.multiconfig:125 using wiki config: /home/bear-004/users/lusec001/moin/share/moin/mywiki/wikiconfig.pyc
+[Thu Apr 01 00:39:28 2010] [error] [client 123.27.191.44] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://users.cs.fiu.edu/~mullerk/tech/
+[Thu Apr 01 00:39:29 2010] [error] [client 123.27.191.44] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso
+[Thu Apr 01 00:39:32 2010] [error] [client 74.182.120.29] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:39:39 2010] [error] [client 74.182.120.29] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:39:42 2010] [error] [client 220.181.94.224] 2010-04-01 00:39:42,876 WARNING MoinMoin.log:139 using logging configuration read from built-in fallback in MoinMoin.log module!
+[Thu Apr 01 00:39:43 2010] [error] [client 220.181.94.224] 2010-04-01 00:39:43,205 INFO MoinMoin.config.multiconfig:125 using wiki config: /home/bear-004/users/lusec001/moin/share/moin/mywiki/wikiconfig.pyc
+[Thu Apr 01 00:39:43 2010] [error] [client 65.10.162.8] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:39:43 2010] [error] [client 65.10.162.8] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:39:45 2010] [error] [client 220.191.22.165] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~msun01
+[Thu Apr 01 00:39:49 2010] [error] [client 66.229.184.177] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:39:58 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 00:39:58 2010] [error] [client 66.249.65.4] Premature end of script headers: test_lookup.pl
+[Thu Apr 01 00:40:12 2010] [error] [client 220.181.94.224] 2010-04-01 00:40:12,901 WARNING MoinMoin.log:139 using logging configuration read from built-in fallback in MoinMoin.log module!
+[Thu Apr 01 00:40:13 2010] [error] [client 220.181.94.224] 2010-04-01 00:40:13,236 INFO MoinMoin.config.multiconfig:125 using wiki config: /home/bear-004/users/lusec001/moin/share/moin/mywiki/wikiconfig.pyc
+[Thu Apr 01 00:40:13 2010] [error] [client 220.191.22.165] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~msun01
+[Thu Apr 01 00:40:19 2010] [error] [client 220.191.22.165] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~msun01
+[Thu Apr 01 00:40:27 2010] [error] [client 220.191.22.165] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~msun01
+[Thu Apr 01 00:40:40 2010] [error] [client 220.191.22.165] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~msun01
+[Thu Apr 01 00:41:38 2010] [error] [client 220.191.22.165] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~msun01
+[Thu Apr 01 00:42:51 2010] [error] [client 64.183.65.106] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:43:04 2010] [error] [client 66.176.204.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:43:05 2010] [error] [client 66.176.204.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:44:00 2010] [error] [client 24.219.124.141] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:44:07 2010] [error] [client 74.67.169.250] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cis.fiu.edu/~flynnj/cats/new/lynx.jpg
+[Thu Apr 01 00:44:08 2010] [error] [client 210.212.45.144] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:44:14 2010] [error] [client 207.46.13.88] File does not exist: /home/bear-006/users/mpill001/public_html/~mpill001
+[Thu Apr 01 00:44:15 2010] [error] [client 129.82.213.207] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:44:21 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 00:44:21 2010] [error] [client 66.249.65.4] Premature end of script headers: test_file.pl
+[Thu Apr 01 00:44:22 2010] [error] [client 67.195.115.87] File does not exist: /home/bear-008/users/vagelis/public_html/classes/COP5725/index_files/editdata.mso
+[Thu Apr 01 00:45:03 2010] [error] [client 129.82.213.207] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:45:31 2010] [error] [client 66.249.65.4] (13)Permission denied: file permissions deny server access: /home/bear-008/users/pestaina/public_html/cop2210.html
+[Thu Apr 01 00:45:44 2010] [error] [client 207.46.195.230] File does not exist: /home/bear-009/users/weiss/public_html/phc  
+[Thu Apr 01 00:46:15 2010] [error] [client 149.169.125.4] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:46:15 2010] [error] [client 149.169.125.4] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:46:16 2010] [error] [client 84.3.229.148] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:46:18 2010] [error] [client 149.169.125.4] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:47:17 2010] [error] [client 67.195.115.87] Negotiation: discovered file(s) matching request: /home/bear-000/users/flynnj/public_html/cats/lynxies/index.html (None could be negotiated).
+[Thu Apr 01 00:47:33 2010] [error] [client 189.143.14.36] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:47:38 2010] [error] [client 189.143.14.36] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:48:44 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 00:48:44 2010] [error] [client 66.249.65.4] Premature end of script headers: test.cgi
+[Thu Apr 01 00:49:07 2010] [error] [client 67.35.87.238] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:49:31 2010] [error] [client 67.35.87.238] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:49:32 2010] [error] [client 66.249.65.4] (13)Permission denied: cannot read directory for multi: /home/bear-006/users/osorioj/public_html/
+[Thu Apr 01 00:49:45 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://users.cs.fiu.edu/
+[Thu Apr 01 00:49:47 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:49:47 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:49:48 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://www.cs.fiu.edu/~wpeng002/ke/
+[Thu Apr 01 00:49:50 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:49:50 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:49:51 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://m.iask.com/m/download.php?url=aHR0cDovL2NzLmZpdS5lZHUvJTdld3BlbmcwMDIva2UvbG92ZWlzc3VzcGVjdC5tcDM=&name=%B0%AE%CA%C7%BB%B3%D2%C9
+[Thu Apr 01 00:49:52 2010] [error] [client 71.206.79.27] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:49:52 2010] [error] [client 71.206.79.27] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:49:57 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:49:57 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://www.cs.fiu.edu/
+[Thu Apr 01 00:49:59 2010] [error] [client 71.206.79.27] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:50:01 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:05 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:07 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:11 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:12 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:17 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:50:17 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:50:19 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:50:20 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:50:21 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:50:22 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:50:23 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:50:24 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:50:28 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:29 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:39 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:40 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:43 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:43 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:45 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:45 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:50 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:50:51 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:50:52 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:53 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:55 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:50:55 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:51:00 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:51:00 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:51:05 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:05 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:06 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:07 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:08 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:08 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:10 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:11 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:15 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:51:16 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:51:18 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:18 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:20 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:20 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:22 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:23 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 00:51:26 2010] [error] [client 192.18.43.225] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:51:27 2010] [error] [client 66.249.65.4] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/HPDRC
+[Thu Apr 01 00:51:28 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:51:29 2010] [error] [client 192.18.43.225] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:51:29 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:51:35 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:51:46 2010] [crit] [client 113.109.187.188] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://cs.fiu.edu/
+[Thu Apr 01 00:52:29 2010] [error] [client 116.125.140.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:53:06 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 00:53:06 2010] [error] [client 66.249.65.4] Premature end of script headers: ParseLibTest.cgi
+[Thu Apr 01 00:53:32 2010] [error] [client 66.249.65.4] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/HPDRC
+[Thu Apr 01 00:54:34 2010] [error] [client 207.46.199.199] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:54:43 2010] [error] [client 65.55.220.224] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 00:54:56 2010] [error] [client 210.212.194.181] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:55:32 2010] [error] [client 66.249.65.4] File does not exist: /home/hpdrc-demo/sdbtools/public_html/VisualCafe/Documentation/JFC\\index.html
+[Thu Apr 01 00:55:55 2010] [error] [client 187.152.103.226] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:55:56 2010] [error] [client 187.152.103.226] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:56:45 2010] [error] [client 98.180.32.6] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:57:29 2010] [error] [client 66.249.65.17] suexec policy violation: see suexec log for more details
+[Thu Apr 01 00:57:29 2010] [error] [client 66.249.65.17] Premature end of script headers: clear_cookies.pl
+[Thu Apr 01 00:57:40 2010] [error] [client 66.249.65.4] File does not exist: /home/hpdrc-demo/sdbtools/public_html/VisualCafe/Documentation/Java\\packages.html
+[Thu Apr 01 00:58:23 2010] [error] [client 65.13.52.91] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:58:45 2010] [error] [client 165.91.4.149] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:58:47 2010] [error] [client 94.65.196.186] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:58:47 2010] [error] [client 94.65.196.186] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:59:05 2010] [error] [client 121.246.147.81] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/_vti_inf.html
+[Thu Apr 01 00:59:05 2010] [error] [client 121.246.147.81] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/_vti_bin
+[Thu Apr 01 00:59:07 2010] [error] [client 121.246.147.81] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/_vti_inf.html
+[Thu Apr 01 00:59:07 2010] [error] [client 66.68.146.192] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:59:07 2010] [error] [client 121.246.147.81] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/_vti_bin
+[Thu Apr 01 00:59:10 2010] [error] [client 66.68.146.192] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:59:28 2010] [error] [client 208.240.243.170] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:59:34 2010] [error] [client 66.249.65.4] File does not exist: /home/hpdrc-demo/sdbtools/public_html/VisualCafe/Documentation/java\\symantec\\packages.html
+[Thu Apr 01 00:59:43 2010] [error] [client 67.35.87.238] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 00:59:48 2010] [error] [client 67.35.87.238] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:00:21 2010] [error] [client 94.65.196.186] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 01:00:41 2010] [error] [client 210.212.146.98] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:00:44 2010] [error] [client 210.212.146.98] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:01:35 2010] [error] [client 208.240.243.170] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 01:01:36 2010] [error] [client 208.240.243.170] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:01:42 2010] [error] [client 59.94.41.14] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:01:52 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 01:01:52 2010] [error] [client 66.249.65.4] Premature end of script headers: pictutil.pl
+[Thu Apr 01 01:02:30 2010] [error] [client 67.148.60.104] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:03:05 2010] [error] [client 202.164.197.225] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:03:06 2010] [error] [client 67.170.242.154] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:03:09 2010] [error] [client 67.170.242.154] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:04:48 2010] [error] [client 66.249.65.4] (13)Permission denied: file permissions deny server access: /home/bear-008/users/pestaina/public_html/cda4101.html
+[Thu Apr 01 01:05:11 2010] [error] [client 203.171.196.165] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:05:14 2010] [error] [client 70.132.116.81] Premature end of script headers: logvisitor.pl, referer: http://www.google.com/ig/ifr?view=home&url=http://www.google.com/ig/modules/bookmarks.xml&nocache=0&up_bpp=50&up_label=Chi+Zhang%27s+Personal+Book+Mark&up_nw=0&up_sort=title&lang=en&country=us&.lang=en&.country=us&synd=ig&mid=24&ifpctok=-3656423172689610925&exp_track_js=1&exp_ids=300889&parent=http://www.google.com&is_signedin=1
+[Thu Apr 01 01:05:20 2010] [error] [client 70.132.116.91] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:05:46 2010] [error] [client 207.46.13.133] (13)Permission denied: file permissions deny server access: /home/bear-009/users/weiss/public_html/cop3530_spr09/Recursion.java
+[Thu Apr 01 01:06:00 2010] [error] [client 186.84.169.59] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:06:09 2010] [error] [client 67.195.115.87] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~kmadhy01
+[Thu Apr 01 01:06:14 2010] [error] [client 210.212.194.181] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:06:15 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 01:06:15 2010] [error] [client 66.249.65.4] Premature end of script headers: parse-multi.pl
+[Thu Apr 01 01:06:16 2010] [error] [client 122.160.113.185] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:06:16 2010] [error] [client 122.160.113.185] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:07:27 2010] [error] [client 66.176.204.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:07:29 2010] [error] [client 66.176.204.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:08:12 2010] [error] [client 66.176.204.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:08:14 2010] [error] [client 66.176.204.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:08:34 2010] [error] [client 211.137.104.67] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:08:46 2010] [error] [client 67.195.114.56] (13)Permission denied: cannot read directory for multi: /home/bear-009/users/weiss/public_html/phc++/code/
+[Thu Apr 01 01:09:37 2010] [error] [client 76.24.58.98] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~ccaned01, referer: http://www.mazda3forums.com/index.php?topic=9414.0
+[Thu Apr 01 01:10:38 2010] [error] [client 66.249.65.4] (13)Permission denied: file permissions deny server access: /home/bear-011/users/giri/public_html/teach/Bioinf/Papers/PearsonTutorialIsmb2000.pdf
+[Thu Apr 01 01:10:38 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 01:10:46 2010] [error] [client 98.180.32.6] File does not exist: /home/bear-009/users/weiss/public_html/adspc++2/code/code.zip, referer: http://users.cis.fiu.edu/~weiss/adspc++2/code/
+[Thu Apr 01 01:10:46 2010] [error] [client 98.180.32.6] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:10:49 2010] [error] [client 98.180.32.6] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:11:38 2010] [error] [client 75.214.193.145] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:12:02 2010] [error] [client 69.234.194.144] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://www.lexusfforum.com/forums/showthread.php?t=107
+[Thu Apr 01 01:12:02 2010] [error] [client 69.234.194.144] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://www.lexusfforum.com/forums/showthread.php?t=107
+[Thu Apr 01 01:12:02 2010] [error] [client 69.234.194.144] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://www.lexusfforum.com/forums/showthread.php?t=107
+[Thu Apr 01 01:12:05 2010] [error] [client 69.234.194.144] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://www.lexusfforum.com/forums/showthread.php?t=107
+[Thu Apr 01 01:12:05 2010] [error] [client 69.234.194.144] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://www.lexusfforum.com/forums/showthread.php?t=107
+[Thu Apr 01 01:12:05 2010] [error] [client 69.234.194.144] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://www.lexusfforum.com/forums/showthread.php?t=107
+[Thu Apr 01 01:12:33 2010] [error] [client 75.214.193.145] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:13:16 2010] [error] [client 218.248.46.117] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:13:17 2010] [error] [client 218.248.46.117] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:13:24 2010] [error] [client 122.167.193.144] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:13:27 2010] [error] [client 122.167.193.144] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:13:53 2010] [error] [client 98.64.97.53] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:15:01 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 01:15:01 2010] [error] [client 66.249.65.4] Premature end of script headers: coutwords-1.pl
+[Thu Apr 01 01:15:11 2010] [error] [client 66.249.65.4] (13)Permission denied: file permissions deny server access: /home/bear-008/users/pestaina/public_html/cop2250.html
+[Thu Apr 01 01:15:13 2010] [error] [client 131.94.222.96] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:15:23 2010] [error] [client 65.55.108.155] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 01:15:27 2010] [error] [client 122.178.161.129] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:15:30 2010] [error] [client 122.178.161.129] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:15:51 2010] [error] [client 68.171.235.17] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cs.fiu.edu/~skrel002/oleta/Main_Page.htm
+[Thu Apr 01 01:15:52 2010] [error] [client 68.171.235.17] File does not exist: /home/bear-002/users/skrel002/public_html/oleta/images, referer: http://users.cs.fiu.edu/~skrel002/oleta/Main_Page.htm
+[Thu Apr 01 01:15:53 2010] [error] [client 68.171.235.17] File does not exist: /home/bear-002/users/skrel002/public_html/layout, referer: http://users.cs.fiu.edu/~skrel002/oleta/Main_Page.htm
+[Thu Apr 01 01:15:59 2010] [error] [client 93.158.151.25] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~beznosov
+[Thu Apr 01 01:16:03 2010] [error] [client 68.171.235.17] File does not exist: /home/bear-002/users/skrel002/public_html/layout, referer: http://users.cs.fiu.edu/~skrel002/oleta/Main_Page.htm
+[Thu Apr 01 01:16:03 2010] [error] [client 68.171.235.17] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cs.fiu.edu/~skrel002/layout/css/Main2.css
+[Thu Apr 01 01:16:12 2010] [error] [client 67.35.87.238] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:16:14 2010] [error] [client 68.171.235.17] File does not exist: /home/bear-002/users/skrel002/public_html/oleta/images, referer: http://users.cs.fiu.edu/~skrel002/oleta/Main_Page.htm
+[Thu Apr 01 01:16:17 2010] [error] [client 122.164.43.105] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:16:17 2010] [error] [client 68.171.235.17] File does not exist: /home/bear-002/users/skrel002/public_html/layout, referer: http://users.cs.fiu.edu/~skrel002/oleta/Main_Page.htm
+[Thu Apr 01 01:17:07 2010] [error] [client 75.214.193.145] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:17:09 2010] [error] [client 209.152.117.83] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:19:06 2010] [error] [client 113.169.90.216] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:19:06 2010] [error] [client 113.169.90.216] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://ddth.com/showthread.php?t=201613
+[Thu Apr 01 01:19:07 2010] [error] [client 113.169.90.216] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://ddth.com/showthread.php?t=201613
+[Thu Apr 01 01:19:08 2010] [error] [client 113.169.90.216] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://ddth.com/showthread.php?t=201613
+[Thu Apr 01 01:19:08 2010] [error] [client 113.169.90.216] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://ddth.com/showthread.php?t=201613
+[Thu Apr 01 01:19:23 2010] [error] [client 113.169.90.216] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://www.ioage.com/web/navierren.htm?url=http://users.cs.fiu.edu/~mullerk/tech/VX2PVOL_EN.iso&domain=users.cs.fiu.edu&code=404
+[Thu Apr 01 01:19:23 2010] [error] [client 113.169.90.216] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://www.ioage.com/web/navierren.htm?url=http://users.cs.fiu.edu/~mullerk/tech/VX2PVOL_EN.iso&domain=users.cs.fiu.edu&code=404
+[Thu Apr 01 01:19:24 2010] [error] [client 66.249.65.17] suexec policy violation: see suexec log for more details
+[Thu Apr 01 01:19:24 2010] [error] [client 66.249.65.17] Premature end of script headers: print.binary.stdin.pl
+[Thu Apr 01 01:19:24 2010] [error] [client 113.169.90.216] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://www.ioage.com/web/navierren.htm?url=http://users.cs.fiu.edu/~mullerk/tech/VX2PVOL_EN.iso&domain=users.cs.fiu.edu&code=404
+[Thu Apr 01 01:19:25 2010] [error] [client 113.169.90.216] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso
+[Thu Apr 01 01:19:28 2010] [error] [client 113.169.90.216] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso
+[Thu Apr 01 01:19:45 2010] [error] [client 207.46.199.46] File does not exist: /home/bear-008/users/sadjadi/public_html/Software/ACT/Publications/ConferenceWorkshop-bib.html
+[Thu Apr 01 01:20:14 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:14 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:14 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:14 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:14 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:14 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:14 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:15 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:15 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:15 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:15 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:15 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:15 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:15 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:20:21 2010] [error] [client 65.55.230.29] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 01:20:52 2010] [error] [client 66.249.65.4] (13)Permission denied: file permissions deny server access: /home/bear-008/users/pestaina/public_html/cgs2100.html
+[Thu Apr 01 01:21:16 2010] [error] [client 207.46.199.39] File does not exist: /home/bear-000/users/esj/public_html/scs/atmgate.cs.fiu.edu.html
+[Thu Apr 01 01:22:20 2010] [error] [client 99.25.38.116] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:22:23 2010] [error] [client 99.25.38.116] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:22:52 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:22:52 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:22:52 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:22:52 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:22:52 2010] [error] [client 76.109.64.161] File does not exist: /home/bear-006/users/mpill001/public_html/isf, referer: http://my.is/forums/f136/black-lexus-f-neiman-marcus-edition-jm-lexus-florida-343374/
+[Thu Apr 01 01:22:54 2010] [error] [client 65.55.214.46] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 01:23:21 2010] [error] [client 66.57.4.196] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 01:23:22 2010] [error] [client 66.57.4.196] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 01:23:36 2010] [error] [client 206.53.147.92] File does not exist: /home/bear-002/users/skrel002/public_html/oleta/layout, referer: http://users.cs.fiu.edu/~skrel002/oleta/Main_Page.htm
+[Thu Apr 01 01:23:37 2010] [error] [client 206.53.147.92] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cs.fiu.edu/~skrel002/oleta/Main_Page.htm
+[Thu Apr 01 01:23:37 2010] [error] [client 206.53.147.92] File does not exist: /home/bear-002/users/skrel002/public_html/oleta/images, referer: http://users.cs.fiu.edu/~skrel002/oleta/Main_Page.htm
+[Thu Apr 01 01:23:38 2010] [error] [client 206.53.147.92] File does not exist: /home/bear-002/users/skrel002/public_html/oleta/layout, referer: http://users.cs.fiu.edu/~skrel002/oleta/Main_Page.htm
+[Thu Apr 01 01:23:38 2010] [error] [client 206.53.147.92] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cs.fiu.edu/~skrel002/oleta/layout/css/Main.css
+[Thu Apr 01 01:23:39 2010] [error] [client 206.53.147.92] File does not exist: /home/bear-002/users/skrel002/public_html/layout, referer: http://users.cs.fiu.edu/~skrel002/oleta/Main_Page.htm
+[Thu Apr 01 01:23:46 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 01:23:46 2010] [error] [client 66.249.65.4] Premature end of script headers: preferences.pl
+[Thu Apr 01 01:24:40 2010] [error] [client 220.227.11.195] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:25:22 2010] [error] [client 210.212.194.165] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:25:24 2010] [error] [client 206.53.147.92] File does not exist: /home/bear-002/users/skrel002/public_html/oleta/layout, referer: http://users.cs.fiu.edu/~skrel002/oleta/Main_Page.htm
+[Thu Apr 01 01:25:24 2010] [error] [client 206.53.147.92] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cs.fiu.edu/~skrel002/oleta/layout/css/Main.css
+[Thu Apr 01 01:25:59 2010] [error] [client 99.132.154.209] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:25:59 2010] [error] [client 99.132.154.209] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:26:10 2010] [error] [client 99.132.154.209] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:27:02 2010] [error] [client 115.97.2.52] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:27:07 2010] [error] [client 67.161.1.90] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:27:18 2010] [error] [client 66.249.65.16] (13)Permission denied: file permissions deny server access: /home/bear-008/users/pestaina/public_html/cgs2423.html
+[Thu Apr 01 01:28:09 2010] [error] [client 66.249.65.16] suexec policy violation: see suexec log for more details
+[Thu Apr 01 01:28:09 2010] [error] [client 66.249.65.16] Premature end of script headers: mailto.pl
+[Thu Apr 01 01:28:38 2010] [error] [client 186.84.169.59] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:28:58 2010] [error] [client 24.6.42.107] File does not exist: /home/bear-011/users/giri/public_html/BIP/background.jpg, referer: http://users.cis.fiu.edu/~giri/BIP/
+[Thu Apr 01 01:29:00 2010] [error] [client 24.6.42.107] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:29:03 2010] [error] [client 24.6.42.107] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:30:13 2010] [error] [client 207.46.13.52] File does not exist: /home/bear-008/users/khalils/public_html
+[Thu Apr 01 01:30:13 2010] [error] [client 207.46.204.241] client denied by server configuration: /home/bear-009/users/weiss/public_html/cgs2423_spr97
+[Thu Apr 01 01:32:05 2010] [error] [client 65.55.106.162] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 01:32:13 2010] [error] [client 207.46.13.85] File does not exist: /home/bear-000/users/flynnj/public_html/devel/function.file
+[Thu Apr 01 01:32:32 2010] [alert] [client 66.249.65.4] /home/hpdrc-demo/sdbtools/public_html/hpdrc2/.htaccess: AuthName takes one argument, The authentication realm (e.g. "Members Only")
+[Thu Apr 01 01:34:57 2010] [error] [client 76.108.225.46] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:34:57 2010] [error] [client 76.108.225.46] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:35:00 2010] [error] [client 76.108.225.46] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:35:08 2010] [error] [client 207.46.199.231] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 01:35:17 2010] [error] [client 67.161.1.90] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:35:18 2010] [error] [client 67.195.115.87] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~niyer01
+[Thu Apr 01 01:36:12 2010] [error] [client 207.46.204.183] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~xni01
+[Thu Apr 01 01:36:20 2010] [error] [client 216.129.119.44] File does not exist: /home/bear-006/users/jalav001/public_html/Projects/VIS/Published Rose Model/looseends
+[Thu Apr 01 01:36:37 2010] [error] [client 202.131.114.22] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:36:51 2010] [error] [client 64.253.179.199] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:36:55 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 01:36:55 2010] [error] [client 66.249.65.4] Premature end of script headers: error.pl
+[Thu Apr 01 01:36:59 2010] [error] [client 116.58.100.78] (13)Permission denied: cannot read directory for multi: /home/bear-009/users/weiss/public_html/phc++/code/, referer: http://www.google.com.pk/search?hl=en&source=hp&q=student+biodata+with+classes+c%2B%2B&btnG=Google+Search&meta=&aq=f&aqi=&aql=&oq=&gs_rfai=
+[Thu Apr 01 01:37:07 2010] [error] [client 122.167.193.144] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:37:10 2010] [error] [client 122.167.193.144] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:37:42 2010] [error] [client 67.161.1.90] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:38:16 2010] [error] [client 207.46.204.197] File does not exist: /home/bear-008/users/taoli/public_html/workshop/TDM2005/www.fiu.edu
+[Thu Apr 01 01:39:04 2010] [error] [client 67.195.114.56] (13)Permission denied: file permissions deny server access: /home/hpdrc-demo/sdbtools/public_html/Aerial_Web_Ext/broward-keys/26080C56.hdr
+[Thu Apr 01 01:39:13 2010] [error] [client 207.46.13.99] File does not exist: /home/bear-004/users/lusec001/public_html/kernelnewbie_archives_google.xml
+[Thu Apr 01 01:39:35 2010] [error] [client 93.158.151.25] File does not exist: /home/bear-003/users/ovald002/public_html/education.html
+[Thu Apr 01 01:40:41 2010] [error] [client 121.242.72.194] File does not exist: /home/bear-009/users/weiss/public_html/Deltoid/vcstl/stylesheets, referer: http://users.cis.fiu.edu/~weiss/Deltoid/vcstl/FAQ.HTM
+[Thu Apr 01 01:40:41 2010] [error] [client 121.242.72.194] File does not exist: /home/bear-009/users/weiss/public_html/Deltoid/vcstl/art, referer: http://users.cis.fiu.edu/~weiss/Deltoid/vcstl/FAQ.HTM
+[Thu Apr 01 01:40:41 2010] [error] [client 121.242.72.194] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:40:44 2010] [error] [client 121.242.72.194] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:40:47 2010] [error] [client 125.71.228.69] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:41:18 2010] [error] [client 66.249.65.17] suexec policy violation: see suexec log for more details
+[Thu Apr 01 01:41:18 2010] [error] [client 66.249.65.17] Premature end of script headers: preferences.pl
+[Thu Apr 01 01:41:21 2010] [crit] [client 119.147.9.87] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://users.cis.fiu.edu/~wpeng002/ke/letitbe.mp3
+[Thu Apr 01 01:41:29 2010] [error] [client 67.161.1.90] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:41:29 2010] [error] [client 121.242.72.194] File does not exist: /home/bear-009/users/weiss/public_html/Deltoid/vcstl/art, referer: http://users.cis.fiu.edu/~weiss/Deltoid/vcstl/FAQ.HTM
+[Thu Apr 01 01:41:29 2010] [error] [client 121.242.72.194] File does not exist: /home/bear-009/users/weiss/public_html/Deltoid/vcstl/stylesheets, referer: http://users.cis.fiu.edu/~weiss/Deltoid/vcstl/FAQ.HTM
+[Thu Apr 01 01:41:42 2010] [error] [client 121.242.72.194] File does not exist: /home/bear-009/users/weiss/public_html/Deltoid/vcstl/stylesheets, referer: http://users.cis.fiu.edu/~weiss/Deltoid/vcstl/FAQ.HTM
+[Thu Apr 01 01:41:42 2010] [error] [client 121.242.72.194] File does not exist: /home/bear-009/users/weiss/public_html/Deltoid/vcstl/art, referer: http://users.cis.fiu.edu/~weiss/Deltoid/vcstl/FAQ.HTM
+[Thu Apr 01 01:41:56 2010] [error] [client 194.27.242.93] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:41:59 2010] [error] [client 194.27.242.93] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:44:15 2010] [error] [client 76.210.68.218] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:44:43 2010] [error] [client 207.46.13.87] File does not exist: /home/bear-011/users/giri/public_html/teach/6936/F03
+[Thu Apr 01 01:45:41 2010] [error] [client 66.249.65.16] suexec policy violation: see suexec log for more details
+[Thu Apr 01 01:45:41 2010] [error] [client 66.249.65.16] Premature end of script headers: gbook1.cgi
+[Thu Apr 01 01:47:12 2010] [error] [client 125.71.228.69] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:47:44 2010] [error] [client 66.245.218.156] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cis.fiu.edu/~weiss/dsaa_c++3/code/
+[Thu Apr 01 01:49:30 2010] [error] [client 174.142.53.234] File does not exist: /home/bear-009/users/kraynek/public_html/photos/Memorial-Day-2004/Eves-Photos/slides/berrys, bill and polly.jpg
+[Thu Apr 01 01:49:35 2010] [error] [client 71.232.177.67] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:49:44 2010] [error] [client 207.46.204.187] File does not exist: /home/bear-008/users/sadjadi/public_html/Teaching/Autonomic Grid Computing/CEN 5082-Spring-2009/Lectures/evo-documentation.pdf
+[Thu Apr 01 01:50:03 2010] [error] [client 66.249.65.16] suexec policy violation: see suexec log for more details
+[Thu Apr 01 01:50:03 2010] [error] [client 66.249.65.16] Premature end of script headers: cookie.set.pl
+[Thu Apr 01 01:51:08 2010] [error] [client 67.184.171.162] invalid CGI ref "cgi-bin/counter" in /home/bear-008/users/downeyt/public_html/c2400.shtml, referer: http://search.yahoo.com/search?p=masm+program+examples&fr=yfp-t-701-s&fr2=sb-top&xargs=0&pstart=1&b=81&xa=RhjHnJj7PLLcgq4WFev0jg--,1270186701
+[Thu Apr 01 01:52:22 2010] [error] [client 67.184.171.162] invalid CGI ref "cgi-bin/counter" in /home/bear-008/users/downeyt/public_html/c2400.shtml, referer: http://search.yahoo.com/search?p=masm+program+examples&fr=yfp-t-701-s&fr2=sb-top&xargs=0&pstart=1&b=81&xa=RhjHnJj7PLLcgq4WFev0jg--,1270186701
+[Thu Apr 01 01:52:26 2010] [error] [client 66.245.218.156] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cis.fiu.edu/~weiss/dsaa_c++3/code/
+[Thu Apr 01 01:53:11 2010] [crit] [client 124.247.235.114] (13)Permission denied: /home/bear-010/users/jstric01/public_html/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://pdfdatabase.com/download/real-time-doc-9029182.html
+[Thu Apr 01 01:54:26 2010] [error] [client 66.249.65.16] suexec policy violation: see suexec log for more details
+[Thu Apr 01 01:54:26 2010] [error] [client 66.249.65.16] Premature end of script headers: cgi-lib.pl
+[Thu Apr 01 01:54:39 2010] [error] [client 65.10.162.8] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:55:48 2010] [error] [client 70.149.17.160] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:56:01 2010] [error] [client 66.249.65.16] (13)Permission denied: cannot read directory for multi: /home/bear-007/users/selivona/public_html/
+[Thu Apr 01 01:56:01 2010] [error] [client 66.249.65.16] (13)Permission denied: cannot read directory for multi: /home/bear-007/users/selivona/public_html/
+[Thu Apr 01 01:56:01 2010] [error] [client 66.249.65.16] (13)Permission denied: cannot read directory for multi: /home/bear-007/users/selivona/public_html/
+[Thu Apr 01 01:56:01 2010] [error] [client 66.249.65.16] (13)Permission denied: cannot read directory for multi: /home/bear-007/users/selivona/public_html/
+[Thu Apr 01 01:56:01 2010] [error] [client 66.249.65.16] (13)Permission denied: cannot read directory for multi: /home/bear-007/users/selivona/public_html/
+[Thu Apr 01 01:56:20 2010] [error] [client 66.249.65.4] (13)Permission denied: file permissions deny server access: /home/bear-008/users/downeyt/public_html/cgs3092/a01x08.html
+[Thu Apr 01 01:56:39 2010] [error] [client 66.249.65.16] (13)Permission denied: file permissions deny server access: /home/bear-007/users/selivona/public_html/CEN5011Internal/EmptyFile.mdb
+[Thu Apr 01 01:56:59 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-008/users/downeyt/public_html/cop3832/jsworkshop/guest.html
+[Thu Apr 01 01:57:17 2010] [error] [client 66.249.65.16] (13)Permission denied: file permissions deny server access: /home/bear-008/users/milani/public_html/cop4226/Notes/_vti_cnf/intro.ppt
+[Thu Apr 01 01:57:29 2010] [error] [client 65.55.234.167] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 01:57:48 2010] [error] [client 67.195.114.56] (13)Permission denied: file permissions deny server access: /home/hpdrc-demo/sdbtools/public_html/Aerial_Web_Ext/broward-keys/25080A68.hdr
+[Thu Apr 01 01:57:56 2010] [error] [client 66.249.65.16] (13)Permission denied: file permissions deny server access: /home/bear-008/users/milani/public_html/cop4226/Notes/_vti_cnf/Controls.ppt
+[Thu Apr 01 01:58:08 2010] [error] [client 210.5.36.1] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:58:15 2010] [error] [client 66.249.65.16] (13)Permission denied: file permissions deny server access: /home/bear-008/users/milani/public_html/cop4226/Notes/_vti_cnf/assignments.htm
+[Thu Apr 01 01:58:26 2010] [error] [client 210.5.36.1] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:58:41 2010] [error] [client 207.46.194.38] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 01:58:49 2010] [error] [client 66.249.65.16] suexec policy violation: see suexec log for more details
+[Thu Apr 01 01:58:49 2010] [error] [client 66.249.65.16] Premature end of script headers: calendar2.pl
+[Thu Apr 01 01:58:59 2010] [error] [client 66.249.65.16] (13)Permission denied: file permissions deny server access: /home/bear-008/users/milani/public_html/cop4226/Notes/_vti_cnf/messageboxes.htm
+[Thu Apr 01 01:59:08 2010] [error] [client 220.225.53.60] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:59:11 2010] [error] [client 220.225.53.60] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:59:12 2010] [error] [client 66.249.65.16] (13)Permission denied: file permissions deny server access: /home/bear-008/users/milani/public_html/cop4226/Notes/_vti_cnf/PropertySheets.doc
+[Thu Apr 01 01:59:31 2010] [error] [client 66.249.65.16] (13)Permission denied: file permissions deny server access: /home/bear-008/users/milani/public_html/cop4226/Notes/_vti_cnf/MenusAndToolBars.ppt
+[Thu Apr 01 01:59:42 2010] [error] [client 76.28.249.137] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 01:59:43 2010] [error] [client 207.46.204.233] File does not exist: /home/bear-008/users/khalils/public_html
+[Thu Apr 01 02:00:26 2010] [error] [client 218.248.46.99] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:00:26 2010] [error] [client 218.248.46.99] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:00:33 2010] [error] [client 65.55.230.16] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:00:48 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/dsl.c
+[Thu Apr 01 02:01:07 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/dsl.h
+[Thu Apr 01 02:01:26 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/list.c
+[Thu Apr 01 02:01:34 2010] [error] [client 68.45.142.204] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cis.fiu.edu/~flynnj/tv/Aristocats/marie.jpg
+[Thu Apr 01 02:01:45 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/list.h
+[Thu Apr 01 02:02:04 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/tree.c
+[Thu Apr 01 02:02:08 2010] [error] [client 67.195.115.87] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~vdsouz01
+[Thu Apr 01 02:02:24 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/tree.h
+[Thu Apr 01 02:02:33 2010] [error] [client 24.85.135.230] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~ccaned01, referer: http://www.mazda3forums.com/index.php?topic=9135.0
+[Thu Apr 01 02:02:37 2010] [error] [client 24.85.135.230] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~ccaned01, referer: http://www.mazda3forums.com/index.php?topic=9135.0
+[Thu Apr 01 02:02:38 2010] [error] [client 24.85.135.230] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~ccaned01, referer: http://www.mazda3forums.com/index.php?topic=9135.0
+[Thu Apr 01 02:02:43 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/sort.c
+[Thu Apr 01 02:02:49 2010] [error] [client 116.125.141.3] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:02:54 2010] [error] [client 122.116.52.125] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:02:57 2010] [error] [client 122.116.52.125] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:03:02 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/Ch8.out
+[Thu Apr 01 02:03:12 2010] [error] [client 66.249.65.16] suexec policy violation: see suexec log for more details
+[Thu Apr 01 02:03:20 2010] [error] [client 210.212.195.136] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:03:21 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/treap.h
+[Thu Apr 01 02:03:40 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/Ch7.out
+[Thu Apr 01 02:03:59 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/queue.h
+[Thu Apr 01 02:04:18 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/queue.c
+[Thu Apr 01 02:04:38 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/Ch4.out
+[Thu Apr 01 02:04:43 2010] [crit] [client 207.46.195.238] (13)Permission denied: /home/bear-008/users/downeyt/public_html/cgs3559/old/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 02:04:57 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fatal.h
+[Thu Apr 01 02:05:14 2010] [error] [client 207.46.13.95] (13)Permission denied: file permissions deny server access: /home/bear-009/users/weiss/public_html/cop3337_f06/Assign5.java
+[Thu Apr 01 02:05:16 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/Ch2.out
+[Thu Apr 01 02:05:35 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/splay.c
+[Thu Apr 01 02:05:39 2010] [error] [client 66.176.204.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:05:42 2010] [error] [client 66.176.204.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:05:54 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/Ch6.out
+[Thu Apr 01 02:06:13 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/Ch5.out
+[Thu Apr 01 02:06:25 2010] [error] [client 67.195.115.87] Negotiation: discovered file(s) matching request: /home/bear-000/users/flynnj/public_html/cats/lynxies/index.html (None could be negotiated).
+[Thu Apr 01 02:06:32 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/Ch3.out
+[Thu Apr 01 02:06:52 2010] [error] [client 66.249.65.16] File does not exist: /home/bear-009/users/weiss/public_html/c.html/splay.h
+[Thu Apr 01 02:07:11 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/treap.c
+[Thu Apr 01 02:07:30 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/Ch1.out
+[Thu Apr 01 02:07:38 2010] [alert] [client 66.249.65.4] /home/hpdrc-demo/sdbtools/public_html/hpdrc2/.htaccess: AuthName takes one argument, The authentication realm (e.g. "Members Only")
+[Thu Apr 01 02:07:44 2010] [error] [client 203.123.186.205] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 02:07:49 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/Ch12.out
+[Thu Apr 01 02:08:08 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/aatree.h
+[Thu Apr 01 02:08:27 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/Ch10.out
+[Thu Apr 01 02:08:34 2010] [error] [client 219.239.227.243] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:08:46 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig1_3.c
+[Thu Apr 01 02:08:47 2010] [error] [client 65.55.108.149] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:08:49 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:08:58 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:08:59 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:09:00 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:09:01 2010] [error] [client 58.186.113.101] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://www.vn-zoom.com/f258/windows-xp-sp2-vol-nguyen-goc-xin-nhat-tren-msdn-295294.html
+[Thu Apr 01 02:09:02 2010] [error] [client 58.186.113.101] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://www.vn-zoom.com/f258/windows-xp-sp2-vol-nguyen-goc-xin-nhat-tren-msdn-295294.html
+[Thu Apr 01 02:09:03 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:09:05 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:09:05 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig2_9.c
+[Thu Apr 01 02:09:06 2010] [error] [client 58.186.113.101] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://www.vn-zoom.com/f258/windows-xp-sp2-vol-nguyen-goc-xin-nhat-tren-msdn-295294.html
+[Thu Apr 01 02:09:07 2010] [error] [client 58.186.113.101] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://www.vn-zoom.com/f258/windows-xp-sp2-vol-nguyen-goc-xin-nhat-tren-msdn-295294.html
+[Thu Apr 01 02:09:07 2010] [error] [client 58.186.113.101] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:09:10 2010] [error] [client 58.186.113.101] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:09:14 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:09:20 2010] [error] [client 207.46.194.87] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:09:22 2010] [error] [client 70.68.175.84] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:09:25 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/cursor.c
+[Thu Apr 01 02:09:25 2010] [error] [client 203.197.157.143] File does not exist: /home/bear-008/users/irvinek/public_html/Fall_2004, referer: http://www.programminglearn.com/200/introducing-visual-basic-net
+[Thu Apr 01 02:09:25 2010] [error] [client 70.68.175.84] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:09:41 2010] [error] [client 124.181.126.144] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:09:44 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/aatree.c
+[Thu Apr 01 02:09:47 2010] [error] [client 65.55.231.27] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:10:03 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/testaa.c
+[Thu Apr 01 02:10:22 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig1_2.c
+[Thu Apr 01 02:10:23 2010] [error] [client 85.31.84.157] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:10:41 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig1_4.c
+[Thu Apr 01 02:11:00 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/testrb.c
+[Thu Apr 01 02:11:19 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/max_sum.c
+[Thu Apr 01 02:11:39 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/testque.c
+[Thu Apr 01 02:11:58 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 02:11:58 2010] [error] [client 66.249.65.4] Premature end of script headers: aerial.cgi
+[Thu Apr 01 02:12:01 2010] [error] [client 59.165.92.216] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:12:01 2010] [error] [client 59.165.92.216] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:12:07 2010] [error] [client 115.113.20.6] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:12:08 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig2_10.c
+[Thu Apr 01 02:12:08 2010] [error] [client 59.165.92.216] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:12:11 2010] [error] [client 59.165.92.216] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:12:13 2010] [error] [client 59.165.92.216] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:12:17 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/binheap.c
+[Thu Apr 01 02:12:36 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/binheap.h
+[Thu Apr 01 02:12:37 2010] [error] [client 65.55.215.88] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:12:40 2010] [error] [client 59.165.92.216] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:12:55 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/avltree.h
+[Thu Apr 01 02:12:56 2010] [error] [client 59.165.92.216] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:13:06 2010] [error] [client 59.165.92.216] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:13:08 2010] [error] [client 59.165.92.216] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:13:15 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/hashsep.c
+[Thu Apr 01 02:13:20 2010] [error] [client 203.135.26.100] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:13:23 2010] [error] [client 203.135.26.100] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:13:33 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/testdsl.c
+[Thu Apr 01 02:13:53 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/stackar.h
+[Thu Apr 01 02:14:12 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/avltree.c
+[Thu Apr 01 02:14:31 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/testavl.c
+[Thu Apr 01 02:14:50 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/testtrp.c
+[Thu Apr 01 02:15:07 2010] [error] [client 61.6.1.38] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:15:08 2010] [crit] [client 76.110.235.69] (13)Permission denied: /home/bear-011/users/giri/public_html/bioinf/PARegionFigures/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 02:15:08 2010] [error] [client 76.110.235.69] (13)Permission denied: cannot read directory for multi: /home/bear-011/users/giri/public_html/bioinf/GYM/
+[Thu Apr 01 02:15:08 2010] [error] [client 76.110.235.69] (13)Permission denied: cannot read directory for multi: /home/bear-011/users/giri/public_html/bioinf/GYM/
+[Thu Apr 01 02:15:08 2010] [error] [client 76.110.235.69] (13)Permission denied: cannot read directory for multi: /home/bear-011/users/giri/public_html/bioinf/GYM/
+[Thu Apr 01 02:15:08 2010] [error] [client 76.110.235.69] (13)Permission denied: cannot read directory for multi: /home/bear-011/users/giri/public_html/bioinf/GYM/
+[Thu Apr 01 02:15:08 2010] [error] [client 76.110.235.69] (13)Permission denied: cannot read directory for multi: /home/bear-011/users/giri/public_html/bioinf/GYM/
+[Thu Apr 01 02:15:08 2010] [crit] [client 76.110.235.69] (13)Permission denied: /home/bear-011/users/giri/public_html/bioinf/BioPerlUtils/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 02:15:09 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig2_11.c
+[Thu Apr 01 02:15:09 2010] [crit] [client 76.110.235.69] (13)Permission denied: /home/bear-011/users/giri/public_html/bioinf/PARegionFigures/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 02:15:09 2010] [error] [client 76.110.235.69] (13)Permission denied: cannot read directory for multi: /home/bear-011/users/giri/public_html/bioinf/GYM/
+[Thu Apr 01 02:15:09 2010] [error] [client 76.110.235.69] (13)Permission denied: cannot read directory for multi: /home/bear-011/users/giri/public_html/bioinf/GYM/
+[Thu Apr 01 02:15:09 2010] [error] [client 76.110.235.69] (13)Permission denied: cannot read directory for multi: /home/bear-011/users/giri/public_html/bioinf/GYM/
+[Thu Apr 01 02:15:09 2010] [error] [client 76.110.235.69] (13)Permission denied: cannot read directory for multi: /home/bear-011/users/giri/public_html/bioinf/GYM/
+[Thu Apr 01 02:15:09 2010] [error] [client 76.110.235.69] (13)Permission denied: cannot read directory for multi: /home/bear-011/users/giri/public_html/bioinf/GYM/
+[Thu Apr 01 02:15:09 2010] [crit] [client 76.110.235.69] (13)Permission denied: /home/bear-011/users/giri/public_html/bioinf/BioPerlUtils/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 02:15:10 2010] [error] [client 61.6.1.38] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:15:16 2010] [crit] [client 76.110.235.69] (13)Permission denied: /home/bear-011/users/giri/public_html/bioinf/GYM2/GYM3/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://users.cis.fiu.edu/~giri/bioinf/
+[Thu Apr 01 02:15:16 2010] [crit] [client 76.110.235.69] (13)Permission denied: /home/bear-011/users/giri/public_html/bioinf/GYM2/temp/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://users.cis.fiu.edu/~giri/bioinf/
+[Thu Apr 01 02:15:16 2010] [crit] [client 76.110.235.69] (13)Permission denied: /home/bear-011/users/giri/public_html/bioinf/GYM2/hthcgi/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://users.cis.fiu.edu/~giri/bioinf/
+[Thu Apr 01 02:15:28 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/stackli.h
+[Thu Apr 01 02:15:39 2010] [error] [client 152.106.99.22] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:15:47 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/stackli.c
+[Thu Apr 01 02:16:06 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/stackar.c
+[Thu Apr 01 02:16:20 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 02:16:20 2010] [error] [client 66.249.65.4] Premature end of script headers: aerial3.cgi
+[Thu Apr 01 02:16:31 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/testbin.c
+[Thu Apr 01 02:16:45 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/hashsep.h
+[Thu Apr 01 02:17:04 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig10_55.c
+[Thu Apr 01 02:17:23 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/pairheap.h
+[Thu Apr 01 02:17:32 2010] [error] [client 203.113.130.218] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso
+[Thu Apr 01 02:17:33 2010] [error] [client 203.113.130.218] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:17:33 2010] [error] [client 203.113.130.218] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:17:36 2010] [error] [client 83.119.73.229] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:17:42 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/hashquad.h
+[Thu Apr 01 02:18:01 2010] [error] [client 207.46.194.124] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:18:01 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/pairheap.c
+[Thu Apr 01 02:18:11 2010] [error] [client 210.212.214.46] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:18:20 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/disjsets.c
+[Thu Apr 01 02:18:32 2010] [error] [client 116.125.140.17] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:18:40 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/redblack.h
+[Thu Apr 01 02:18:59 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig10_46.c
+[Thu Apr 01 02:19:18 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/testsply.c
+[Thu Apr 01 02:19:37 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig10_53.c
+[Thu Apr 01 02:19:56 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/hashquad.c
+[Thu Apr 01 02:20:05 2010] [error] [client 180.191.44.231] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:20:06 2010] [error] [client 180.191.44.231] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:20:15 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/binomial.c
+[Thu Apr 01 02:20:34 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/testhash.c
+[Thu Apr 01 02:20:43 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 02:20:43 2010] [error] [client 66.249.65.4] Premature end of script headers: aerial2.cgi
+[Thu Apr 01 02:20:54 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/teststka.c
+[Thu Apr 01 02:21:13 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/binomial.h
+[Thu Apr 01 02:21:32 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/redblack.c
+[Thu Apr 01 02:21:38 2010] [error] [client 99.250.31.151] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:21:51 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/leftheap.h
+[Thu Apr 01 02:22:02 2010] [error] [client 65.8.255.39] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:22:07 2010] [error] [client 207.46.199.178] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:22:10 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/teststkl.c
+[Thu Apr 01 02:22:13 2010] [error] [client 207.46.204.191] File does not exist: /home/bear-009/users/barton/public_html/UNI3.xtm
+[Thu Apr 01 02:22:16 2010] [error] [client 116.90.239.3] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:22:19 2010] [error] [client 116.90.239.3] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:23:17 2010] [error] [client 70.68.175.84] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:23:21 2010] [error] [client 65.55.215.91] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:23:26 2010] [error] [client 76.10.116.14] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:23:29 2010] [error] [client 76.10.116.14] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:23:32 2010] [error] [client 144.214.111.150] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:24:09 2010] [error] [client 218.111.67.118] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:24:12 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-008/users/smithjo/public_html/COP3338/advanced/awt.html
+[Thu Apr 01 02:24:33 2010] [error] [client 75.57.71.125] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:25:00 2010] [error] [client 207.46.195.231] File does not exist: /home/bear-006/users/mpill001/public_html/~mpill001
+[Thu Apr 01 02:25:06 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 02:25:06 2010] [error] [client 66.249.65.4] Premature end of script headers: yes.cgi
+[Thu Apr 01 02:26:01 2010] [error] [client 202.137.4.101] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:26:03 2010] [error] [client 202.137.4.101] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:26:12 2010] [error] [client 173.183.38.49] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~ccaned01, referer: http://www.mazda3forums.com/index.php?topic=4664.0
+[Thu Apr 01 02:26:18 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/testleft.c
+[Thu Apr 01 02:26:30 2010] [error] [client 207.46.204.190] File does not exist: /home/bear-006/users/mpill001/public_html/~mpill001
+[Thu Apr 01 02:26:41 2010] [error] [client 218.248.46.84] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:26:42 2010] [error] [client 218.248.46.84] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:26:42 2010] [error] [client 210.96.211.253] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:27:13 2010] [error] [client 116.125.140.4] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:27:19 2010] [error] [client 218.248.46.116] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:27:19 2010] [error] [client 218.248.46.116] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:27:46 2010] [error] [client 67.250.21.40] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 02:27:46 2010] [error] [client 67.250.21.40] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:27:47 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:27:49 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:27:49 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:27:49 2010] [error] [client 67.250.21.40] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:27:54 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:27:57 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:28:13 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/leftheap.c
+[Thu Apr 01 02:29:04 2010] [error] [client 207.46.194.136] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:29:29 2010] [error] [client 66.249.65.4] aerial.cgi.save: line 4: unexpected EOF while looking for matching ``'
+[Thu Apr 01 02:29:29 2010] [error] [client 66.249.65.4] aerial.cgi.save: line 13: syntax error: unexpected end of file
+[Thu Apr 01 02:29:29 2010] [error] [client 66.249.65.4] Premature end of script headers: aerial.cgi.save
+[Thu Apr 01 02:30:19 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig10_45.c
+[Thu Apr 01 02:31:24 2010] [error] [client 210.212.194.165] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:31:57 2010] [error] [client 203.81.17.32] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 02:31:57 2010] [error] [client 203.81.17.32] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:32:00 2010] [error] [client 203.81.17.32] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:32:02 2010] [error] [client 66.176.204.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:32:04 2010] [error] [client 66.176.204.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:32:16 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-008/users/smithjo/public_html/COP3338/Essentials/io/ObjectStream.html
+[Thu Apr 01 02:32:53 2010] [error] [client 65.55.230.19] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:33:52 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 02:33:52 2010] [error] [client 66.249.65.4] Premature end of script headers: aerial3.cgi
+[Thu Apr 01 02:34:20 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/testheap.c
+[Thu Apr 01 02:34:42 2010] [error] [client 76.7.108.219] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:34:42 2010] [error] [client 76.7.108.219] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:36:18 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-008/users/smithjo/public_html/COP3338/Essentials/io/fileDescriptor.html
+[Thu Apr 01 02:36:34 2010] [error] [client 189.124.213.143] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:36:46 2010] [error] [client 202.141.140.248] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:36:53 2010] [error] [client 217.125.196.204] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:37:59 2010] [error] [client 203.122.14.130] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:38:01 2010] [error] [client 207.46.13.135] File does not exist: /home/bear-006/users/mpill001/public_html/Articles/index.html
+[Thu Apr 01 02:38:15 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 02:38:15 2010] [error] [client 66.249.65.4] Premature end of script headers: aerial2.cgi
+[Thu Apr 01 02:38:25 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/testtree.c
+[Thu Apr 01 02:39:01 2010] [error] [client 203.122.14.130] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:39:13 2010] [error] [client 67.250.21.40] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 02:39:17 2010] [error] [client 210.212.194.181] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:39:26 2010] [error] [client 115.117.195.58] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:39:28 2010] [error] [client 58.27.19.245] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:39:29 2010] [error] [client 115.117.195.58] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:39:41 2010] [error] [client 58.27.19.245] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:40:08 2010] [error] [client 64.180.171.19] (13)Permission denied: cannot read directory for multi: /home/bear-007/users/dyganova/public_html/, referer: http://www.i-pets.com/blog/labels/funny.html
+[Thu Apr 01 02:40:17 2010] [error] [client 61.30.29.252] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:40:21 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig10_43.c
+[Thu Apr 01 02:41:02 2010] [error] [client 65.55.215.85] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:41:03 2010] [error] [client 131.107.65.248] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:41:13 2010] [error] [client 93.158.151.25] File does not exist: /home/bear-003/users/ovald002/public_html/publications.html
+[Thu Apr 01 02:42:17 2010] [error] [client 163.21.216.253] File does not exist: /home/bear-006/users/lzhen001/public_html/File Cabinet/Chameleon/an efficient heuristic procedure for partitioning graphs.pdf, referer: http://scholar.google.com.tw/scholar?start=70&q=process+and+procedure&hl=zh-TW&as_sdt=2000
+[Thu Apr 01 02:42:22 2010] [error] [client 66.249.65.4] client denied by server configuration: /home/bear-009/users/weiss/public_html/cgs2423_spr97
+[Thu Apr 01 02:42:38 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 02:42:38 2010] [error] [client 66.249.65.4] Premature end of script headers: yes.cgi
+[Thu Apr 01 02:42:45 2010] [error] [client 163.21.216.253] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:42:45 2010] [error] [client 98.219.80.152] (13)Permission denied: file permissions deny server access: /home/bear-008/users/navlakha/public_html/3530/thinheadline.gif, referer: http://users.cis.fiu.edu/~navlakha/3530/ds.html
+[Thu Apr 01 02:42:45 2010] [error] [client 163.21.216.253] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:42:48 2010] [error] [client 98.219.80.152] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:43:22 2010] [error] [client 131.107.65.248] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:43:22 2010] [error] [client 131.107.65.248] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:44:49 2010] [error] [client 65.55.230.29] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:44:50 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig10_62.c
+[Thu Apr 01 02:44:50 2010] [error] [client 117.195.234.247] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:44:50 2010] [error] [client 117.195.234.247] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:45:31 2010] [error] [client 207.46.13.42] File does not exist: /home/bear-008/users/khalils/public_html
+[Thu Apr 01 02:46:22 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig10_40.c
+[Thu Apr 01 02:46:26 2010] [error] [client 122.181.153.180] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:46:47 2010] [error] [client 203.113.130.218] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://www.laptrinhviet.com/he-dieu-hanh/3962-vx2pvol_en-ban-windows-xp-sp2-nguyen-goc-xin-nhat-tren-msdn.html
+[Thu Apr 01 02:47:00 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 02:47:00 2010] [error] [client 66.249.65.4] Premature end of script headers: aerial.cgi
+[Thu Apr 01 02:47:09 2010] [error] [client 203.113.130.218] File does not exist: /home/bear-007/users/mullerk/public_html/tech/VX2PVOL_EN.iso, referer: http://diendan.laptopnova.vn/ha-ae-ia-u-ha-nh/27925-vx2pvol_en-ba-n-windows-xp-sp2-nguya-n-ga-c-xa-n-nha-t-tra-n-msdn.html
+[Thu Apr 01 02:47:24 2010] [error] [client 222.231.42.201] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:47:41 2010] [error] [client 152.14.90.82] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:48:16 2010] [error] [client 203.81.17.32] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 02:48:18 2010] [error] [client 117.55.247.50] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:48:19 2010] [error] [client 203.81.17.32] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:49:03 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/testpair.c
+[Thu Apr 01 02:49:36 2010] [error] [client 120.141.183.173] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:49:39 2010] [error] [client 74.160.168.18] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:49:40 2010] [error] [client 122.167.16.91] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 02:49:41 2010] [error] [client 122.167.16.91] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:49:42 2010] [error] [client 74.160.168.18] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:49:44 2010] [error] [client 122.167.16.91] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:50:02 2010] [error] [client 207.47.233.68] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 02:50:03 2010] [error] [client 207.47.233.68] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:50:03 2010] [error] [client 207.47.233.68] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:50:06 2010] [error] [client 207.47.233.68] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:50:28 2010] [error] [client 207.46.13.146] File does not exist: /home/bear-007/users/tho01/public_html/stuff
+[Thu Apr 01 02:50:33 2010] [error] [client 122.116.52.125] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:50:36 2010] [error] [client 66.249.65.4] File does not exist: /home/bear-009/users/weiss/public_html/c.html/fig10_38.c
+[Thu Apr 01 02:50:42 2010] [error] [client 207.46.199.226] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:50:52 2010] [error] [client 218.111.67.118] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:51:16 2010] [error] [client 165.91.15.113] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 02:51:23 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 02:51:23 2010] [error] [client 66.249.65.4] Premature end of script headers: one.cgi
+[Thu Apr 01 02:51:29 2010] [error] [client 165.91.15.113] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:51:29 2010] [error] [client 165.91.15.113] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:51:31 2010] [error] [client 165.91.15.113] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:51:36 2010] [error] [client 203.188.64.208] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:51:42 2010] [error] [client 203.81.17.32] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 02:51:45 2010] [error] [client 203.81.17.32] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:51:53 2010] [error] [client 203.188.64.208] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:52:07 2010] [error] [client 117.207.69.139] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 02:52:11 2010] [error] [client 117.207.69.139] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:52:12 2010] [error] [client 67.195.114.56] (13)Permission denied: file permissions deny server access: /home/hpdrc-demo/sdbtools/public_html/Aerial_Web_Ext/broward-keys/26080A78.hdr
+[Thu Apr 01 02:52:17 2010] [error] [client 208.115.111.244] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:52:47 2010] [error] [client 122.116.52.125] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:52:50 2010] [error] [client 174.52.130.237] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:52:53 2010] [error] [client 174.52.130.237] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:54:06 2010] [error] [client 221.10.55.226] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:55:00 2010] [crit] [client 207.46.13.54] (13)Permission denied: /home/bear-010/users/jstric01/public_html/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 02:55:46 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 02:55:46 2010] [error] [client 66.249.65.4] Premature end of script headers: query_view_log.cgi
+[Thu Apr 01 02:56:33 2010] [error] [client 207.46.194.157] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:56:42 2010] [error] [client 79.21.160.237] (13)Permission denied: cannot read directory for multi: /home/bear-007/users/dyganova/public_html/, referer: http://www.i-pets.com/blog/labels/funny.html
+[Thu Apr 01 02:57:35 2010] [error] [client 67.194.33.149] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:57:35 2010] [error] [client 67.194.33.149] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:57:38 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:57:38 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:57:40 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:57:47 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:57:51 2010] [error] [client 98.64.109.153] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:58:07 2010] [error] [client 67.244.62.122] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:58:07 2010] [error] [client 67.244.62.122] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:58:09 2010] [error] [client 67.244.62.122] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:58:14 2010] [error] [client 216.129.119.44] File does not exist: /home/bear-011/users/giri/public_html/teach/Bioinf/S05/lec9.pdf
+[Thu Apr 01 02:58:39 2010] [error] [client 207.46.199.200] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 02:59:11 2010] [error] [client 210.212.195.136] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 02:59:32 2010] [error] [client 210.212.85.151] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:00:09 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 03:00:09 2010] [error] [client 66.249.65.4] Premature end of script headers: shoppe.cgi
+[Thu Apr 01 03:00:29 2010] [error] [client 76.249.190.243] (13)Permission denied: cannot read directory for multi: /home/bear-007/users/dyganova/public_html/, referer: http://www.i-pets.com/blog/labels/funny.html
+[Thu Apr 01 03:00:59 2010] [error] [client 67.194.33.149] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:01:01 2010] [error] [client 112.121.55.5] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:01:03 2010] [error] [client 67.194.33.149] (13)Permission denied: cannot read directory for multi: /home/bear-009/users/weiss/public_html/dsaa_c2e/, referer: http://users.cis.fiu.edu/~weiss/dsaa_c2e/files.html
+[Thu Apr 01 03:02:27 2010] [error] [client 202.79.55.68] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:03:35 2010] [error] [client 218.56.0.154] File does not exist: /home/bear-005/users/wpeng002/public_html/xiaomai.smi, referer: http://pingback.mp3.sogou.com/bg_listen_wmp3.jsp?area=n
+[Thu Apr 01 03:03:43 2010] [error] [client 194.187.80.6] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cs.fiu.edu/~weiss/
+[Thu Apr 01 03:03:44 2010] [error] [client 194.187.80.6] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:04:31 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 03:04:31 2010] [error] [client 66.249.65.4] Premature end of script headers: query_track.cgi
+[Thu Apr 01 03:05:31 2010] [error] [client 207.46.195.239] File does not exist: /home/bear-006/users/mpill001/public_html/Articles/Dating-87.html
+[Thu Apr 01 03:05:31 2010] [error] [client 207.46.204.190] (13)Permission denied: cannot read directory for multi: /home/bear-008/users/czhang/public_html/teaching/cop6611/slides/
+[Thu Apr 01 03:06:11 2010] [error] [client 194.187.80.6] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cs.fiu.edu/~weiss/
+[Thu Apr 01 03:06:11 2010] [error] [client 194.187.80.6] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:07:52 2010] [error] [client 60.250.37.142] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:08:36 2010] [error] [client 59.177.6.125] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:08:39 2010] [error] [client 124.124.93.154] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:08:54 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 03:08:54 2010] [error] [client 66.249.65.4] Premature end of script headers: fast_count2.cgi
+[Thu Apr 01 03:09:04 2010] [error] [client 207.46.204.191] 2010-04-01 03:09:04,031 WARNING MoinMoin.log:139 using logging configuration read from built-in fallback in MoinMoin.log module!
+[Thu Apr 01 03:09:05 2010] [error] [client 207.46.204.191] 2010-04-01 03:09:05,453 INFO MoinMoin.config.multiconfig:125 using wiki config: /home/bear-004/users/lusec001/moin/share/moin/mywiki/wikiconfig.pyc
+[Thu Apr 01 03:09:14 2010] [error] [client 207.46.194.112] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:09:40 2010] [error] [client 78.182.73.210] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:10:10 2010] [error] [client 65.55.215.93] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:12:01 2010] [error] [client 71.201.203.253] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:12:04 2010] [error] [client 71.201.203.253] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:12:59 2010] [error] [client 210.212.195.136] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:13:23 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 03:13:23 2010] [error] [client 66.249.65.4] Premature end of script headers: startup.pl
+[Thu Apr 01 03:14:29 2010] [error] [client 207.46.13.146] File does not exist: /home/bear-006/users/xwang009/public_html
+[Thu Apr 01 03:14:42 2010] [error] [client 93.173.152.135] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:15:10 2010] [error] [client 67.195.115.87] File does not exist: /home/bear-001/users/acm/public_html/Events/2005-Fall
+[Thu Apr 01 03:15:37 2010] [error] [client 66.81.173.149] File does not exist: /home/bear-006/users/mpill001/public_html/images, referer: http://users.cs.fiu.edu/~mpill001/Costumes57.html
+[Thu Apr 01 03:15:48 2010] [error] [client 66.81.173.149] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:15:50 2010] [error] [client 66.81.173.149] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:16:30 2010] [error] [client 207.46.195.230] File does not exist: /home/bear-008/users/downeyt/public_html/invalid.transitional.html
+[Thu Apr 01 03:16:30 2010] [error] [client 207.46.13.101] (13)Permission denied: file permissions deny server access: /home/bear-009/users/weiss/public_html/cop3530_f98/assignments/quiz3.pdf
+[Thu Apr 01 03:17:16 2010] [error] [client 131.107.65.248] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:17:22 2010] [error] [client 66.81.173.149] File does not exist: /home/bear-006/users/mpill001/public_html/images, referer: http://users.cs.fiu.edu/~mpill001/Costumes57.html
+[Thu Apr 01 03:17:51 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 03:17:51 2010] [error] [client 66.249.65.4] Premature end of script headers: fast_count.cgi
+[Thu Apr 01 03:18:38 2010] [error] [client 60.48.34.226] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 03:18:53 2010] [error] [client 83.98.232.138] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:19:00 2010] [error] [client 60.48.34.226] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:19:06 2010] [error] [client 60.48.34.226] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:19:21 2010] [error] [client 131.94.222.94] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:19:41 2010] [error] [client 210.212.194.181] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:20:44 2010] [error] [client 131.94.222.229] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:20:44 2010] [error] [client 131.94.222.229] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:21:03 2010] [error] [client 131.94.222.94] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:21:38 2010] [error] [client 78.182.73.210] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:21:53 2010] [error] [client 131.94.222.229] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:21:55 2010] [error] [client 131.94.222.229] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:21:55 2010] [error] [client 131.94.222.229] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:22:19 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 03:22:19 2010] [error] [client 66.249.65.4] Premature end of script headers: store.cgi
+[Thu Apr 01 03:22:25 2010] [error] [client 149.199.62.254] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:22:25 2010] [error] [client 149.199.62.254] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://www.google.com/search?q=Iterator+java&ie=utf-8&oe=utf-8&aq=t&rls=org.mozilla:en-US:official&client=firefox-a
+[Thu Apr 01 03:22:59 2010] [error] [client 207.46.13.143] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~jmora009
+[Thu Apr 01 03:23:31 2010] [error] [client 78.182.73.210] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:23:47 2010] [error] [client 78.182.73.210] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:23:48 2010] [error] [client 202.166.201.162] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cis.fiu.edu/~downeyt/cop3402/hamming.html
+[Thu Apr 01 03:23:57 2010] [error] [client 131.94.222.229] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:24:00 2010] [error] [client 131.94.222.229] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:24:11 2010] [error] [client 61.135.249.208] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:24:59 2010] [error] [client 207.46.13.46] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/teaching
+[Thu Apr 01 03:24:59 2010] [error] [client 122.168.191.2] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:25:53 2010] [error] [client 122.162.214.57] File does not exist: /home/bear-010/users/kchat001/public_html/AF_CHapter02.ppt
+[Thu Apr 01 03:26:19 2010] [error] [client 222.231.42.202] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:26:29 2010] [error] [client 207.46.195.223] File does not exist: /home/bear-006/users/xwang009/public_html
+[Thu Apr 01 03:26:34 2010] [error] [client 124.124.54.66] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:26:47 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 03:26:47 2010] [error] [client 66.249.65.4] Premature end of script headers: cookie_test.cgi
+[Thu Apr 01 03:27:04 2010] [error] [client 76.0.12.71] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:27:12 2010] [error] [client 79.31.29.197] (13)Permission denied: cannot read directory for multi: /home/bear-007/users/dyganova/public_html/, referer: http://www.i-pets.com/blog/labels/funny.html
+[Thu Apr 01 03:28:17 2010] [error] [client 83.84.82.161] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:28:30 2010] [error] [client 210.212.195.136] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:28:46 2010] [error] [client 65.55.108.154] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:28:50 2010] [error] [client 74.173.141.71] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:28:50 2010] [error] [client 74.173.141.71] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:28:58 2010] [error] [client 207.46.199.38] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/~kvarga01
+[Thu Apr 01 03:29:22 2010] [error] [client 67.195.114.56] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:29:23 2010] [error] [client 67.195.114.56] (13)Permission denied: file permissions deny server access: /home/hpdrc-demo/sdbtools/public_html/Aerial_Web_Ext/broward-keys/24081E76.hdr
+[Thu Apr 01 03:29:47 2010] [error] [client 66.215.243.194] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cis.fiu.edu/~weiss/dsaa_c++3/code/
+[Thu Apr 01 03:30:59 2010] [error] [client 76.0.12.71] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:31:16 2010] [error] [client 66.249.65.4] suexec policy violation: see suexec log for more details
+[Thu Apr 01 03:31:16 2010] [error] [client 66.249.65.4] Premature end of script headers: counter.cgi
+[Thu Apr 01 03:31:18 2010] [error] [client 220.181.94.224] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:31:29 2010] [error] [client 220.181.94.224] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:31:32 2010] [error] [client 74.173.141.71] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:31:34 2010] [error] [client 124.82.58.217] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:31:38 2010] [error] [client 124.82.58.217] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:31:43 2010] [error] [client 194.7.83.92] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:31:47 2010] [error] [client 74.173.141.71] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:34:22 2010] [error] [client 65.55.216.50] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:34:27 2010] [error] [client 68.228.67.4] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:34:30 2010] [error] [client 68.228.67.4] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:35:33 2010] [error] [client 61.147.97.249] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:36:08 2010] [error] [client 202.175.42.3] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 03:36:09 2010] [error] [client 202.175.42.3] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:36:57 2010] [error] [client 64.81.141.13] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:37:00 2010] [error] [client 64.81.141.13] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:37:04 2010] [error] [client 212.219.81.179] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:37:17 2010] [error] [client 62.69.146.108] File does not exist: /home/bear-008/users/vagelis/public_html/classes/...
+[Thu Apr 01 03:37:23 2010] [error] [client 62.69.146.108] File does not exist: /home/bear-008/users/vagelis/public_html/classes/...
+[Thu Apr 01 03:37:28 2010] [error] [client 97.118.45.87] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 03:37:29 2010] [error] [client 97.118.45.87] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:37:37 2010] [error] [client 65.7.198.104] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:37:39 2010] [error] [client 65.55.108.171] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:37:40 2010] [error] [client 65.7.198.104] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:38:25 2010] [error] [client 74.225.43.122] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:38:29 2010] [error] [client 74.225.43.122] (13)Permission denied: file permissions deny server access: /home/bear-006/users/osorioj/public_html/cts4348sp10/ppt/15.ppt, referer: http://users.cis.fiu.edu/~osorioj/cts4348sp10/cts4348Lectures.html
+[Thu Apr 01 03:38:32 2010] [error] [client 74.225.43.122] (13)Permission denied: file permissions deny server access: /home/bear-006/users/osorioj/public_html/cts4348sp10/ppt/15.ppt, referer: http://users.cis.fiu.edu/~osorioj/cts4348sp10/cts4348Lectures.html
+[Thu Apr 01 03:39:29 2010] [error] [client 97.118.45.87] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:39:57 2010] [error] [client 87.1.88.156] (13)Permission denied: cannot read directory for multi: /home/bear-009/users/weiss/public_html/dsj2/code/
+[Thu Apr 01 03:39:57 2010] [error] [client 87.1.88.156] (13)Permission denied: cannot read directory for multi: /home/bear-009/users/weiss/public_html/dsj2/code/
+[Thu Apr 01 03:39:57 2010] [error] [client 87.1.88.156] (13)Permission denied: cannot read directory for multi: /home/bear-009/users/weiss/public_html/dsj2/code/
+[Thu Apr 01 03:39:57 2010] [error] [client 87.1.88.156] (13)Permission denied: cannot read directory for multi: /home/bear-009/users/weiss/public_html/dsj2/code/
+[Thu Apr 01 03:39:57 2010] [error] [client 87.1.88.156] (13)Permission denied: cannot read directory for multi: /home/bear-009/users/weiss/public_html/dsj2/code/
+[Thu Apr 01 03:39:57 2010] [error] [client 207.46.199.193] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:39:57 2010] [error] [client 87.1.88.156] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:40:32 2010] [error] [client 76.95.148.60] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico, referer: http://users.cis.fiu.edu/~jweiss/uselect1.JPG
+[Thu Apr 01 03:42:54 2010] [error] [client 221.213.9.135] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cs.fiu.edu/~weiss/
+[Thu Apr 01 03:42:55 2010] [error] [client 125.71.228.74] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:42:56 2010] [error] [client 221.213.9.135] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:43:08 2010] [error] [client 68.40.19.65] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:43:10 2010] [error] [client 69.59.78.78] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/images, referer: http://users.cis.fiu.edu/~xzhou001/
+[Thu Apr 01 03:43:10 2010] [error] [client 69.59.78.78] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:43:22 2010] [error] [client 110.174.10.56] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:43:26 2010] [error] [client 69.59.78.78] (13)Permission denied: file permissions deny server access: /home/bear-006/users/xzhou001/public_html/resume/CV_Xiaosi_files/image001.gif, referer: http://users.cis.fiu.edu/~xzhou001/resume/CV_Xiaosi.htm
+[Thu Apr 01 03:43:30 2010] [error] [client 180.149.49.65] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 03:43:31 2010] [error] [client 180.149.49.65] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:43:39 2010] [error] [client 67.195.115.87] File does not exist: /home/bear-008/users/smithjo/public_html/COP3338/javax, referer: http://users.cis.fiu.edu/~smithjo/COP3338/
+[Thu Apr 01 03:43:50 2010] [error] [client 69.59.78.78] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/images, referer: http://users.cis.fiu.edu/~xzhou001/
+[Thu Apr 01 03:44:10 2010] [error] [client 207.46.199.179] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:44:12 2010] [error] [client 65.55.220.222] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:44:58 2010] [error] [client 99.27.50.90] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:44:59 2010] [error] [client 99.27.50.90] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:45:00 2010] [error] [client 99.27.50.90] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:46:03 2010] [error] [client 99.27.50.90] (13)Permission denied: cannot read directory for multi: /home/bear-009/users/prabakar/public_html/, referer: http://www.cis.fiu.edu/faculty/prabakar/
+[Thu Apr 01 03:46:04 2010] [error] [client 99.27.50.90] (13)Permission denied: file permissions deny server access: /home/bear-009/users/prabakar/public_html/fiulogo.gif, referer: http://users.cis.fiu.edu/~prabakar/
+[Thu Apr 01 03:46:06 2010] [error] [client 204.236.226.210] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:46:59 2010] [error] [client 99.27.50.90] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:47:03 2010] [crit] [client 208.131.25.169] (13)Permission denied: /home/bear-008/users/taoli/public_html/class/CAP4770-F08/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 03:47:03 2010] [crit] [client 208.131.25.169] (13)Permission denied: /home/bear-008/users/taoli/public_html/class/CAP4770-F08/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 03:47:04 2010] [crit] [client 208.131.25.169] (13)Permission denied: /home/bear-008/users/taoli/public_html/class/CAP4770-F08/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 03:47:41 2010] [error] [client 122.168.191.2] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:47:46 2010] [error] [client 61.135.249.68] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/robots.txt
+[Thu Apr 01 03:47:47 2010] [crit] [client 61.135.249.68] (13)Permission denied: /home/bear-005/users/wpeng002/public_html/ke/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+[Thu Apr 01 03:48:06 2010] [error] [client 72.148.130.182] File does not exist: /home/bear-001/users/acm/public_html/acmCss.css, referer: http://users.cis.fiu.edu/~acm/events.php
+[Thu Apr 01 03:48:06 2010] [error] [client 72.148.130.182] File does not exist: /home/bear-001/users/acm/public_html/defaultFormat.css, referer: http://users.cis.fiu.edu/~acm/events.php
+[Thu Apr 01 03:48:06 2010] [error] [client 72.148.130.182] File does not exist: /home/bear-001/users/acm/public_html/competition, referer: http://users.cis.fiu.edu/~acm/events.php
+[Thu Apr 01 03:48:06 2010] [error] [client 72.148.130.182] File does not exist: /home/bear-001/users/acm/public_html/photos/seminars, referer: http://users.cis.fiu.edu/~acm/events.php
+[Thu Apr 01 03:48:06 2010] [error] [client 72.148.130.182] File does not exist: /home/bear-001/users/acm/public_html/photos/seminars, referer: http://users.cis.fiu.edu/~acm/events.php
+[Thu Apr 01 03:48:06 2010] [error] [client 72.148.130.182] File does not exist: /home/bear-001/users/acm/public_html/photos/seminars, referer: http://users.cis.fiu.edu/~acm/events.php
+[Thu Apr 01 03:48:06 2010] [error] [client 72.148.130.182] File does not exist: /home/bear-001/users/acm/public_html/competition, referer: http://users.cis.fiu.edu/~acm/events.php
+[Thu Apr 01 03:48:06 2010] [error] [client 72.148.130.182] File does not exist: /home/bear-001/users/acm/public_html/photos/Alvarez.jpg, referer: http://users.cis.fiu.edu/~acm/events.php
+[Thu Apr 01 03:48:07 2010] [error] [client 72.148.130.182] File does not exist: /home/bear-001/users/acm/public_html/photos/venture_challenge.jpg, referer: http://users.cis.fiu.edu/~acm/events.php
+[Thu Apr 01 03:48:07 2010] [error] [client 72.148.130.182] File does not exist: /home/bear-001/users/acm/public_html/photos/tucker.jpg, referer: http://users.cis.fiu.edu/~acm/events.php
+[Thu Apr 01 03:48:11 2010] [error] [client 72.148.130.182] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:48:46 2010] [error] [client 110.174.10.56] File does not exist: /home/bear-000/users/flynnj/public_html/tv/Aristocats/favicon.ico
+[Thu Apr 01 03:49:01 2010] [error] [client 93.173.152.135] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:49:02 2010] [error] [client 110.174.10.56] File does not exist: /home/bear-000/users/flynnj/public_html/tv/Aristocats/favicon.ico
+[Thu Apr 01 03:50:38 2010] [error] [client 83.238.174.231] File does not exist: /home/bear-009/users/weiss/public_html/dsaa.jpg, referer: http://users.cis.fiu.edu/~weiss/
+[Thu Apr 01 03:50:38 2010] [error] [client 83.238.174.231] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:51:01 2010] [error] [client 93.173.152.135] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:51:42 2010] [crit] [client 193.188.105.25] (13)Permission denied: /home/bear-001/users/emonte02/public_html/wp/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable, referer: http://www.traidnt.net/vb/showthread.php?t=347686
+[Thu Apr 01 03:52:03 2010] [error] [client 86.88.20.36] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:53:27 2010] [error] [client 213.79.115.66] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:53:30 2010] [error] [client 213.79.115.66] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:53:39 2010] [alert] [client 66.249.65.4] /home/hpdrc-demo/sdbtools/public_html/rvc2/.htaccess: AuthName takes one argument, The authentication realm (e.g. "Members Only")
+[Thu Apr 01 03:53:41 2010] [error] [client 76.254.59.165] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:53:44 2010] [error] [client 76.254.59.165] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
+[Thu Apr 01 03:55:20 2010] [error] [client 202.170.60.253] File does not exist: /opt/website/sites/users.cs.fiu.edu/data/favicon.ico
