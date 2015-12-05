@@ -1,0 +1,15 @@
+source originally downloaded from:
+http://users.cis.fiu.edu/~ltang002/logmining.html
+
+compile:
+mvn package
+
+execute:
+java -jar JarFileName ParserType StartLine EndLine InputFileName NumClusters 
+ 
+ParserType: 0=FileZilla, 1=MySQL, 2=PVFS2, 3=ApacheError
+StartLine: 0 starts at first line
+EndLine: -1 does ALL log lines
+
+NOTE: output format currently in form
+timestamp,clusterId,logline
