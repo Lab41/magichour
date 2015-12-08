@@ -1,6 +1,9 @@
 from __future__ import division
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 from math import floor, sqrt, log10
+
+LogLine = namedtuple('LogLine', ['ts', 'text'])
+LogGroup = namedtuple('LogEntry', ['ts', 'group'])
 
 from utils import *
 
@@ -20,7 +23,10 @@ class Cluster(object):
         '''
         Check to see if input line belongs in the cluster
         '''
+        # If our template string matches then check to see if any of the leafs match
         if cosine_sim(self.template_line_split, line_split, skip_count) >= threshold:
+            # If index is set then this is a cluster that has already been split so we should check to see if we are
+            # in the right split, if we aren't don't go any further
             if self.index is not None and self.index_val is not None:
                 if len(line_split) > skip_count + self.index and  self.index_val != line_split[skip_count + self.index]:
                     if verbose:
@@ -30,6 +36,7 @@ class Cluster(object):
                     if verbose:
                         print 'passed selfcheck'
 
+            # Check all leafs in the tree to see if any of them match
             for leaf in self.leafs:
                 if leaf.check_for_match(line_split, threshold, skip_count):
                     return True
@@ -40,12 +47,14 @@ class Cluster(object):
         '''
         Add line to this cluster
         '''
-        line_split = line.split()
+        line_split = line.text.split()
         leaf_indexes_that_match = []
+        # See which leafs this line could belong in
         for i in range(len(self.leafs)):
             if self.leafs[i].check_for_match(line_split, threshold, skip_count):
                 leaf_indexes_that_match.append(i)
 
+        # Should belong in 1 leaf or 2 (the correct leaf and the "other" leaf)
         if len(leaf_indexes_that_match) == 1:
             ind = leaf_indexes_that_match[0]
             self.leafs[ind].add_to_leaf(line, threshold, skip_count)
@@ -56,7 +65,7 @@ class Cluster(object):
             else:
                 self.leafs[leaf_indexes_that_match[1]].add_to_leaf(line, threshold, skip_count)
         else:
-            ls = line.split()[skip_count:]
+            ls = line_split[skip_count:]
             print 'Input Line: ', ls
             #print 'Cluster template: ', self.template_line
             for leaf_index in leaf_indexes_that_match:
@@ -81,7 +90,16 @@ class Cluster(object):
             leaf.print_template_lines(indent + 4)
             #print leaf.get_num_lines(), leaf.get_template_line()
 
-    def split_leaf(self, min_items_for_split, skip_count, min_word_pos_entropy, min_percent):
+    def print_groups(self, index, include_text=False):
+        for leaf in self.leafs:
+            index = leaf.print_groups(index, include_text)
+            index += 1
+        return index
+
+    def split_leaf(self, min_items_for_split, skip_count, min_word_pos_entropy, min_percent, verbose=False):
+        '''
+        Split any leafs that meet the criteria for a split (> min_items_for_split)
+        '''
         replacements = [] # tuple of (index_to_delete, [new_leafs])
         for i, leaf in enumerate(self.leafs):
             if leaf.get_num_lines() > min_items_for_split:
@@ -93,10 +111,11 @@ class Cluster(object):
         replacements.reverse()
 
         for index_to_delete, new_leafs in replacements:
-            print 'New Leafs:'
-            for leaf in new_leafs.leafs:
-                print leaf.get_num_lines(), leaf.get_template_line()
-            print '---------'
+            if verbose:
+                print 'New Leafs:'
+                for leaf in new_leafs.leafs:
+                    print leaf.get_num_lines(), leaf.get_template_line()
+                print '---------'
 
             if self.leafs[index_to_delete].index_val is not None:
                 new_leafs.index_val = self.leafs[index_to_delete].index_val
