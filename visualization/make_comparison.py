@@ -1,8 +1,9 @@
 import sys
 import os
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 
-from cluster import LogGroup
+# From StringMatch/cluster.py
+LogGroup = namedtuple('LogEntry', ['ts', 'group'])
 
 def main():
     if len(sys.argv) == 4 and sys.argv[3] == '-s':
