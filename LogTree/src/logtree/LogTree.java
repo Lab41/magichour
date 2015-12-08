@@ -105,12 +105,18 @@ public class LogTree {
 			// Determining Centroids in order to assign Cluster IDs
 			int[] centers = _sl.getClusterCentroids(_numEvents);
 
-			System.out.println("Sending results to file LogTree_"+ _numEvents + "_" + _curFileName+"...");
+			// Prepare output file name and path based on input file name	
+			File outputFile = new File(_curFileName);
+			String _absPath = outputFile.getAbsolutePath();
+			String _curPath = _absPath.substring(0, _absPath.lastIndexOf(File.separator));
+			_curFileName = outputFile.getName();
+			
+			System.out.println("Sending results to file: " + _curPath + "/LogTree_"+ _numEvents + "_" + _curFileName);			
 			
 			// Output results to file named "LogTree_" & number of clusters & input file name
 			List<LogElement> results = new ArrayList<LogElement>();
 			_sl.getInsts(results);
-			FileOutputStream out = new FileOutputStream("LogTree_"+ _numEvents + "_" + _curFileName);			
+			FileOutputStream out = new FileOutputStream(_curPath + "/LogTree_"+ _numEvents + "_" + _curFileName);			
 			PrintStream outPrint = new PrintStream(out);
 
 			// Output timestamp, clusterid, original log entry line
