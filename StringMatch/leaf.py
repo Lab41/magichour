@@ -1,6 +1,7 @@
 from __future__ import division
 from collections import defaultdict
 from math import floor, sqrt, log10
+from time import mktime
 
 from cluster import Cluster
 from utils import *
@@ -10,8 +11,8 @@ class Leaf(object):
     def __init__(self, log_line, index=None, index_val=None):
         self.log_lines = []
         self.log_lines.append(log_line)
-        self.template_line = log_line
-        self.template_line_split = log_line.split()
+        self.template_line = log_line.text
+        self.template_line_split = log_line.text.split()
         self.index = index
         self.index_val = index_val
 
@@ -41,7 +42,7 @@ class Leaf(object):
         self.log_lines.append(line)
 
     def get_template_line(self):
-        return self.log_lines[0]
+        return self.template_line
 
     def get_num_lines(self):
         return len(self.log_lines)
@@ -49,7 +50,18 @@ class Leaf(object):
     def print_template_lines(self, indent):
         print '--'*indent, self.get_num_lines(), self.index_val#, self.get_template_line()
 
-    def split_leaf(self, min_items_for_split, skip_count, min_word_pos_entropy, min_percent):
+    def print_groups(self, index, include_text=False):
+        for line in self.log_lines:
+            try:
+                if include_text:
+                    print '%s,%d,%s'%(mktime(line.ts.timetuple()), index, line.text)
+                else:
+                    print '%s,%d,%s'%(mktime(line.ts.timetuple()), index)
+            except:
+                print ',%d'%(index)
+        return index + 1
+
+    def split_leaf(self, min_items_for_split, skip_count, min_word_pos_entropy, min_percent, verbose=False):
         '''
         Split this leaf into multiple leaves
 
@@ -60,13 +72,13 @@ class Leaf(object):
             return None
 
         # use line length of first line as a hack for max line length
-        line_length = max([len(self.log_lines[i].split()) for i in range(len(self.log_lines))])
+        line_length = max([len(self.log_lines[i].text.split()) for i in range(len(self.log_lines))])
         # Build position dependent word counter
         word_counts = [defaultdict(int) for i in range(line_length)]
 
         # Count words in each line
         for line in self.log_lines:
-            for i, word in enumerate(line.split()[skip_count:]):
+            for i, word in enumerate(line.text.split()[skip_count:]):
                 word_counts[i][word] += 1
 
         # Calculate entropies for each word position
@@ -100,7 +112,7 @@ class Leaf(object):
         # Add log lines to leaves
         leafs = {}
         for line in self.log_lines:
-            line_split = line.split()[skip_count:]
+            line_split = line.text.split()[skip_count:]
             try:
                 split_word = line_split[min_entropy_index]
             except:
@@ -121,7 +133,8 @@ class Leaf(object):
         if split_word not in leafs:
             leafs[split_word] = Leaf(line, index=min_entropy_index, index_val=split_word)
 
-        print "Splitting Leaf: ", split_words
+        if verbose:
+            print "Splitting Leaf: ", split_words
         cluster = None
         for word in leafs:
             if cluster is None:

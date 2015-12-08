@@ -5,12 +5,38 @@ from itertools import islice
 import gzip
 from collections import defaultdict
 from math import floor, sqrt, log10
+import datetime
 
 from utils import *
-from cluster import Cluster
+from cluster import Cluster, LogLine
 from leaf import Leaf
 
 
+def get_clusters(dataset_iterator, batch_size, skip_count, threshold, MIN_SAMPLES_FOR_SPLIT):
+    line_count = 0
+    clusters = []
+    for line in dataset_iterator:
+        line_split = line.text.split()
+        if len(line_split) > skip_count:
+            has_matched = False
+            for i in range(len(clusters)):
+                if clusters[i].check_for_match(line_split, threshold, skip_count):
+                    clusters[i].add_to_leaf(line, threshold, skip_count)
+                    has_matched = True
+
+            if not has_matched:
+                clusters.append(Cluster(Leaf(line)))    # Create a new cluster
+
+        line_count += 1
+
+        if line_count > batch_size:
+            # Split leafs that are too large
+            for i in range(len(clusters)):
+                if clusters[i].get_num_lines() > MIN_SAMPLES_FOR_SPLIT:
+                    clusters[i].split_leaf(MIN_SAMPLES_FOR_SPLIT, skip_count, min_word_pos_entropy=.0001, min_percent=.1)
+
+            line_count = 0
+    return clusters
 
 
 def main():
@@ -37,48 +63,30 @@ def main():
         fIn = gzip.open(options.filename)
     else:
         fIn = open(options.filename)
-    #fIn = open('/var/log/system.log')#gzip.open(fname)#.readlines()[:num_msgs]
+
+    def dataset_iteator(fIn, num_lines=options.num_lines):
+        lines_read = 0
+        success_full = 0
+        while num_lines== -1 or lines_read < num_lines:
+            lines_read += 1
+            line = fIn.readline()
+            if len(line) == 0:
+                break
+            else:
+                try:
+                    ts = datetime.datetime.strptime(line[:14], '%b %d %H:%M:%S')
+                    yield LogLine(ts.replace(year=2015), line.strip()[:15])
+                    success_full += 1
+                except:
+                    pass
+                    #raise
 
 
-    total_lines_read = 0
-    time_to_stop = False
-    clusters = []
-    prev_num_clusters = -1
-    while total_lines_read < options.num_lines or (options.num_lines == -1 and not time_to_stop):
-        print total_lines_read
-        # Read in log lines
-        lines = [line.strip() for line in islice(fIn, num_msgs)]
-        print 'Done Reading'
+    clusters = get_clusters(dataset_iteator(fIn), num_msgs, skip_count, threshold, MIN_SAMPLES_FOR_SPLIT)
 
-        total_lines_read += len(lines)
-        if len(lines) != num_msgs: # We got to the end of the file
-            print 'Stopping', len(lines), num_msgs
-            time_to_stop = True
-
-        # Process a set of log lines
-        for line in lines:
-            line_split = line.split()
-            if len(line_split) > skip_count:
-                has_matched = False
-                for i in range(len(clusters)):
-                    if clusters[i].check_for_match(line_split, threshold, skip_count):
-                        clusters[i].add_to_leaf(line, threshold, skip_count)
-                        has_matched = True
-
-                if not has_matched:
-                    clusters.append(Cluster(Leaf(line)))    # Create a new cluster
-
-        print 'Done Processing, starting check for splits '
-        if prev_num_clusters != len(clusters):
-            print "Currently have %d clusters"%len(clusters)
-            prev_num_clusters = len(clusters)
-
-        # Split leafs that are too large
-        for i in range(len(clusters)):
-            if clusters[i].get_num_lines() > MIN_SAMPLES_FOR_SPLIT:
-                clusters[i].split_leaf(MIN_SAMPLES_FOR_SPLIT, skip_count, min_word_pos_entropy=.0001, min_percent=.1)
+    index = 0
     for cluster in clusters:
-        cluster.print_template_lines(0)
+        index = cluster.print_groups(index)
 
 if __name__ == "__main__":
     main()

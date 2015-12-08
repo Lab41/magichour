@@ -6,7 +6,7 @@ def cosine_sim(l1, l2, skip_count = 0):
     #l1 = l1.split()
     #l2 = l2.split()
     num_common = 0
-    for i in range(skip_count, min(len(l1), len(l2))):
+    for i in xrange(skip_count, min(len(l1), len(l2))):
         if l1[i] == l2[i]:
             num_common +=1
     return num_common/sqrt((len(l1)-skip_count)*(len(l2)-skip_count))
