@@ -2,6 +2,7 @@ from collections import namedtuple
 import datetime
 import re
 import sys
+import time
 
 
 LogLine = namedtuple('LogLine', ['ts', 'text', 'processed'])
@@ -27,12 +28,15 @@ def processString(inText):
 
     text = re.sub(r'(?:\d{2}:\d{2}:\d{2},\d{3})', TIME, text, FLAGS)
     text = re.sub(r'(?:\d{4}-\d{2}-\d{2})', DATE, text, FLAGS)
-    text = re.sub(r'(?:\w+(\.?)+:\d+)', FILEANDLINE, text, FLAGS)
+    text = re.sub(r'(\w+\.)+(\w+):\d{1,10}', FILEANDLINE, text, FLAGS)
     text = re.sub(r'https?:\/\/\S+', URL, text, FLAGS)
-    text = re.sub(r'(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)', IPADDR, text, FLAGS)
+    text = re.sub(r'(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.)' +
+                  r'{3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)',
+                  IPADDR, text, FLAGS)
     text = re.sub(r'(\S+)\/([^\/]?)(?:\S+)', FILEPATH, text, FLAGS)
     text = re.sub(r'(?:(\w+\.)+\w{1,3})', AFILE, text, FLAGS)
-    text = re.sub(r'alert|error|crit', LEVEL, text, FLAGS)
+    text = re.sub(r'debug|error|fatal|info|trace|trace_int' +
+                  r'|warn|alert|error|crit', LEVEL, text, FLAGS)
 
     text = re.sub(r'(?:\d+)', INT, text, FLAGS)
 
@@ -43,9 +47,6 @@ def processString(inText):
             text = re.sub(c, SILENTREMOVE, text, FLAGS)
 
     text = re.sub(r'\s+', ' ', text, FLAGS)
-
-    print inText
-    print text
 
     return text.lstrip().rstrip()
 
@@ -67,16 +68,19 @@ def dataset_iterator(fIn, num_lines):
                 logtype = 1
                 if logtype == 0:
                     # syslogway
-                    ts = datetime.datetime.strptime(line[:14], '%b %d %H:%M:%S')
+                    t = datetime.datetime.strptime(line[:14], '%b %d %H:%M:%S')
+                    t.replace(year=2015)
+                    ts = time.mktime(t.timetuple())
                     rest = line[15:].strip()
                     processed = processString(rest)
-                    yield LogLine(ts.replace(year=2015), rest,  processed)
+                    yield LogLine(ts, rest,  processed)
                     success_full += 1
                 if logtype == 1:
                     # apache weblog way
-                    ts = datetime.datetime.strptime(line[1:25],
-                                                    '%a %b %d %H:%M:%S %Y')
-                    rest = line[27:].strip()
+                    t = datetime.datetime.strptime(line[1:25],
+                                                   '%a %b %d %H:%M:%S %Y')
+                    ts = time.mktime(t.timetuple())
+                    rest = line[26:].lstrip().strip()
                     processed = processString(rest)
                     yield LogLine(ts, rest,  processed)
                     success_full += 1
@@ -86,9 +90,14 @@ def dataset_iterator(fIn, num_lines):
 
 
 def main(argv):
-    print 'reading %s, writing %s' % (argv[0], argv[1])
+    print 'reading %s' % (argv[0])
     a = open(argv[0], 'r')
-    b = open(argv[1], 'w')
+    if len(argv) == 2:
+        print 'writing %s' % (argv[1])
+        b = open(argv[1], 'w')
+    else:
+        b = sys.stdout
+        print 'writing stdout'
 
     for logLine in dataset_iterator(a, -1):
         out = '%s %s\n' % (logLine.ts, logLine.processed)
