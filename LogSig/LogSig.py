@@ -220,9 +220,21 @@ def dataset_iterator(fIn, num_lines):
             break
         else:
             try:
-                ts = datetime.datetime.strptime(line[:14], '%b %d %H:%M:%S')
-                yield LogLine(ts.replace(year=2015), line[15:].strip())
-                success_full += 1
+                logtype = 1
+                if logtype == 0:
+                    # syslogway
+                    t = datetime.datetime.strptime(line[:14], '%b %d %H:%M:%S')
+                    t.replace(year=2015)
+                    ts = time.mktime(t.timetuple())
+                    yield LogLine(ts, line[15:].strip())
+                    success_full += 1
+                if logtype == 1:
+                    # apache weblog way
+                    t = datetime.datetime.strptime(line[1:25],
+                                                   '%a %b %d %H:%M:%S %Y')
+                    ts = time.mktime(t.timetuple())
+                    yield LogLine(ts, line[27:].strip())
+                    success_full += 1
             except:
                 pass
 
@@ -232,9 +244,16 @@ def main(argv):
 
     totalS = time.time()
 
+    out = None
+
     print 'Attempting to open %s' % (argv[0])
     print 'k = %i' % int(argv[1])
     print 'maxIter = %i' % int(argv[2])
+    if len(argv) > 3:
+        print 'ClusterOutputFile = %s' % argv[3]
+        out = open(argv[3], 'w')
+    else:
+        out = sys.stdout
 
     a = open(argv[0], 'r')
     D = list()
@@ -278,9 +297,11 @@ def main(argv):
         for d in D:
             if p == G[d.md5hash]:
                 # print ' %03i      | %s' % (G[d.md5hash], d.line.text)
-                print '%s,%s,%s' % (time.mktime(d.line.ts.timetuple()),
-                                    outDict[G[d.md5hash]],
-                                    d.line.text)
+                outLine = '%s,%s,%s\n' % (d.line.ts,
+                                          outDict[G[d.md5hash]],
+                                          d.line.text)
+                out.write(outLine)
+    out.close()
 
 if __name__ == "__main__":
     # install the signal handler
