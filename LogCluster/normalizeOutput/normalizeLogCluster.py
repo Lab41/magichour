@@ -40,10 +40,11 @@ For each pair of regexes r and s for languages L(r) and L(s)
     Repeat the steps above to see if it's possible to eliminate r
 
 '''
+
+
 def rankMatches(m):
 
     retval = sorted(m, cmp=badWay)
-    print retval
     return retval
 
 
@@ -54,17 +55,22 @@ def parseClusterLines(l):
         fixedLine = escapeCrap(m)
         matches.append(findReplacement(fixedLine).lstrip().rstrip())
 
-    print 'pre'
-    for m in matches:
-        print m
+    # sys.stderr.write( 'pre\n')
+    # for m in matches:
+    #     sys.stderr.write('%s \n' % (m))
 
     matches = rankMatches(matches)
 
-    print 'post'
-    for m in matches:
-        print m
+    sys.stderr.write( '\n')
+    for cluster, r in enumerate(matches):
+        sys.stderr.write('cluster:%i,%s\n' % (cluster, r))
+    sys.stderr.write( '\n')
 
-    return matches
+    compiledMatches = list()
+    for m in matches:
+        compiledMatches.append(re.compile(m))
+
+    return compiledMatches
 
 
 def main(argv):
@@ -74,30 +80,35 @@ def main(argv):
 
     if len(argv) == 3:
         sys.stderr.write('writing %s\n' % (argv[2]))
-        outDesc = open(argv[2],'w')
+        outDesc = open(argv[2], 'w')
     else:
         sys.stderr.write('writing to stdout\n')
 
         outDesc = sys.stdout
 
-
     cPatternRaw = readLines(argv[0])
     regList = parseClusterLines(cPatternRaw)
     lines = readLines(argv[1])
 
-    print
-    for cluster, r in enumerate(regList):
-        sys.stderr.write( 'cluster:%i , %s\n' %( cluster, r))
-    print
-
+    processed = 0
+    eol = 0
     for l in lines:
-        for cluster, search in enumerate(regList):
-            if re.search(search, l):
-                t = l[:19]
-                ts = datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
-                outDesc.write( '%s,%i,%s\n' % (time.mktime(ts.timetuple()),
-                                    cluster,
-                                    l[20:].rstrip().strip()))
+        processed += 1
+        for cluster,compPattern  in enumerate(regList):
+            if processed % 10000 == 0:
+                processed = 0
+                sys.stderr.write('.')
+                eol = eol +1
+                if eol == 50:
+                    eol =0;
+                    sys.stderr.write('\n')
+
+
+            if compPattern.search(l):
+                t = l[:12]
+                outDesc.write('%s,%i,%s\n' % (t,
+                                              cluster,
+                                              l[13:].lstrip().strip()))
                 break
 
 
@@ -113,8 +124,8 @@ def findReplacement(s):
             newString = r'(:?\ \S+){%i,%i}' % (int(m.groups()[0]),
                                                int(m.groups()[1]))
             # the r is very important
-            newFound =r'\\ \\\*\\\{%i\\,%i\\}' % (int(m.groups()[0]),
-                                                  int(m.groups()[1]))
+            newFound = r'\\ \\\*\\\{%i\\,%i\\}' % (int(m.groups()[0]),
+                                                   int(m.groups()[1]))
             b = re.sub(newFound, newString, b)
         return b
     return s
