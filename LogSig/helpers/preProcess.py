@@ -36,7 +36,7 @@ def processString(inText):
                   r'{3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)',
                   IPADDR, text, FLAGS)
     text = re.sub(r'(\S+)\/([^\/]?)(?:\S+)', FILEPATH, text, FLAGS)
-    text = re.sub(r'(?:(\w+\.)+\w{1,3})', AFILE, text, FLAGS)
+    text = re.sub(r'(?:(\w+\.)+\w+)', AFILE, text, FLAGS)
     text = re.sub(r'debug|error|fatal|info|trace|trace_int' +
                   r'|warn|alert|error|crit', LEVEL, text, FLAGS)
 
@@ -66,7 +66,7 @@ def dataset_iterator(fIn, num_lines, tdi):
         else:
             try:
                 t = datetime.datetime.strptime(line[tdi.start:tdi.stop],
-                                                tdi.fmat)
+                                               tdi.fmat)
                 ts = time.mktime(t.timetuple())
                 left = line[:tdi.start]
                 right = line[tdi.stop:]
@@ -147,24 +147,24 @@ def main(argv):
    zeros shall be permitted but shall not be required.
 """
 
-    parser = argparse.ArgumentParser(description='reformat input',formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(description='reformat input',
+                                     formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-i', required=True, nargs=1, help='input file')
     parser.add_argument('-o', nargs=1, help='output file')
     parser.add_argument('--start', required=True,  nargs=1,
                         help='index date start')
     parser.add_argument('--stop', required=True, nargs=1, help='index date end')
-    parser.add_argument('-f', required=True, nargs=1, help=letters )
+    parser.add_argument('-f', required=True, nargs=1, help=letters)
     parsedArgs = parser.parse_args(argv)
 
-
-    print 'reading %s' % (parsedArgs.i[0])
+    sys.stderr.write( 'reading %s\n' % (parsedArgs.i[0]))
     a = open(str(parsedArgs.i[0]), 'r')
-    if parsedArgs.o != None:
-        print 'writing %s' % (parsedArgs.o[0])
+    if parsedArgs.o is not None:
+        sys.stderr.write('writing %s\n' % (parsedArgs.o[0]))
         b = open(str(parsedArgs.o[0]), 'w')
     else:
         b = sys.stdout
-        print 'writing stdout'
+        sys.stderr.write('writing stdout\n')
 
     start = int(parsedArgs.start[0])
     stop = int(parsedArgs.stop[0])
