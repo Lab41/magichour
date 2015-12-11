@@ -1,8 +1,0 @@
-source originally downloaded from:
-http://users.cis.fiu.edu/~ltang002/logmining.html
-
-check the GROSSMAN comments to see where I butchered things out
-
-
-compile:
-mvn package
