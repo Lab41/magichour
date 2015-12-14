@@ -7,6 +7,7 @@ RUN apt-get update \
     && update-rc.d rsyslog defaults 
 ADD ./logentries.conf /etc/rsyslog.d/logentries.conf
 ADD ./rsyslog.conf /etc/rsyslog.conf
+ADD ./50-default.conf /etc/rsyslog.d/
 RUN service rsyslog restart
 EXPOSE 514/udp
 EXPOSE 514/tcp
