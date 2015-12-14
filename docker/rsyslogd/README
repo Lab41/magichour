@@ -14,4 +14,4 @@ docker rm -v $(docker ps -a -q -f status=exited)
 
 echo ‘sourcehost message text’ | nc -v -u -w 0 localhost 514
 docker run -p 514:514/udp -v ~/logs:/var/log/magichour -i -t ubuntu:15.10 /bin/bash
-
+docker run -p 514:514/udp -v ~/logs:/var/log/magichour -i -t ubuntu:15.10 /bin/sh -c "service rsyslog start; /bin/sh ; while true; do sleep 1 ; done"
