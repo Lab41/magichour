@@ -8,6 +8,5 @@ outputLogClusterRun - This is the run redirected output form the LogCluster prog
 logFileYouRanLogClusterOn - this is the input file you gave to logcluster
  E.G: ~/data/apache_)error_1K.log.preproc
 
-<outputFile> - optional file you want to place the data into.  If not specified output goes to stdout
 
-python ormalizedLogCluster.py outputLogClusterRun logFileYouRanLogClusterOn <outputFile>
+python normalizedLogCluster.py outputLogClusterRun logFileYouRanLogClusterOn outputFile clusterDecisions

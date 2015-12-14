@@ -1,6 +1,4 @@
 import re
-import time
-import datetime
 import sys
 
 
@@ -53,7 +51,7 @@ def parseClusterLines(l):
     for o in range(0, len(l), 3):
         m = l[o].lstrip().rstrip()
         fixedLine = escapeCrap(m)
-        matches.append(findReplacement(fixedLine).lstrip().rstrip())
+        matches.append(findReplacement(fixedLine).lstrip().rstrip()+'^')
 
     # sys.stderr.write( 'pre\n')
     # for m in matches:
@@ -61,10 +59,10 @@ def parseClusterLines(l):
 
     matches = rankMatches(matches)
 
-    sys.stderr.write( '\n')
+    sys.stderr.write('\n')
     for cluster, r in enumerate(matches):
         sys.stderr.write('cluster:%i,%s\n' % (cluster, r))
-    sys.stderr.write( '\n')
+    sys.stderr.write('\n')
 
     compiledMatches = list()
     for m in matches:
@@ -77,8 +75,9 @@ def main(argv):
 
     sys.stderr.write('reading patterns %s\n' % (argv[0]))
     sys.stderr.write('reading logLines %s\n' % (argv[1]))
+    sys.stderr.write('writing patterns %s\n' % (argv[2]))
 
-    if len(argv) == 3:
+    if len(argv) >= 3:
         sys.stderr.write('writing %s\n' % (argv[2]))
         outDesc = open(argv[2], 'w')
     else:
@@ -86,30 +85,50 @@ def main(argv):
 
         outDesc = sys.stdout
 
+    patternOut = open(argv[2], 'w')
+
     cPatternRaw = readLines(argv[0])
     regList = parseClusterLines(cPatternRaw)
     lines = readLines(argv[1])
 
     processed = 0
     eol = 0
-    for l in lines:
-        processed += 1
-        for cluster,compPattern  in enumerate(regList):
-            if processed % 10000 == 0:
-                processed = 0
-                sys.stderr.write('.')
-                eol = eol +1
-                if eol == 50:
-                    eol =0;
-                    sys.stderr.write('\n')
+    c = 0
 
+    for cluster, compPattern in enumerate(regList):
+        patternOut.write('%s,%s\n' % (cluster, compPattern))
+    patternOut.close()
+
+
+
+    for l in lines:
+
+        processed += 1
+        found = False
+        if processed % 1000 == 0:
+            processed = 0
+            c += 1
+            sys.stderr.write('.')
+            eol += 1
+            if eol == 50:
+                eol = 0
+                sys.stderr.write('%i*000 entries\n' % (c))
+
+        for cluster, compPattern in enumerate(regList):
 
             if compPattern.search(l):
                 t = l[:12]
                 outDesc.write('%s,%i,%s\n' % (t,
                                               cluster,
                                               l[13:].lstrip().strip()))
+                found = True
                 break
+
+        if not found:
+            t = l[:12]
+            outDesc.write('%s,%i,%s\n' % (t,
+                                          -1,
+                                          l[13:].lstrip().strip()))
 
 
 def findReplacement(s):

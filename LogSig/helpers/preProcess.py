@@ -145,11 +145,12 @@ def main(argv):
    in the range [69,99] shall refer to years 1969 to 1999 inclusive, and values
    in the range [00,68] shall refer to years 2000 to 2068 inclusive; leading
    zeros shall be permitted but shall not be required.
+%%Y The 4 digit year
 """
 
     parser = argparse.ArgumentParser(description='reformat input',
                                      formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-i', required=True, nargs=1, help='input file')
+    parser.add_argument('-i', nargs=1, help='input file')
     parser.add_argument('-o', nargs=1, help='output file')
     parser.add_argument('--start', required=True,  nargs=1,
                         help='index date start')
@@ -157,8 +158,13 @@ def main(argv):
     parser.add_argument('-f', required=True, nargs=1, help=letters)
     parsedArgs = parser.parse_args(argv)
 
-    sys.stderr.write( 'reading %s\n' % (parsedArgs.i[0]))
-    a = open(str(parsedArgs.i[0]), 'r')
+    if parsedArgs.i is not None:
+        sys.stderr.write( 'reading %s\n' % (parsedArgs.i[0]))
+        a = open(str(parsedArgs.i[0]), 'r')
+    else:
+        a = sys.stdin
+        sys.stderr.write('reading stdin\n')
+
     if parsedArgs.o is not None:
         sys.stderr.write('writing %s\n' % (parsedArgs.o[0]))
         b = open(str(parsedArgs.o[0]), 'w')
