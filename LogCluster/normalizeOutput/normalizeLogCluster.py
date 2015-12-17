@@ -51,7 +51,7 @@ def parseClusterLines(l):
     for o in range(0, len(l), 3):
         m = l[o].lstrip().rstrip()
         fixedLine = escapeCrap(m)
-        matches.append(findReplacement(fixedLine).lstrip().rstrip()+'^')
+        matches.append(findReplacement(fixedLine).lstrip().rstrip())
 
     # sys.stderr.write( 'pre\n')
     # for m in matches:
@@ -66,7 +66,8 @@ def parseClusterLines(l):
 
     compiledMatches = list()
     for m in matches:
-        compiledMatches.append(re.compile(m))
+        #make sure to force match end of line
+        compiledMatches.append(re.compile(m+'$'))
 
     return compiledMatches
 
@@ -99,8 +100,6 @@ def main(argv):
         patternOut.write('%s,%s\n' % (cluster, compPattern))
     patternOut.close()
 
-
-
     for l in lines:
 
         processed += 1
@@ -115,8 +114,11 @@ def main(argv):
                 sys.stderr.write('%i*000 entries\n' % (c))
 
         for cluster, compPattern in enumerate(regList):
-
-            if compPattern.search(l):
+            if compPattern.search((l[13:].strip())):
+                # print 'MATCH********'
+                # print 'comparing'
+                # print 'l:',l[13:].strip()
+                # print 'p:',compPattern.pattern
                 t = l[:12]
                 outDesc.write('%s,%i,%s\n' % (t,
                                               cluster,
