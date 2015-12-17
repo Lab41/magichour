@@ -59,34 +59,26 @@ def parseClusterLines(l):
 
     matches = rankMatches(matches)
 
-    sys.stderr.write('\n')
-    for cluster, r in enumerate(matches):
-        sys.stderr.write('cluster:%i,%s\n' % (cluster, r))
-    sys.stderr.write('\n')
-
     compiledMatches = list()
     for m in matches:
-        #make sure to force match end of line
+        # make sure to force match end of line
         compiledMatches.append(re.compile(m+'$'))
 
     return compiledMatches
+
 
 
 def main(argv):
 
     sys.stderr.write('reading patterns %s\n' % (argv[0]))
     sys.stderr.write('reading logLines %s\n' % (argv[1]))
-    sys.stderr.write('writing patterns %s\n' % (argv[2]))
+    sys.stderr.write('writing logClusters %s\n' % (argv[2]))
+    sys.stderr.write('writing patterns %s\n' % (argv[3]))
 
-    if len(argv) >= 3:
-        sys.stderr.write('writing %s\n' % (argv[2]))
-        outDesc = open(argv[2], 'w')
-    else:
-        sys.stderr.write('writing to stdout\n')
+    sys.stderr.write('writing %s\n' % (argv[2]))
+    outDesc = open(argv[2], 'w')
 
-        outDesc = sys.stdout
-
-    patternOut = open(argv[2], 'w')
+    patternOut = open(argv[3], 'w')
 
     cPatternRaw = readLines(argv[0])
     regList = parseClusterLines(cPatternRaw)
@@ -97,7 +89,7 @@ def main(argv):
     c = 0
 
     for cluster, compPattern in enumerate(regList):
-        patternOut.write('%s,%s\n' % (cluster, compPattern))
+        patternOut.write('%s,%s\n' % (cluster, compPattern.pattern))
     patternOut.close()
 
     for l in lines:
