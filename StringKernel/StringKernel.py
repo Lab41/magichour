@@ -35,7 +35,8 @@ def main():
     parser.add_option("--scheme", dest="scheme", type="choice", choices=scheme_choices, default=default_scheme,
             help="Scheme for constructing subsequences. Valid choices: %s. Default: %s" % (scheme_choices, default_scheme))
 
-    parser.add_option("--kernel", action="store_true", dest="kernel_kmeans", default=False)
+    parser.add_option("--kernel", action="store_true", dest="kernel_kmeans", default=False,
+            help="Flag for using KernelKMeans algorithm instead of KMeans.")
     parser.add_option("--nystroem", dest="nystroem", type=int, default=-1,
             help="Number of features to construct for approximating the kernel using the Nystroem method. Default: -1 (do not approximate kernel)")
     parser.add_option("--max_iterations", dest="max_iterations", type=int, default=1000,
@@ -83,16 +84,29 @@ def main():
         start_time = time.time()
         l = transform(lines, options.decay_factor, options.subsequence_length, options.scheme)
         l = scale(l)
-        logger.debug("Finished. Duration: %s" % (time.time()-start_time))
+        logger.debug("Duration: %s" % (time.time()-start_time))
         kmeans = KMeans(n_clusters=options.num_clusters, max_iter=options.max_iterations)
         kmeans.fit(l)
 
+    # ============
+
+    d = {}
     # May need to change this section depending on how you want to output the log file.
     for group, s in zip(kmeans.labels_, lines_w_times):
         epoch = timestamp = s[:options.num_skipchars]
         #epoch = int(time.mktime(time.strptime(timestamp.strip()[1:-1], "%a %b %d %H:%M:%S %Y")))
+        epoch = int(time.mktime(time.strptime(timestamp.strip(), "%Y-%m-%d %H:%M:%S")))
         msg = s[options.num_skipchars:]
-        print "%s,%s,%s" % (epoch, group, msg.strip())
+        l = d.get(group, [])
+        l.append((epoch, group, msg))
+        d[group] = l
+        #print "%s,%s,%s" % (epoch, group, msg.strip())
+
+    # Pretty print clusters.
+    for x in d.keys():
+        for epoch, group, msg in d[x]:
+            print "%s,%s,%s" % (epoch, group, msg.strip())
+        #print "--------------------"
 
 if __name__ == "__main__":
     main()

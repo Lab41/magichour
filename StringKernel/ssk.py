@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 def wss_gen(s, r):
     words = s.split()
-    for result in ss_generator(words, r):
+    for result in ss_gen(words, r):
         yield result
 
 def ss_gen(s, r):
@@ -85,5 +85,13 @@ def ssk(s1, s2, **kwargs):
     return ret
 
 def transform(lines, decay_factor, ss_len, scheme):
-    ss_dicts = [ss_dict(line, decay_factor, ss_len, scheme) for line in lines]
+    ss_dicts = []
+    for x in xrange(0, len(lines)):
+        if x % (len(lines) / 10) == 0:
+            logger.debug("%s percent processed..." % ((x*100)/len(lines)))
+        line = lines[x]
+        ss_dicts.append(ss_dict(line, decay_factor, ss_len, scheme))
     return standardize_ss_dicts(ss_dicts)
+
+    #ss_dicts = [ss_dict(line, decay_factor, ss_len, scheme) for line in lines]
+    #return standardize_ss_dicts(ss_dicts)
