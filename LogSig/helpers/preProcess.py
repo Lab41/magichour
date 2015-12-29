@@ -24,7 +24,8 @@ def processString(inText):
     LEVEL = ' LEVEL '
     INT = ' INT '
 
-    badchars = [r'\[', r'\]', r'\(', r'\)', r'{', r'}', r':', r',', r'-']
+    #badchars = [r'\[', r'\]', r'\(', r'\)', r'{', r'}', r':', r',', r'-']
+    badchars = [r'\[', r'\]', r'\(', r'\)', r'{', r'}', r':', r',','=']
     silentchars = [r'\"', r'\.', r'\'', r'\`', r'!']
     text = ""+inText.lower()
 

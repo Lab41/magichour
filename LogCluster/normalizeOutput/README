@@ -3,10 +3,17 @@ This program normalizes the output from the LogCluster program to our standard.
 The program takes 2 parameters with an optional output parameter
 
 outputLogClusterRun - This is the run redirected output form the LogCluster program
-	E.G.: perl ./logcluster.pl --lfilter='.{20}(.*)' --input ~/data/apache_error_1K.log.preproc  --template='$1' --rsupport 3 > outputLogClusterRun
+	E.G.: perl ./logcluster.pl --lfilter='.{13}(.*)' --input ~/data/tbird.log.preProc  --template='$1' --support 200 > ~/data/tbird.log.preProc.200.supports 
 
 logFileYouRanLogClusterOn - this is the input file you gave to logcluster
  E.G: ~/data/apache_)error_1K.log.preproc
 
-
 python normalizedLogCluster.py outputLogClusterRun logFileYouRanLogClusterOn outputFile clusterDecisions
+
+processing chain eg:
+cat ~/data/tbird.log | cut -b 1-20,34- | python ./preProcess.py --start=0 --stop=19 -f='%Y.%m.%d.%H:%M:%S'  > ~/data/tbird.log.preProc
+perl ./logcluster.pl --lfilter='.{13}(.*)' --input ~/data/tbird.log.preProc  --template='$1' --support 200  > ~/data/tbird.logg.preProc.200.supports 
+python normalizeLogCluster.py ~/data/tbird.log.preProc.200.supports ~/data/tbird.log.preProc ~/data/tbird.log.preProc.200.supports.out ~/data/tbird.log.preProc.200.supports.clusters
+timecut
+lda
+
