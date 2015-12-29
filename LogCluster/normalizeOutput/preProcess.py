@@ -33,21 +33,19 @@ def processString(inText):
     KEYVALUE = ' KEYVALUE '
 
     badchars = [r'\[', r'\]', r'\(', r'\)', r'{', r'}', r':', r',', '=']
-    silentchars = [r'\"', r'\.', r'\'', r'\`', r'!', r'#',r'-',r'>',r'<','@']
+    silentchars = [r'\"', r'\.', r'\'', r'\`', r'!', r'#',
+                   r'-', r'>', r'<', '@']
     users = ['aadmin', 'badmin', 'cadmin', 'dadmin', 'eadmin',
-             'tbird-admin1', 'tbird-sm', 'root','tbirdadm']
+             'tbird-admin1', 'tbird-sm', 'root', 'tbirdadm']
     text = ""+inText.lower().lstrip().strip()
     for u in users:
         text = re.sub(u, USER, text, 0, FLAGS)
     text = re.sub(r'(?:[a-z]n\d+)', MACHINENAME, text, 0, FLAGS)
-    #text = re.sub(r'(?:[a-z]n\d+)', MACHINENAME, text, 0, FLAGS)
-    #text = re.sub(r'(?:[a-z]n\d+)', MACHINENAME, text, 0, FLAGS)
-    #text = re.sub(r'(?:[a-z]n\d+)', MACHINENAME, text, 0, FLAGS)
-    #text = re.sub(r'(?:[a-z]n\d+)', MACHINENAME, text, 0, FLAGS)
 
-
-    text = re.sub(r'(?:[0-9A-Fa-f]{2}[:-]){5}(?:[0-9A-Fa-f]{2})', MACADDR, text, 0, FLAGS)
-    text = re.sub(r'(?:interrupt [0-9a-fA-F]{4}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}\.[0-9a-fA-F]\[[a-z]\])', INTERRUPT, text, 0, FLAGS)
+    text = re.sub(r'(?:[0-9A-Fa-f]{2}[:-]){5}(?:[0-9A-Fa-f]{2})',
+                  MACADDR, text, 0, FLAGS)
+    text = re.sub(r'(?:interrupt [0-9a-fA-F]{4}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}\.[0-9a-fA-F]\[[a-z]\])',
+                  INTERRUPT, text, 0, FLAGS)
     text = re.sub(r'(?:\d{2}:\d{2}:\d{2},\d{3})', TIME, text, 0, FLAGS)
     text = re.sub(r'(?:\d{4}-\d{2}-\d{2})', DATE, text, 0, FLAGS)
     text = re.sub(r'(\w+\.)+(\w+):\d{1,10}', FILEANDLINE, text, 0, FLAGS)
@@ -64,7 +62,7 @@ def processString(inText):
     text = re.sub(r'(?:0x[0-9a-fA-F]+)', HEX, text, 0, FLAGS)
     text = re.sub(r'(?:[vV]\d+)', VERSION, text, 0, FLAGS)
     text = re.sub(r'(?:\d+)', INT, text, 0, FLAGS)
-    text = re.sub(r'(?:\w+)=(?:.+?)(?:\b|$)',KEYVALUE,text,0, FLAGS)
+    text = re.sub(r'(?:\w+)=(?:.+?)(?:\b|$)', KEYVALUE, text, 0, FLAGS)
 
     for c in badchars:
         text = re.sub(c, SPACE, text, 0, FLAGS)
