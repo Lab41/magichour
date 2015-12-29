@@ -13,9 +13,11 @@ TDI = namedtuple('TDI', ['start', 'stop', 'fmat'])
 def processString(inText):
     FLAGS = re.MULTILINE | re.DOTALL
     URL = ' URL '
+    MACADDR = ' MACADDR '
     FILEPATH = ' FILEPATH '
     IPADDR = ' IPADDR '
     FILEANDLINE = ' FILEANDLINE '
+    MACHINENAME = ' MACHINENAME '
     DATE = ' DATE '
     TIME = ' TIME '
     SILENTREMOVE = ''
@@ -23,35 +25,55 @@ def processString(inText):
     AFILE = ' AFILE '
     LEVEL = ' LEVEL '
     INT = ' INT '
+    INTERRUPT = ' INTERRUPT '
+    HEX = ' HEX '
+    HEX16 = ' MEMADDR '
+    USER = ' USER '
+    VERSION = ' VERSION '
+    KEYVALUE = ' KEYVALUE '
 
-    #badchars = [r'\[', r'\]', r'\(', r'\)', r'{', r'}', r':', r',', r'-']
-    badchars = [r'\[', r'\]', r'\(', r'\)', r'{', r'}', r':', r',','=']
-    silentchars = [r'\"', r'\.', r'\'', r'\`', r'!']
-    text = ""+inText.lower()
+    badchars = [r'\[', r'\]', r'\(', r'\)', r'{', r'}', r':', r',', '=']
+    silentchars = [r'\"', r'\.', r'\'', r'\`', r'!', r'#',
+                   r'-', r'>', r'<', '@']
+    users = ['aadmin', 'badmin', 'cadmin', 'dadmin', 'eadmin',
+             'tbird-admin1', 'tbird-sm', 'root', 'tbirdadm']
+    text = ""+inText.lower().lstrip().strip()
+    for u in users:
+        text = re.sub(u, USER, text, 0, FLAGS)
+    text = re.sub(r'(?:[a-z]n\d+)', MACHINENAME, text, 0, FLAGS)
 
-    text = re.sub(r'(?:\d{2}:\d{2}:\d{2},\d{3})', TIME, text, FLAGS)
-    text = re.sub(r'(?:\d{4}-\d{2}-\d{2})', DATE, text, FLAGS)
-    text = re.sub(r'(\w+\.)+(\w+):\d{1,10}', FILEANDLINE, text, FLAGS)
-    text = re.sub(r'https?:\/\/\S+', URL, text, FLAGS)
+    text = re.sub(r'(?:[0-9A-Fa-f]{2}[:-]){5}(?:[0-9A-Fa-f]{2})',
+                  MACADDR, text, 0, FLAGS)
+    text = re.sub(r'(?:interrupt [0-9a-fA-F]{4}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}\.[0-9a-fA-F]\[[a-z]\])',
+                  INTERRUPT, text, 0, FLAGS)
+    text = re.sub(r'(?:\d{2}:\d{2}:\d{2},\d{3})', TIME, text, 0, FLAGS)
+    text = re.sub(r'(?:\d{4}-\d{2}-\d{2})', DATE, text, 0, FLAGS)
+    text = re.sub(r'(\w+\.)+(\w+):\d{1,10}', FILEANDLINE, text, 0, FLAGS)
+    text = re.sub(r'https?:\/\/\S+', URL, text, 0, FLAGS)
     text = re.sub(r'(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.)' +
                   r'{3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)',
-                  IPADDR, text, FLAGS)
-    text = re.sub(r'(\S+)\/([^\/]?)(?:\S+)', FILEPATH, text, FLAGS)
-    text = re.sub(r'(?:(\w+\.)+\w+)', AFILE, text, FLAGS)
+                  IPADDR, text, 0, FLAGS)
+    text = re.sub(r'(\S+)\/([^\/]?)(?:\S+)', FILEPATH, text, 0, FLAGS)
+    text = re.sub(r'(?:(\w+\.)+\w+)', AFILE, text, 0, FLAGS)
     text = re.sub(r'debug|error|fatal|info|trace|trace_int' +
-                  r'|warn|alert|error|crit', LEVEL, text, FLAGS)
+                  r'|warning|warn|alert|error|crit', LEVEL, text, 0, FLAGS)
 
-    text = re.sub(r'(?:\d+)', INT, text, FLAGS)
+    text = re.sub(r'(?:[0-9a-fA-F]{16})', HEX16, text, 0, FLAGS)
+    text = re.sub(r'(?:0x[0-9a-fA-F]+)', HEX, text, 0, FLAGS)
+    text = re.sub(r'(?:[vV]\d+)', VERSION, text, 0, FLAGS)
+    text = re.sub(r'(?:\d+)', INT, text, 0, FLAGS)
+    text = re.sub(r'(?:\w+)=(?:.+?)(?:\b|$)', KEYVALUE, text, 0, FLAGS)
 
     for c in badchars:
-        text = re.sub(c, SPACE, text, FLAGS)
+        text = re.sub(c, SPACE, text, 0, FLAGS)
+        # text = re.sub(c, '', text, 0, FLAGS)
 
     for c in silentchars:
-            text = re.sub(c, SILENTREMOVE, text, FLAGS)
+            text = re.sub(c, SILENTREMOVE, text, 0, FLAGS)
 
-    text = re.sub(r'\s+', ' ', text, FLAGS)
+    retval = ' '.join(text.split())
 
-    return text.lstrip().rstrip()
+    return retval
 
 
 def dataset_iterator(fIn, num_lines, tdi):
@@ -160,7 +182,7 @@ def main(argv):
     parsedArgs = parser.parse_args(argv)
 
     if parsedArgs.i is not None:
-        sys.stderr.write( 'reading %s\n' % (parsedArgs.i[0]))
+        sys.stderr.write('reading %s\n' % (parsedArgs.i[0]))
         a = open(str(parsedArgs.i[0]), 'r')
     else:
         a = sys.stdin
