@@ -64,12 +64,12 @@ def processString(inText):
     text = re.sub(r'(?:\d+)', INT, text, 0, FLAGS)
     text = re.sub(r'(?:\w+)=(?:.+?)(?:\b|$)', KEYVALUE, text, 0, FLAGS)
 
-    for c in badchars:
-        text = re.sub(c, SPACE, text, 0, FLAGS)
+    #for c in badchars:
+    #    text = re.sub(c, SPACE, text, 0, FLAGS)
         # text = re.sub(c, '', text, 0, FLAGS)
 
-    for c in silentchars:
-            text = re.sub(c, SILENTREMOVE, text, 0, FLAGS)
+    #for c in silentchars:
+    #        text = re.sub(c, SILENTREMOVE, text, 0, FLAGS)
 
     retval = ' '.join(text.split())
 
