@@ -6,77 +6,35 @@ import time
 import argparse
 
 
-LogLine = namedtuple('LogLine', ['ts', 'text', 'processed'])
 TDI = namedtuple('TDI', ['start', 'stop', 'fmat'])
 
+LogLine = namedtuple('LogLine', ['ts', 'text', 'processed',
+                                 'dictionary', 'supportId'])
+TransformLine = namedtuple('TransformLine', ['id', 'type', 'NAME', 'transform'])
+OutLine = namedtuple('OutLine', ['ts', 'supportId', 'dictionary'])
 
-def processString(inText):
+
+def makeTransformedLine(l, transforms):
+    text = l.text.strip()
+    replaceDict = dict()
     FLAGS = re.MULTILINE | re.DOTALL
-    URL = ' URL '
-    MACADDR = ' MACADDR '
-    FILEPATH = ' FILEPATH '
-    IPADDR = ' IPADDR '
-    FILEANDLINE = ' FILEANDLINE '
-    MACHINENAME = ' MACHINENAME '
-    DATE = ' DATE '
-    TIME = ' TIME '
-    SILENTREMOVE = ''
-    SPACE = ' '
-    AFILE = ' AFILE '
-    LEVEL = ' LEVEL '
-    INT = ' INT '
-    INTERRUPT = ' INTERRUPT '
-    HEX = ' HEX '
-    HEX16 = ' MEMADDR '
-    USER = ' USER '
-    VERSION = ' VERSION '
-    KEYVALUE = ' KEYVALUE '
+    for t in transforms:
+        if t.type == 'REPLACE':
+            replaceList = re.findall(t.transform, text)
+            if replaceList:
+                replaceDict[t.NAME] = replaceList
+            text = re.sub(t.transform, ' '+t.NAME+' ', text, 0, FLAGS)
 
-    badchars = [r'\[', r'\]', r'\(', r'\)', r'{', r'}', r':', r',', '=']
-    silentchars = [r'\"', r'\.', r'\'', r'\`', r'!', r'#',
-                   r'-', r'>', r'<', '@']
-    users = ['aadmin', 'badmin', 'cadmin', 'dadmin', 'eadmin',
-             'tbird-admin1', 'tbird-sm', 'root', 'tbirdadm']
-    text = ""+inText.lower().lstrip().strip()
-    for u in users:
-        text = re.sub(u, USER, text, 0, FLAGS)
-    text = re.sub(r'(?:[a-z]n\d+)', MACHINENAME, text, 0, FLAGS)
+        if t.type == 'REPLACELIST':
+            print 'REPLACELIST not implemented yet'
 
-    text = re.sub(r'(?:[0-9A-Fa-f]{2}[:-]){5}(?:[0-9A-Fa-f]{2})',
-                  MACADDR, text, 0, FLAGS)
-    text = re.sub(r'(?:interrupt [0-9a-fA-F]{4}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}\.[0-9a-fA-F]\[[a-z]\])',
-                  INTERRUPT, text, 0, FLAGS)
-    text = re.sub(r'(?:\d{2}:\d{2}:\d{2},\d{3})', TIME, text, 0, FLAGS)
-    text = re.sub(r'(?:\d{4}-\d{2}-\d{2})', DATE, text, 0, FLAGS)
-    text = re.sub(r'(\w+\.)+(\w+):\d{1,10}', FILEANDLINE, text, 0, FLAGS)
-    text = re.sub(r'https?:\/\/\S+', URL, text, 0, FLAGS)
-    text = re.sub(r'(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.)' +
-                  r'{3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)',
-                  IPADDR, text, 0, FLAGS)
-    text = re.sub(r'(\S+)\/([^\/]?)(?:\S+)', FILEPATH, text, 0, FLAGS)
-    text = re.sub(r'(?:(\w+\.)+\w+)', AFILE, text, 0, FLAGS)
-    text = re.sub(r'debug|error|fatal|info|trace|trace_int' +
-                  r'|warning|warn|alert|error|crit', LEVEL, text, 0, FLAGS)
+    processed = ' '.join(text.split())
+    retVal = LogLine(l.ts, l.text.lstrip().rstrip(), processed.lstrip().rstrip(), replaceDict, None)
 
-    text = re.sub(r'(?:[0-9a-fA-F]{16})', HEX16, text, 0, FLAGS)
-    text = re.sub(r'(?:0x[0-9a-fA-F]+)', HEX, text, 0, FLAGS)
-    text = re.sub(r'(?:[vV]\d+)', VERSION, text, 0, FLAGS)
-    text = re.sub(r'(?:\d+)', INT, text, 0, FLAGS)
-    text = re.sub(r'(?:\w+)=(?:.+?)(?:\b|$)', KEYVALUE, text, 0, FLAGS)
-
-    #for c in badchars:
-    #    text = re.sub(c, SPACE, text, 0, FLAGS)
-        # text = re.sub(c, '', text, 0, FLAGS)
-
-    #for c in silentchars:
-    #        text = re.sub(c, SILENTREMOVE, text, 0, FLAGS)
-
-    retval = ' '.join(text.split())
-
-    return retval
+    return retVal
 
 
-def dataset_iterator(fIn, num_lines, tdi):
+def dataset_iterator(fIn, num_lines, tdi, transforms):
     '''
         Handle reading the data from file into a know form
     '''
@@ -94,8 +52,9 @@ def dataset_iterator(fIn, num_lines, tdi):
                 left = line[:tdi.start]
                 right = line[tdi.stop:]
                 rest = left+right
-                processed = processString(rest)
-                yield LogLine(ts, rest,  processed)
+                lline = LogLine(ts, rest, None, None, None)
+                processed = makeTransformedLine(lline, transforms)
+                yield processed
 
                 '''
 
@@ -179,34 +138,47 @@ def main(argv):
                         help='index date start')
     parser.add_argument('--stop', required=True, nargs=1, help='index date end')
     parser.add_argument('-f', required=True, nargs=1, help=letters)
+    parser.add_argument('-t', required=True, nargs=1, help='file of transforms to apply')
     parsedArgs = parser.parse_args(argv)
 
     if parsedArgs.i is not None:
         sys.stderr.write('reading %s\n' % (parsedArgs.i[0]))
-        a = open(str(parsedArgs.i[0]), 'r')
+        i = open(str(parsedArgs.i[0]), 'r')
     else:
-        a = sys.stdin
+        i = sys.stdin
         sys.stderr.write('reading stdin\n')
+
+    if parsedArgs.f is not None:
+        sys.stderr.write('reading transforms from file %s\n' % (parsedArgs.t[0]))
+        t = open(str(parsedArgs.t[0]), 'r')
 
     if parsedArgs.o is not None:
         sys.stderr.write('writing %s\n' % (parsedArgs.o[0]))
-        b = open(str(parsedArgs.o[0]), 'w')
+        o = open(str(parsedArgs.o[0]), 'w')
     else:
-        b = sys.stdout
+        o = sys.stdout
         sys.stderr.write('writing stdout\n')
 
     start = int(parsedArgs.start[0])
     stop = int(parsedArgs.stop[0])
     fmat = str(parsedArgs.f[0])
     tdi = TDI(start, stop, fmat)
+    transforms = list()
 
-    for logLine in dataset_iterator(a, -1, tdi):
+    for trans in t:
+        if trans.lstrip()[0] == '#':
+            continue
+        else:
+            ID, TYPE, NAME, TRANSFORM = trans.lstrip().rstrip().split(',', 3)
+            transforms.append(TransformLine(ID, TYPE, NAME, r''+TRANSFORM))
+
+    for logLine in dataset_iterator(i, -1, tdi, transforms):
         out = '%s %s\n' % (logLine.ts, logLine.processed)
-        b.write(out)
+        o.write(out)
 
-    a.close()
-    b.close()
-
+    i.close()
+    o.close()
+    t.close()
 if __name__ == "__main__":
 
     main(sys.argv[1:])
