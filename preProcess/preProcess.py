@@ -10,8 +10,8 @@ TDI = namedtuple('TDI', ['start', 'stop', 'fmat'])
 
 LogLine = namedtuple('LogLine', ['ts', 'text', 'processed',
                                  'dictionary', 'supportId'])
+
 TransformLine = namedtuple('TransformLine', ['id', 'type', 'NAME', 'transform'])
-OutLine = namedtuple('OutLine', ['ts', 'supportId', 'dictionary'])
 
 
 def makeTransformedLine(l, transforms):
