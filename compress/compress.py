@@ -24,7 +24,7 @@ def makeTransformedLine(l, transforms):
             print 'REPLACELIST not implemented yet'
 
     processed = ' '.join(text.split())
-    retVal = LogLine(l.ts, l.text, processed, replaceDict, None)
+    retVal = LogLine(l.ts, l.text.lstrip().rstrip(), processed.lstrip().rstrip(), replaceDict, None)
 
     return retVal
 
