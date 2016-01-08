@@ -29,17 +29,18 @@ def makeTransformedLine(l, transforms):
             print 'REPLACELIST not implemented yet'
 
     processed = ' '.join(text.split())
-    retVal = LogLine(l.ts, l.text.lstrip().rstrip(), processed.lstrip().rstrip(), replaceDict, None)
+    retVal = LogLine(l.ts, l.text.lstrip().rstrip(),
+                     processed.lstrip().rstrip(), replaceDict, None)
 
     return retVal
 
 
-def dataset_iterator(fIn, num_lines, tdi, transforms):
+def dataset_iterator(fIn, numLines, tdi, transforms):
     '''
         Handle reading the data from file into a know form
     '''
     lines_read = 0
-    while num_lines == -1 or lines_read < num_lines:
+    while numLines == -1 or lines_read < numLines:
         lines_read += 1
         line = fIn.readline()
         if len(line) == 0:
@@ -138,7 +139,8 @@ def main(argv):
                         help='index date start')
     parser.add_argument('--stop', required=True, nargs=1, help='index date end')
     parser.add_argument('-f', required=True, nargs=1, help=letters)
-    parser.add_argument('-t', required=True, nargs=1, help='file of transforms to apply')
+    parser.add_argument('-t', required=True, nargs=1,
+                        help='file of transforms to apply')
     parsedArgs = parser.parse_args(argv)
 
     if parsedArgs.i is not None:
@@ -149,7 +151,8 @@ def main(argv):
         sys.stderr.write('reading stdin\n')
 
     if parsedArgs.f is not None:
-        sys.stderr.write('reading transforms from file %s\n' % (parsedArgs.t[0]))
+        sys.stderr.write('reading transforms from file %s\n' %
+                         (parsedArgs.t[0]))
         t = open(str(parsedArgs.t[0]), 'r')
 
     if parsedArgs.o is not None:
