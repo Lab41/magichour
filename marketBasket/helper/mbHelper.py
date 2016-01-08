@@ -1,4 +1,5 @@
 import sys
+import math
 from collections import namedtuple
 
 iDat = namedtuple('iDat', ['time', 'cluster', 'record'])
@@ -23,7 +24,7 @@ def main(argv):
     for l in iFile.xreadlines():
         x = l.strip().split(',', 2)
         data = iDat(*x)
-        currentTime = int(float(data.time)) % seconds
+        currentTime = math.floor(int(float(data.time)) /  int(seconds))
 
         # 1x setup
         if not setup:
