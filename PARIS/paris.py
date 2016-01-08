@@ -17,7 +17,7 @@ r = 1#.51
 r_count = int(floor(r*num_elements_per_atom))
 r_slack = num_elements_per_atom - r_count
 
-print num_K,L,N,r, r_count, r_slack
+#print num_K,L,N,r, r_count, r_slack
 
 def xor(s1, s2, skip_in_s2=0):
     """
@@ -31,19 +31,6 @@ def xor(s1, s2, skip_in_s2=0):
     num_in_s2_not_in_s1 = max(num_in_s2_not_in_s1, 0)
     return num_in_s1_not_in_s2  + num_in_s2_not_in_s1
 
-# def paris_distance(di, A, R, r_count):
-#     '''
-#     Compute paris distance function
-#     '''
-#     ais = []
-#     for ind in R:
-#         ais.append(xor(di, A[ind], r_count))
-#
-#     if len(ais) == 0:
-#         return 1.0
-#
-#     #print 'PD', len(ais), len(di), sum(ais), max(ais), min(ais)
-#     return sum(ais)/float(len(di))
 def paris_distance(di, A, R, r_count):
     '''
     Compute paris distance function
@@ -56,16 +43,6 @@ def paris_distance(di, A, R, r_count):
 
 
     return xor(di, total_rep, r_count)/len(di)
-
-    # ais = []
-    # for ind in R:
-    #     ais.append(xor(di, A[ind], r_count))
-    #
-    # if len(ais) == 0:
-    #     return 1.0
-    #
-    # #print 'PD', len(ais), len(di), sum(ais), max(ais), min(ais)
-    # return sum(ais)/float(len(di))
 
 def PCF(D, A, R, tau=.5, verbose=False):
     '''
@@ -312,16 +289,6 @@ def PARIS(D, r_slack, num_iterations=3):
     print 'Num ATOMS: ', len(A)
     return A, R
 
-
-    #     # Close
-    #
-    # print 'Representation Error'
-    # for ind in range(len(D)):
-    #     ri = set()
-    #     for j in R[ind]:
-    #         ri.update(A[j])
-    #     print len(D[ind]), len(D[ind].symmetric_difference(ri))
-
 def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, groups_to_skip=set([-1])):
 
     transactions = defaultdict(set)
@@ -336,7 +303,7 @@ def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, gro
             time = float(line[0])
             group = int(line[1])
             if group not in lookup_table:
-                # Add to lookup table if we haven't seen this group before
+                # Add to lookup table if we haven't seen this group before for displaying the results
                 template = ','.join(line[2:])
                 lookup_table[group] = template
 
@@ -347,10 +314,12 @@ def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, gro
                 # TODO: Allow for overlap here
                 line_count +=1
 
+    # PARIS expects a list of sets and not a dictionary, pull values
     D = transactions.values()
-
+    # Run the PARIS algorithm
     A, R = PARIS(D, r_slack)
 
+    # Display the results
     for a in A:
         for group in a:
             print group, lookup_table[group]
@@ -358,8 +327,6 @@ def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, gro
 
 def test_with_syntheticdata():
     # Generate synthetic data
-
-
     # Define our atoms
     random.seed(1024)
     K = [] # True Atoms
