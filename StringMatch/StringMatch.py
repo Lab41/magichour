@@ -64,7 +64,7 @@ def main():
     else:
         fIn = open(options.filename)
 
-    def dataset_iteator(fIn, num_lines=options.num_lines):
+    def dataset_iterator(fIn, num_lines=options.num_lines):
         lines_read = 0
         success_full = 0
         while num_lines== -1 or lines_read < num_lines:
@@ -82,7 +82,7 @@ def main():
                     #raise
 
 
-    clusters = get_clusters(dataset_iteator(fIn), num_msgs, skip_count, threshold, MIN_SAMPLES_FOR_SPLIT)
+    clusters = get_clusters(dataset_iterator(fIn), num_msgs, skip_count, threshold, MIN_SAMPLES_FOR_SPLIT)
 
     index = 0
     for cluster in clusters:
