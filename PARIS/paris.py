@@ -299,7 +299,7 @@ def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, gro
         if line_count_limit and line_count < line_count_limit:
             line = line.strip().split(',')
 
-            # Extract fileds
+            # Extract fields
             time = float(line[0])
             group = int(line[1])
             if group not in lookup_table:
