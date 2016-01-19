@@ -241,7 +241,7 @@ def dataset_iterator(fIn, num_lines):
 
 
 def openFile(name, mode):
-    if name.tolower().endswith('.gz'):
+    if name.lower().endswith('.gz'):
         return gzip.open(name, mode+'b')
     else:
         return open(name, mode)

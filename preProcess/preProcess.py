@@ -16,7 +16,7 @@ TransformLine = namedtuple('TransformLine', ['id', 'type', 'NAME', 'transform'])
 
 
 def openFile(name, mode):
-    if name.tolower().endswith('.gz'):
+    if name.lower().endswith('.gz'):
         return gzip.open(name, mode+'b')
     else:
         return open(name, mode)

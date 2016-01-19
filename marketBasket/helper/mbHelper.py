@@ -7,7 +7,7 @@ iDat = namedtuple('iDat', ['time', 'cluster', 'record'])
 oDat = namedtuple('oDat', ['transaction', 'cluster'])
 
 def openFile(name, mode):
-    if name.tolower().endswith('.gz'):
+    if name.lower().endswith('.gz'):
         return gzip.open(name, mode+'b')
     else:
         return open(name, mode)
