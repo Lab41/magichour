@@ -1,12 +1,20 @@
 import re
 import sys
 from collections import namedtuple
+import gzip
 
 LogLine = namedtuple('LogLine', ['ts', 'text', 'processed',
                                  'dictionary', 'supportId'])
 TransformLine = namedtuple('TransformLine', ['id', 'type', 'NAME', 'transform'])
 LogSupport = namedtuple('LogSupport', ['supportId', 'pattern'])
 OutLine = namedtuple('OutLine', ['ts', 'supportId', 'dictionary'])
+
+
+def openFile(name, mode):
+    if name.tolower().endswith('.gz'):
+        return gzip.open(name, mode+'b')
+    else:
+        return open(name, mode)
 
 
 def makeTransformedLine(l, transforms):
@@ -140,9 +148,9 @@ def writeOutput(o, oFile):
 
 
 def main(argv):
-    logLines = open(argv[0], 'r')
-    logSupports = open(argv[1], 'r')
-    simpleTransforms = open(argv[2], 'r')
+    logLines = openFile(argv[0], 'r')
+    logSupports = openFile(argv[1], 'r')
+    simpleTransforms = openFile(argv[2], 'r')
 
     transforms = readTransforms(simpleTransforms)
     simpleTransforms.close()

@@ -6,6 +6,7 @@ import hashlib
 import sys
 import time
 import signal
+import gzip
 
 '''
 name some intermediate data structures
@@ -239,6 +240,13 @@ def dataset_iterator(fIn, num_lines):
                 pass
 
 
+def openFile(name, mode):
+    if name.tolower().endswith('.gz'):
+        return gzip.open(name, mode+'b')
+    else:
+        return open(name, mode)
+
+
 # GOOD
 def main(argv):
 
@@ -251,11 +259,11 @@ def main(argv):
     print 'maxIter = %i' % int(argv[2])
     if len(argv) > 3:
         print 'ClusterOutputFile = %s' % argv[3]
-        out = open(argv[3], 'w')
+        out = openFile(argv[3], 'w')
     else:
         out = sys.stdout
 
-    a = open(argv[0], 'r')
+    a = openFile(argv[0], 'r')
     D = list()
     G = dict()
 

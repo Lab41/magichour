@@ -8,6 +8,7 @@ import hashlib
 import sys
 import time
 import signal
+import gzip
 
 '''
 name some intermediate data structures
@@ -19,7 +20,15 @@ DataRecord = namedtuple('DataRecord', ['line', 'md5hash', 'stats'])
 globalStop = False
 
 
+def openFile(name, mode):
+    if name.tolower().endswith('.gz'):
+        return gzip.open(name, mode+'b')
+    else:
+        return open(name, mode)
+
+
 # TODO make sure that this is correct
+
 def makeEdges(m, i):
 
     retval = []
@@ -284,7 +293,7 @@ def main(argv):
     print 'k = %i' % int(argv[1])
     print 'maxIter = %i' % int(argv[2])
 
-    a = open(argv[0], 'r')
+    a = openFile(argv[0], 'r')
     D = list()
     G = dict()
 

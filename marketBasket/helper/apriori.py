@@ -1,10 +1,17 @@
 import sys
 import os.path
 import csv
-import math 
+import math
 import types
 from collections import defaultdict, Iterable
 import itertools
+import gzip
+
+def openFile(name, mode):
+    if name.tolower().endswith('.gz'):
+        return gzip.open(name, mode+'b')
+    else:
+        return open(name, mode)
 
 class Apriori:
     def __init__(self, data, minSup, minConf):
@@ -47,7 +54,7 @@ class Apriori:
             for subset in subsets:
                 if subset in (self.F[kPrev]):
                     self.F[kPrev].remove(subset)
-                    
+
 
         subsets = self.genSubsets
 
@@ -70,7 +77,7 @@ class Apriori:
             candidate = [tuple(sorted([x, y])) for x in items for y in items if len((x, y)) == k and x != y]
         else:
             candidate = [tuple(set(x).union(y)) for x in items for y in items if len(set(x).union(y)) == k and x != y]
-        
+
         for c in candidate:
             subsets = self.genSubsets(c)
             if any([ x not in items for x in subsets ]):
@@ -130,7 +137,7 @@ class Apriori:
     """
     Prepare the transaction data into a dictionary
     key: Receipt.id
-    val: set(Goods.Id) 
+    val: set(Goods.Id)
 
     Also generates the frequent itemlist for itemsets of size 1
     key: Goods.Id
@@ -158,15 +165,15 @@ def main():
         print 'Expected input format: python apriori.py <dataset.csv> <minSup> <minConf>'
         return
     elif num_args == 5 and sys.argv[1] == "--no-rules":
-        dataset = csv.reader(open(sys.argv[2], "r"))
-        goodsData = csv.reader(open('goods.csv', "r"))
+        dataset = csv.reader(openFile(sys.argv[2], "r"))
+        goodsData = csv.reader(openFile('goods.csv', "r"))
         minSup  = float(sys.argv[3])
         minConf = float(sys.argv[4])
         noRules = True
         print "Dataset: ", sys.argv[2], " MinSup: ", minSup, " MinConf: ", minConf
-    else: 
-        dataset = csv.reader(open(sys.argv[1], "r"))
-        goodsData = csv.reader(open('goods.csv', "r"))
+    else:
+        dataset = csv.reader(openFile(sys.argv[1], "r"))
+        goodsData = csv.reader(openFile('goods.csv', "r"))
         minSup  = float(sys.argv[2])
         minConf = float(sys.argv[3])
         print "Dataset: ", sys.argv[1], " MinSup: ", minSup, " MinConf: ", minConf

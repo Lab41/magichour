@@ -4,6 +4,7 @@ import re
 import sys
 import time
 import argparse
+import gzip
 
 
 TDI = namedtuple('TDI', ['start', 'stop', 'fmat'])
@@ -12,6 +13,13 @@ LogLine = namedtuple('LogLine', ['ts', 'text', 'processed',
                                  'dictionary', 'supportId'])
 
 TransformLine = namedtuple('TransformLine', ['id', 'type', 'NAME', 'transform'])
+
+
+def openFile(name, mode):
+    if name.tolower().endswith('.gz'):
+        return gzip.open(name, mode+'b')
+    else:
+        return open(name, mode)
 
 
 def makeTransformedLine(l, transforms):
@@ -145,7 +153,7 @@ def main(argv):
 
     if parsedArgs.i is not None:
         sys.stderr.write('reading %s\n' % (parsedArgs.i[0]))
-        i = open(str(parsedArgs.i[0]), 'r')
+        i = openFile(parsedArgs.i[0], 'r')
     else:
         i = sys.stdin
         sys.stderr.write('reading stdin\n')
@@ -153,11 +161,11 @@ def main(argv):
     if parsedArgs.f is not None:
         sys.stderr.write('reading transforms from file %s\n' %
                          (parsedArgs.t[0]))
-        t = open(str(parsedArgs.t[0]), 'r')
+        t = openFile(parsedArgs.t[0], 'r')
 
     if parsedArgs.o is not None:
         sys.stderr.write('writing %s\n' % (parsedArgs.o[0]))
-        o = open(str(parsedArgs.o[0]), 'w')
+        o = openFile(parsedArgs.o[0], 'w')
     else:
         o = sys.stdout
         sys.stderr.write('writing stdout\n')
