@@ -145,10 +145,17 @@ sub build_word_sketch {
 
   foreach $ifile (@inputfiles) {
 
-    if (!open(FILE, $ifile)) {
-      log_msg("err", "Can't open input file $ifile: $!");
-      exit(1);
-    }
+	  if (substr($ifile,-3) eq '.gz')
+	  {
+		open FILE, "zcat -c $ifile|";
+	  }
+	  else
+	  {
+		  if (!open(FILE, $ifile)) {
+			  log_msg("err", "Can't open input file $ifile: $!");
+			  exit(1);
+		  }
+	  }
 
     while (<FILE>) {
       $line = process_line($_);
@@ -196,10 +203,17 @@ sub find_frequent_words {
 
   foreach $ifile (@inputfiles) {
 
-    if (!open(FILE, $ifile)) {
-      log_msg("err", "Can't open input file $ifile: $!");
-      exit(1);
-    }
+	  if (substr($ifile,-3) eq '.gz')
+	  {
+		  open FILE, "zcat -c $ifile|";
+	  }
+	  else
+	  {
+		  if (!open(FILE, $ifile)) {
+			  log_msg("err", "Can't open input file $ifile: $!");
+			  exit(1);
+		  }
+	  }
 
     while (<FILE>) {
       chomp($_);
@@ -264,10 +278,17 @@ sub find_freq_word_deps {
 
   foreach $ifile (@inputfiles) {
 
-    if (!open(FILE, $ifile)) {
-      log_msg("err", "Can't open input file $ifile: $!");
-      exit(1);
-    }
+	  if (substr($ifile,-3) eq '.gz')
+	  {
+		  open FILE, "zcat -c $ifile|";
+	  }
+	  else
+	  {
+		  if (!open(FILE, $ifile)) {
+			  log_msg("err", "Can't open input file $ifile: $!");
+			  exit(1);
+		  }
+	  }
 
     while (<FILE>) {
       chomp($_);
@@ -343,10 +364,18 @@ sub find_candidates {
 
   foreach $ifile (@inputfiles) {
 
-    if (!open(FILE, $ifile)) {
-      log_msg("err", "Can't open input file $ifile: $!");
-      exit(1);
-    }
+	  if (substr($ifile,-3) eq '.gz')
+	  {
+		  open FILE, "zcat -c $ifile|";
+	  }
+	  else
+	  {
+		  if (!open(FILE, $ifile)) {
+			  log_msg("err", "Can't open input file $ifile: $!");
+			  exit(1);
+		  }
+	  }
+
 
     while (<FILE>) {
 
