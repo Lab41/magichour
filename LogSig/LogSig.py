@@ -20,8 +20,16 @@ globalStop = False
 
 # GOOD
 def signal_handler(signal, frame):
+
     '''
          stop processing if CTRL-C pressed
+         Args:
+             signal
+             frame
+         Returns:
+             None
+         Globals:
+             globalStop: loop guard
     '''
 
     global globalStop
@@ -32,6 +40,11 @@ def signal_handler(signal, frame):
 def makeHash(s):
     '''
         make a md5 string rep of an input string
+        Args:
+            s(string): input string
+        Returns:
+            stringDigest(string): string representation of the hex digest
+
     '''
 
     m = hashlib.md5()
@@ -45,6 +58,11 @@ def tuple2Str(a):
          make a concatenation of a tuple
          can make multiple things alias to the same comparison..
          'a','aaa','aa','aa','aaa','a' all map to 'aaaa'
+
+         Args:
+             a(tuple): tuple of strings
+         Returns:
+             concatTuple(string): concatenation string
     '''
 
     return '%s%s' % a
@@ -57,6 +75,11 @@ def str2Counter(X):
         set chosen to make membership of a tuple instead of count of tuple
         Counter is to track the number of DOCUMENTS containing the tuple
         not the count of the tuples in a DOCUMENT.
+
+        Args:
+            X(string): string to tokenize and count
+        Returns:
+            stats(collections.Counter)
     '''
     return Counter(map(tuple2Str, set(combinations(X.rstrip().split(), 2))))
 
@@ -67,6 +90,18 @@ def argMaxPhiSimple(C, X, G, denominator):
     '''
         calculate the best partition for X to be part of
         return the number of the partition to caller
+
+        Args:
+            C(): current mapping of loglines to partitions
+            X(dataRecord): processed logline being evaluated
+            G(dict): longline to partition mapping
+            denominator(dict): parition to float mapping.  The lookup
+                               is used to keep from repeatedly calculating
+                               the denominator in a calculation
+
+        Returns:
+            idealPartition(int): X's partition for the next
+                                 iteration of the algorithm
     '''
     numGroups = len(C)
 
@@ -106,8 +141,16 @@ def argMaxPhiSimple(C, X, G, denominator):
 # GOOD
 def randomSeeds(D, k, G):
     '''
-        store the data histograms
-        in each parition
+        initial assignment of loglines to partitions
+
+        Args:
+            D(list(DataRecords)):
+            k(int): number of partitions to make
+            G(dict): logline to partition mapping
+
+        Returns:
+            C(list(Counters)):  Initial partition assignments for all
+                                the log lines
     '''
 
     C = [Counter() for _ in range(k)]
@@ -130,8 +173,18 @@ def updatePartition(CNext, X, GNext, j):
     '''
         update CNext with statistics from X
         update GNext with which group X belongs
+
+        Args:
+            CNext(list(Counters)):
+            X(DataRecord): namedTuple about a single logline
+            GNext(dict): logline to parition mapping
+            j(int)
+
+        Returns:
+            None
     '''
 
+    # update the next locaction for X
     GNext[X.md5hash] = j
 
     # TODO would a binary version of this be sufficient?
@@ -141,7 +194,15 @@ def updatePartition(CNext, X, GNext, j):
 # GOOD
 def partitionsNotEqual(C, CNext):
     '''
-        determine if array of dicts are equal
+        determine if array of counters are equal
+
+        Args:
+            C(list(Counter)) : current interation view of partition membership
+            CNext(list(Counter)): next iteration view of partition membership
+
+        Returns:
+            retval(boolean): True -> same
+                             False -> different
     '''
 
     for i in range(len(C)):
@@ -153,9 +214,17 @@ def partitionsNotEqual(C, CNext):
 # GOOD
 def logSig_localSearch(D, G, k, maxIter):
     '''
-        D : log message set
-        k : number of groups to partition
-        returns: C: partitions
+        Perform the logsig_localsearch algorithm described in paper:
+        LogSig: Geneerating Ssytem Events from Raw Textual Logs
+
+        Args:
+            D(list(DataRecord)): list of DataRecords storing the loglines
+            G(dict): mapping between message and parition
+            k(int) : number of groups to partition
+            maxIter(int): maximum interations to perform before giving up
+                          on convergence
+        Returns:
+            C(list(Counters)): partition statisitics
     '''
 
     global globalStop
@@ -211,6 +280,12 @@ def logSig_localSearch(D, G, k, maxIter):
 def dataset_iterator(fIn, num_lines):
     '''
         Handle reading the data from file into a know form
+
+        Args:
+            fIn(file): input file handle to read from
+            num_lines(int): number of lines to read at once
+        Returns:
+            retVal(LogLine): a parsed logline
     '''
     lines_read = 0
     success_full = 0
@@ -241,6 +316,17 @@ def dataset_iterator(fIn, num_lines):
 
 
 def openFile(name, mode):
+    '''
+        wrapps the open call to handle gzipped input/output
+
+        Args:
+            name(string): name of file to open, if the filename ends in a
+                          '.gz' extension then treat file as a gzip
+            mode(string): mode to open the file as
+        Returns:
+            retval(file): filehandle
+    '''
+
     if name.lower().endswith('.gz'):
         return gzip.open(name, mode+'b')
     else:
@@ -249,6 +335,15 @@ def openFile(name, mode):
 
 # GOOD
 def main(argv):
+    '''
+        main program calculating the LogSig
+
+        Args:
+            argv(list(string)): arguments of main program
+
+        Returns:
+            None
+    '''
 
     totalS = time.time()
 
