@@ -2,8 +2,9 @@ from __future__ import division
 import random
 from math import floor
 from collections import Counter, defaultdict
-from itertools import combinations
+from itertools import combinations, islice
 from copy import deepcopy
+import gzip
 
 #alphabet_size = 200
 alphabet_size = 194
@@ -294,25 +295,29 @@ def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, gro
     transactions = defaultdict(set)
     lookup_table = {}
     line_count = 0
+    if log_file.endswith('.gz'):
+        fIn = gzip.open(log_file)
+    else:
+        fIn = open(log_file)
+
     # Iterate through lines building up a lookup table to map Group to template and to build up transactions
-    for line in open(log_file):
-        if line_count_limit is None or line_count < line_count_limit:
-            line = line.strip().split(',')
+    for line in islice(fIn, line_count_limit):
+        line = line.strip().split(',')
 
-            # Extract fields
-            time = float(line[0])
-            group = int(line[1])
-            if group not in lookup_table:
-                # Add to lookup table if we haven't seen this group before for displaying the results
-                template = ','.join(line[2:])
-                lookup_table[group] = template
+        # Extract fields
+        time = float(line[0])
+        group = int(line[1])
+        if group not in lookup_table:
+            # Add to lookup table if we haven't seen this group before for displaying the results
+            template = ','.join(line[2:])
+            lookup_table[group] = template
 
-            # Based on window add to transactions
-            if group not in groups_to_skip:
-                window = int(time/window_size)
-                transactions[window].add(group)
-                # TODO: Allow for overlap here
-                line_count +=1
+        # Based on window add to transactions
+        if group not in groups_to_skip:
+            window = int(time/window_size)
+            transactions[window].add(group)
+            # TODO: Allow for overlap here
+            line_count +=1
 
     # PARIS expects a list of sets and not a dictionary, pull values
     D = transactions.values()
