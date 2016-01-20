@@ -69,7 +69,7 @@ public class TransactionDatabase {
 						&& thisLine.charAt(0) != '@') {
 					// split the line according to spaces and then
 					// call "addTransaction" to process this line.
-					addTransaction(thisLine.split(" "));
+					addTransaction(thisLine.split(","));
 				}
 			}
 		} catch (Exception e) {
