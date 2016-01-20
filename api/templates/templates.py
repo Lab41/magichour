@@ -3,7 +3,7 @@ import os
 import re
 import subprocess
 import sys
-
+import tempfile
 from collections import namedtuple
 from StringMatch import StringMatch as sm
 
@@ -18,16 +18,11 @@ LOGCLUSTER = "/Users/kylez/lab41/magichour/magichour/api/modules/templates/logcl
 # Right now this will write var lines to a file in order to feed it into logcluster.pl
 # Eventually, the goal is to fully translate logcluster.pl into python in order to eliminate this step.
 def logcluster(lines, *args, **kwargs):
-    # Write lines to file at filepath. 
-    filepath = kwargs.get("filepath", None)
-    if not filepath:
-        DEFAULT_FILENAME = "default.txt"
-        this_dir = os.path.dirname(os.path.realpath(__file__))
-        filepath = os.path.join(this_dir, DEFAULT_FILENAME)
-    with open(filepath, "w") as fp:
-        for line in lines:
-            fp.write("%s\n" % line.msg)
-
+    # Write lines to temporary file.
+    temp = tempfile.TemporaryFile()
+    for line in lines:
+        temp.write("%s\n" % line.msg)
+    
     #command = ["perl", "./logcluster-0.03/logcluster.pl", "--lfilter", self.lfilter,
     #               "--template", self.template, "--support", str(self.support), "--input", self.filepath]
 
@@ -41,7 +36,7 @@ def logcluster(lines, *args, **kwargs):
 
     output = subprocess.check_output(command)
    
-    os.remove(filepath)
+    temp.close()
 
     templates = _parse_logcluster(output)
     return templates
@@ -111,6 +106,7 @@ def stringmatch(lines, *args, **kwargs):
         template_regex = re.compile("%s$" % re.escape(template_str))    
         template = Template(template_id, template_regex, template_str)
         templates.append(template)
+        template_id += 1
     return templates
 
 def baler(lines):
