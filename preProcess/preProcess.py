@@ -4,6 +4,7 @@ import re
 import sys
 import time
 import argparse
+import gzip
 
 
 TDI = namedtuple('TDI', ['start', 'stop', 'fmat'])
@@ -11,19 +12,53 @@ TDI = namedtuple('TDI', ['start', 'stop', 'fmat'])
 LogLine = namedtuple('LogLine', ['ts', 'text', 'processed',
                                  'dictionary', 'supportId'])
 
-TransformLine = namedtuple('TransformLine', ['id', 'type', 'NAME', 'transform'])
+TransformLine = namedtuple('TransformLine', ['id', 'type', 'NAME',
+                                             'transform', 'compiled'])
+
+
+def openFile(name, mode):
+    '''
+    wrapper for the open call
+
+    Args:
+        name(string):   name of the file to open, if the name ends in '.gz'
+                        the file is opened as a gzip file
+        mode(string):   mode to open the file
+
+    Returns:
+        retval(file):   filedescriptor
+
+    '''
+    if name.lower().endswith('.gz'):
+        return gzip.open(name, mode+'b')
+    else:
+        return open(name, mode)
 
 
 def makeTransformedLine(l, transforms):
+    '''
+    apply a list of regex replacements to a line, make note of
+    all the remplacements peformed in a dictionary(list)
+
+    Args:
+        l(LogLine): logline to work on
+        transforms(list(TransformLine)): replacemnts to make with
+
+    Returns:
+        retval(LogLine): logline with the processed, and dictionary portions
+                         filled in
+    '''
     text = l.text.strip()
     replaceDict = dict()
-    FLAGS = re.MULTILINE | re.DOTALL
+    # FLAGS = re.MULTILINE | re.DOTALL
     for t in transforms:
         if t.type == 'REPLACE':
-            replaceList = re.findall(t.transform, text)
+            # replaceList = re.findall(t.transform, text)
+            replaceList = t.compiled.findall(text)
             if replaceList:
                 replaceDict[t.NAME] = replaceList
-            text = re.sub(t.transform, ' '+t.NAME+' ', text, 0, FLAGS)
+            # text = re.sub(t.transform, ' '+t.NAME+' ', text, 0, FLAGS)
+            text = t.compiled.sub(t.NAME, text, 0)
 
         if t.type == 'REPLACELIST':
             print 'REPLACELIST not implemented yet'
@@ -38,6 +73,16 @@ def makeTransformedLine(l, transforms):
 def dataset_iterator(fIn, numLines, tdi, transforms):
     '''
         Handle reading the data from file into a know form
+
+        Args:
+            fIn(file): file descriptor to read from
+            numLines(int): number of lines to read at once
+            tdi(TDI): named tuple holding data location and parsing information
+            transforms(list(TransformLine)): transforms to apply to input
+
+        Returns:
+            retval(LogLine): logline with sections filled in
+
     '''
     lines_read = 0
     while numLines == -1 or lines_read < numLines:
@@ -57,34 +102,23 @@ def dataset_iterator(fIn, numLines, tdi, transforms):
                 processed = makeTransformedLine(lline, transforms)
                 yield processed
 
-                '''
-
-                logtype = 1
-                if logtype == 0:
-                    # syslogway
-                    t = datetime.datetime.strptime(line[:14], '%b %d %H:%M:%S')
-                    t.replace(year=2015)
-                    ts = time.mktime(t.timetuple())
-                    rest = line[15:].strip()
-                    processed = processString(rest)
-                    yield LogLine(ts, rest,  processed)
-                    success_full += 1
-                if logtype == 1:
-                    # apache weblog way
-                    t = datetime.datetime.strptime(line[1:25],
-                                                   '%a %b %d %H:%M:%S %Y')
-                    ts = time.mktime(t.timetuple())
-                    rest = line[26:].lstrip().strip()
-                    processed = processString(rest)
-                    yield LogLine(ts, rest,  processed)
-                    success_full += 1
-                '''
-
             except:
                 pass
 
 
 def main(argv):
+    '''
+        perform the intitial pre-processing of the logfile
+        take thigns wich provide noise in the file and make them constant
+        E.G. 127.0.0.1 -> IPADDR
+
+        Args:
+            argv(list(string)): arguements passed to the program
+
+        Returns:
+            None
+
+    '''
 
     letters = """'format string'
 %%a The day of the week, using the locale's weekday names; either the
@@ -145,7 +179,7 @@ def main(argv):
 
     if parsedArgs.i is not None:
         sys.stderr.write('reading %s\n' % (parsedArgs.i[0]))
-        i = open(str(parsedArgs.i[0]), 'r')
+        i = openFile(parsedArgs.i[0], 'r')
     else:
         i = sys.stdin
         sys.stderr.write('reading stdin\n')
@@ -153,11 +187,11 @@ def main(argv):
     if parsedArgs.f is not None:
         sys.stderr.write('reading transforms from file %s\n' %
                          (parsedArgs.t[0]))
-        t = open(str(parsedArgs.t[0]), 'r')
+        t = openFile(parsedArgs.t[0], 'r')
 
     if parsedArgs.o is not None:
         sys.stderr.write('writing %s\n' % (parsedArgs.o[0]))
-        o = open(str(parsedArgs.o[0]), 'w')
+        o = openFile(parsedArgs.o[0], 'w')
     else:
         o = sys.stdout
         sys.stderr.write('writing stdout\n')
@@ -173,7 +207,8 @@ def main(argv):
             continue
         else:
             ID, TYPE, NAME, TRANSFORM = trans.lstrip().rstrip().split(',', 3)
-            transforms.append(TransformLine(ID, TYPE, NAME, r''+TRANSFORM))
+            transforms.append(TransformLine(ID, TYPE, NAME, r''+TRANSFORM,
+                                            re.compile(r''+TRANSFORM)))
 
     for logLine in dataset_iterator(i, -1, tdi, transforms):
         out = '%s %s\n' % (logLine.ts, logLine.processed)

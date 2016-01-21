@@ -9,6 +9,8 @@ import hashlib
 import sys
 import time
 import signal
+import gzip
+
 
 
 # Signal handler updates GLOBAL to stop processing
@@ -17,6 +19,12 @@ globalStop = False
 LogLine = namedtuple('LogLine', ['ts', 'text'])
 DataRecord = namedtuple('DataRecord', ['line', 'md5hash', 'stats'])
 
+
+def openFile(name, mode):
+    if name.lower().endswith('.gz'):
+        return gzip.open(name, mode+'b')
+    else:
+        return open(name, mode)
 
 # GOOD
 def dataset_iterator(fIn, num_lines):
@@ -235,7 +243,7 @@ def main(argv):
     print 'k = %i' % int(argv[1])
     print 'maxIter = %i' % int(argv[2])
 
-    a = open(argv[0], 'r')
+    a = openFile(argv[0], 'r')
     D = list()
     G = dict()
 
