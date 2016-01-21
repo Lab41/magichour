@@ -296,7 +296,7 @@ def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, gro
     line_count = 0
     # Iterate through lines building up a lookup table to map Group to template and to build up transactions
     for line in open(log_file):
-        if line_count_limit is None or line_count < line_count_limit:
+        if line_count_limit and line_count < line_count_limit:
             line = line.strip().split(',')
 
             # Extract fields
@@ -324,9 +324,6 @@ def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, gro
         for group in a:
             print group, lookup_table[group]
         print '--------------------------------------'
-
-    for a in A:
-        print ' '.join(map(str, a))
 
 def test_with_syntheticdata():
     # Generate synthetic data
@@ -374,7 +371,7 @@ def main():
     parser.add_option("-n", "--num_lines", dest="num_lines", default=None, type=int)
 
     (options, args) = parser.parse_args()
-    run_paris_on_document(options.filename, options.window_size, line_count_limit=options.num_lines)
+    run_paris_on_document(options.filename, options.window_size, options.num_lines)
 
 if __name__ == "__main__":
     main()

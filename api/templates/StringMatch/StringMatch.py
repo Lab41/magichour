@@ -16,7 +16,7 @@ def get_clusters(dataset_iterator, batch_size, skip_count, threshold, MIN_SAMPLE
     line_count = 0
     clusters = []
     for line in dataset_iterator:
-        line_split = line.text.split()
+        line_split = line.msg.split()
         if len(line_split) > skip_count:
             has_matched = False
             for i in range(len(clusters)):
