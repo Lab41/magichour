@@ -14,7 +14,7 @@ def parse_words(log_lines):
     words = set(log_lines.msg.split())
     return [(word, 1) for word in words]
 
-def extract_patterns(line):
+def extract_patterns(line, frequent_words):
     """
     Take single LogLine and output a tuple of frequent words and frequent words with skips
 
@@ -116,7 +116,7 @@ def log_cluster(sc, log_lines, support):
 
     frequent_words = sc.broadcast(set(frequent_word_dict.keys()))
 
-    return log_lines.map(extract_patterns)\
+    return log_lines.map(lambda x: extract_patterns(x, frequent_words))\
                   .groupByKey()\
                   .filter(lambda (freq_word_pattern, pattern): len(pattern) > support)\
                   .map(collapse_patterns)\
