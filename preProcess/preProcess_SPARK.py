@@ -85,11 +85,12 @@ def lineRegexReplacement(line, logTrans):
     return retVal
 
 
-def readTransforms(transFile):
+def readTransforms(sc, transFile):
     '''
     returns a list of transforms for replacement processing
 
     Args:
+        sc(sparkContext): spark context
         transFile(string): uri to the transform file in HDFS
 
     Returns:
@@ -113,13 +114,14 @@ def readTransforms(transFile):
     return lTrans
 
 
-def logPreProcess(logTrans, logFile, partitions):
+def logPreProcess(sc, logTrans, logFile, partitions):
     '''
         take a series of loglines and pre-process the lines
         replace ipaddresses, directories, urls, etc with constants
         keep a dictionary of the replacements done to the line
 
         Args:
+            sc(sparkContext): spark context
             logTrans(string): location fo the transFile in HDFS
             logFile(string): location of the log data in HDFS
             partitions(int): number of partitions to apply to the logFile
@@ -137,11 +139,12 @@ def logPreProcess(logTrans, logFile, partitions):
     return tsLine.map(lambda line: lineRegexReplacement(line, logTrans))
 
 
-def rdd_preProcess(logTrans, logFile, partitions):
+def rdd_preProcess(sc, logTrans, logFile, partitions):
     '''
     make a rdd of preprocessed loglines
 
      Args:
+            sc(sparkContext): sparkContext
             logTrans(string): location fo the transFile in HDFS
             logFile(string): location of the log data in HDFS
             partitions(int): number of partitions to apply to the logFile
@@ -151,6 +154,6 @@ def rdd_preProcess(logTrans, logFile, partitions):
                                    stage of processing
     '''
 
-    lTrans = readTransforms(logTrans)
+    lTrans = readTransforms(sc, logTrans)
     logTrans = sc.broadcast(lTrans)
-    return logPreProcess(logTrans, logFile, partitions)
+    return logPreProcess(sc, logTrans, logFile, partitions)
