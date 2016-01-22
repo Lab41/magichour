@@ -98,7 +98,7 @@ def collapse_patterns(input_pattern_tuple):
             final_pattern.append(word)
     return final_pattern
 
-def log_cluster(log_lines, support):
+def log_cluster(sc, log_lines, support):
     """
     Run log cluster
 
