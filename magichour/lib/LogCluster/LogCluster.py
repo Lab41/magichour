@@ -26,7 +26,7 @@ def extract_patterns(line, frequent_words):
     skip = 0 # Count of non-frequent words since the last frequent word
     freq_word_pattern = [] # Pattern of frequent words (ignoring non-frequent words)
     pattern = [] # Pattern with frequent words and skip counts
-    for word in line.msg.split():
+    for word in line.processed.split():
         # If this is a frequent word
         if word in frequent_words.value:
             # If we've skipped some words since the last frequent word, add to "pattern"
