@@ -1,5 +1,5 @@
 from fp_growth import find_frequent_itemsets
-from paris import PARIS
+from PARIS import paris
 
 # both algorithms accept list of iterables representing transactional windows
 
