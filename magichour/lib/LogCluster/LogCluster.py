@@ -1,5 +1,4 @@
 from collections import namedtuple
-LogLine = namedtuple('LogLine', ['ts', 'msg'])
 
 def parse_words(log_lines):
     """
@@ -11,7 +10,7 @@ def parse_words(log_lines):
     Returns:
          : List of (word, count) tuples where the count will always be 1
     """
-    words = set(log_lines.msg.split())
+    words = set(log_lines.processed.split())
     return [(word, 1) for word in words]
 
 def extract_patterns(line, frequent_words):
