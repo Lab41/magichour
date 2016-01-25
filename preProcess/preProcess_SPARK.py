@@ -1,3 +1,4 @@
+
 from collections import namedtuple
 import re
 
@@ -114,7 +115,7 @@ def readTransforms(sc, transFile):
     return lTrans
 
 
-def logPreProcess(sc, logTrans, logFile, partitions):
+def logPreProcess(sc, logTrans, rrdLogLine):
     '''
         take a series of loglines and pre-process the lines
         replace ipaddresses, directories, urls, etc with constants
@@ -124,22 +125,17 @@ def logPreProcess(sc, logTrans, logFile, partitions):
             sc(sparkContext): spark context
             logTrans(string): location fo the transFile in HDFS
             logFile(string): location of the log data in HDFS
-            partitions(int): number of partitions to apply to the logFile
 
         Returns:
             retval(RDD(LogLines)): preprocessed log lines ready for next
                                    stage of processing
    '''
 
-    # read the logs
-    logs = sc.textFile(logFile).repartition(partitions)
-
-    tsLine = logs.map(rdd_LogLine)
     # following done to make sure that the broadcast gets to the function
-    return tsLine.map(lambda line: lineRegexReplacement(line, logTrans))
+    return rrdLogLine.map(lambda line: lineRegexReplacement(line, logTrans))
 
 
-def rdd_preProcess(sc, logTrans, logFile, partitions):
+def rdd_preProcess(sc, logTrans, rrdLogLine):
     '''
     make a rdd of preprocessed loglines
 
@@ -147,7 +143,6 @@ def rdd_preProcess(sc, logTrans, logFile, partitions):
             sc(sparkContext): sparkContext
             logTrans(string): location fo the transFile in HDFS
             logFile(string): location of the log data in HDFS
-            partitions(int): number of partitions to apply to the logFile
 
     Returns:
             retval(RDD(LogLines)): preprocessed log lines ready for next
@@ -156,4 +151,4 @@ def rdd_preProcess(sc, logTrans, logFile, partitions):
 
     lTrans = readTransforms(sc, logTrans)
     logTrans = sc.broadcast(lTrans)
-    return logPreProcess(sc, logTrans, logFile, partitions)
+    return logPreProcess(sc, logTrans, rrdLogLine)
