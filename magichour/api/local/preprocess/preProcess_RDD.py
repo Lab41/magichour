@@ -1,12 +1,15 @@
-
 from collections import namedtuple
 import re
 
+LogLine = namedtuple('LogLine', ['ts', 'msg',
+                                 'processed', 'dictionary',
+                                 'template', 'templateId', 'templateDict'])
+
+TemplateLine = namedtuple('TemplateLine', ['id', 'template', 'skipWords'])
+
+
 TransformLine = namedtuple('TransformLine',
                            ['id', 'type', 'NAME', 'transform', 'compiled'])
-
-LogLine = namedtuple('LogLine', ['ts', 'msg',
-                                 'processed', 'dictionary', 'supportId'])
 
 
 def rdd_TransformLine(line):
@@ -47,7 +50,7 @@ def rdd_LogLine(line):
 
     # depends on tbird log structure
     l = line.strip().rstrip().split(' ', 3)
-    return LogLine(float(l[2]), l[3], None, None, None)
+    return LogLine(float(l[2]), l[3], None, None, None, None, None)
 
 
 def lineRegexReplacement(line, logTrans):
@@ -81,7 +84,8 @@ def lineRegexReplacement(line, logTrans):
 
     processed = ' '.join(text.split())
     retVal = LogLine(line.ts, line.msg.lstrip().rstrip(),
-                     processed.lstrip().rstrip(), replaceDict, None)
+                     processed.lstrip().rstrip(), replaceDict,
+                     None, None, None)
 
     return retVal
 
