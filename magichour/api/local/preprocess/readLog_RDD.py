@@ -1,6 +1,4 @@
 from collections import namedtuple
-import re
-import json
 
 LogLine = namedtuple('LogLine', ['ts', 'msg',
                                  'processed', 'dictionary',
@@ -46,8 +44,13 @@ def rdd_LogLine(line, logFile):
                          namedtuple
     '''
     l = procLogLine(line, logFile)
-    return LogLine(float(l[0]), l[1],
-                   None, None, None, None, None)
+    return LogLine(float(l[0]),
+                   l[1],
+                   None,
+                   None,
+                   None,
+                   None,
+                   None)
 
 
 def rdd_ReadLog(sc, logFile):

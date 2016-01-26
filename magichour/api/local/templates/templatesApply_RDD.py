@@ -11,7 +11,6 @@ TemplateLine = namedtuple('TemplateLine', ['id', 'template', 'skipWords'])
 TransformLine = namedtuple('TransformLine',
                            ['id', 'type', 'NAME', 'transform', 'compiled'])
 
-
 def badWay(r1, r2):
     '''
     correct way:
@@ -30,10 +29,7 @@ def badWay(r1, r2):
     return(len(r2)-len(r1))
 
 
-def sortMatches(m):
-    '''
-
-    '''
+def rankMatches(m):
     retval = sorted(m, cmp=badWay)
     return retval
 
@@ -49,7 +45,7 @@ def getWordSkipNames(s):
         retval(list(string)): list of the skip patterns found in s
     '''
 
-    pattern = r'\(\(\?:\\ \\S\+\){(\d),(\d)}\)'
+    pattern = r'\(\(\?\:\\\ \{0,1\}\\S\+\)\{(\d)\,(\d)\}\)'
     matchObj = re.finditer(pattern, s.pattern, re.M | re.I)
 
     retVal = list()
@@ -57,7 +53,7 @@ def getWordSkipNames(s):
     if matchObj:
         for m in matchObj:
             vals = m.groups()
-            fpattern = r'((?:\ \S+){%i,%i})' % (int(vals[0]), int(vals[1]))
+            fpattern = r'((?:\ {0,1}\S+){%i,%i})' % (int(vals[0]), int(vals[1]))
             retVal.append(fpattern)
 
     return retVal
@@ -84,20 +80,22 @@ def readTemplates(sc, templateFile):
 
     for t in templateRDD:
         stripped = r''+t.strip().rstrip()
+        print stripped
         escaped = re.escape(stripped)
         replaced = unescapeSkips(escaped)
         matches.append(replaced)
 
-    matches = sortMatches(matches)
+    matches = rankMatches(matches)
 
     templateLines = list()
     for index, m in enumerate(matches):
-        # match end of line too?
+        # match end of line too
         t = TemplateLine(index,
-                         re.compile(m),
+                         re.compile(m + '$'),
                          getWordSkipNames(re.compile(m)))
         templateLines.append(t)
 
+    print templateLines
     return templateLines
 
 
@@ -113,19 +111,22 @@ def unescapeSkips(s):
         retval(string): string with replacement
     '''
 
-    pattern = r'\\ \\\*\\\{(\d*)\\,(\d)\\}'
+    pattern = r'\\\(\\\:\\\?\\\ S\\\+\\\)\\\{(\d)\\\,(\d)\\\}'
+
     matchObj = re.finditer(pattern, s, re.M | re.I)
     b = s
 
     if matchObj:
         for m in matchObj:
 
-            newString = r'(:?\ \S+){%i,%i}' % (int(m.groups()[0]),
-                                               int(m.groups()[1]))
+            newString = r'((?:\ {0,1}\S+){%i,%i})' % (int(m.groups()[0]),
+                                                      int(m.groups()[1]))
+
             # the r is very important
-            newFound = r'\\ \\\*\\\{%i\\,%i\\}' % (int(m.groups()[0]),
-                                                   int(m.groups()[1]))
+            newFound = r'\\\(\\:\\\?\\ S\\\+\\\)\\\{%i\\,%i\\\}' % (int(m.groups()[0]),
+                                                                    int(m.groups()[1]))
             b = re.sub(newFound, newString, b)
+
         return b
     return s
 
@@ -137,8 +138,7 @@ def rdd_MatchLine(line, templates):
         templateDict = dict()
 
         if skipFound:
-            if skipFound.groups():
-                for i in range(len(templateLine.skipWords)):
+            for i in range(len(templateLine.skipWords)):
                     templateDict[templateLine.skipWords[i]] = skipFound.groups()[i]
 
             return LogLine(line.ts,
@@ -156,7 +156,7 @@ def rdd_MatchLine(line, templates):
                    line.dictionary,
                    None,
                    -1,
-                   None)
+                   templateDict)
 
 
 def matchTemplates(sc, templateFile, rddLogLine):
