@@ -30,6 +30,15 @@ def badWay(r1, r2):
 
 
 def rankMatches(m):
+    '''
+    sort maches according to custom sort
+
+    Args:
+        m(list(string)): eventually will be used as regex
+
+    Returns:
+        retval(list(string)): sorted array
+    '''
     retval = sorted(m, cmp=badWay)
     return retval
 
@@ -68,7 +77,7 @@ def readTemplates(sc, templateFile):
         templateFile(string): uri to the transform file in HDFS
 
     Returns:
-        retval(list(string))
+        retval(list(TemplateLine)) list of template lines
     '''
 
     # map the templateFile

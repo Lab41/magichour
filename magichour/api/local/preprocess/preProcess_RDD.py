@@ -70,8 +70,13 @@ def lineRegexReplacement(line, logTrans):
             print 'REPLACELIST not implemented yet'
 
     processed = ' '.join(text.split())
-    retVal = LogLine(line.ts, line.msg.lstrip().rstrip(),
-                     processed.lstrip().rstrip(), replaceDict, None, None, None)
+    retVal = LogLine(line.ts,
+                     line.msg.lstrip().rstrip(),
+                     processed.lstrip().rstrip(),
+                     replaceDict,
+                     None,
+                     None,
+                     None)
 
     return retVal
 
