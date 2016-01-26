@@ -40,23 +40,6 @@ def rdd_TransformLine(line):
                              'COMMENT')
 
 
-def rdd_LogLine(line):
-    '''
-    process a log line into a RDD
-
-    Args:
-        line(string): string from the logline
-
-    Returns:
-        retval(LogLine): fills in the first two portions of the LogLine
-                         namedtuple
-    '''
-
-    # depends on tbird log structure
-    l = line.strip().rstrip().split(' ', 3)
-    return LogLine(float(l[2]), l[3], None, None, None, None, None)
-
-
 def lineRegexReplacement(line, logTrans):
     '''
     apply a list of regex replacements to a line, make note of
