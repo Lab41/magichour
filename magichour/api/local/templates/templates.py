@@ -4,13 +4,16 @@ import re
 import subprocess
 import sys
 import tempfile
-from collections import namedtuple
-from StringMatch import StringMatch as sm
+#from collections import namedtuple
+#from StringMatch import StringMatch as sm
 
-LogLine = namedtuple("LogLine", ["t", "msg"])
-Template = namedtuple("Template", ["id", "match", "str"])
+from magichour.api.local.named_tuples import LogLine, Template
+#LogLine = namedtuple("LogLine", ["t", "msg"])
+#Template = namedtuple("Template", ["id", "match", "str"])
+from magichour.lib import StringMatch
 
-LOGCLUSTER = "/Users/kylez/lab41/magichour/magichour/api/modules/templates/logcluster-0.03/logcluster.pl"
+cur_dir = os.path.dirname(__file__)
+LOGCLUSTER = os.path.abspath(os.path.join(cur_dir, "../../../lib/LogCluster/logcluster-0.03/logcluster.pl"))
 
 # Accepts iterable of namedtuples -- all must be logline namedtuples
 # kwargs --> key "logcluster_kwargs" is a dict containing commandline args for logcluster.pl
@@ -72,7 +75,7 @@ def logcluster(lines, *args, **kwargs):
     #rite lines to temporary file.
     temp = tempfile.TemporaryFile()
     for line in lines:
-        temp.write("%s\n" % line.msg)
+        temp.write("%s\n" % line.text)
     
     #command = ["perl", "./logcluster-0.03/logcluster.pl", "--lfilter", self.lfilter,
     #               "--template", self.template, "--support", str(self.support), "--input", self.filepath]
