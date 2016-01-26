@@ -4,100 +4,79 @@ import re
 import subprocess
 import sys
 import tempfile
-from collections import namedtuple
-from StringMatch import StringMatch as sm
 
-LogLine = namedtuple("LogLine", ["t", "msg"])
-Template = namedtuple("Template", ["id", "match", "str"])
+from magichour.lib import StringMatch
+from magichour.api.local.templates.reader import parse_logcluster
+#LogLine = namedtuple("LogLine", ["t", "msg"])
+#Template = namedtuple("Template", ["id", "match", "str"])
 
-LOGCLUSTER = "/Users/kylez/lab41/magichour/magichour/api/modules/templates/logcluster-0.03/logcluster.pl"
+cur_dir = os.path.dirname(__file__)
+LOGCLUSTER = os.path.abspath(os.path.join(cur_dir, "../../../lib/LogCluster/logcluster-0.03/logcluster.pl"))
 
-# Accepts iterable of namedtuples -- all must be logline namedtuples
-# kwargs --> key "logcluster_kwargs" is a dict containing commandline args for logcluster.pl
+def logcluster(lines, *args, **kwargs):   
+    """
+    This function uses the logcluster algorithm (available at http://ristov.github.io/logcluster/) to cluster log files and mine line patterns.
+    See http://ristov.github.io/publications/cnsm15-logcluster-web.pdf for additional details on the algorithm.
+    The current implementation writes loglines to a temporary file then feeds it to the logcluster command line tool (perl).
+    Eventually, the goal is to fully translate logcluster.pl into python to eliminate this step.
 
-# Right now this will write var lines to a file in order to feed it into logcluster.pl
-# Eventually, the goal is to fully translate logcluster.pl into python in order to eliminate this step.
-def logcluster(lines, *args, **kwargs):
-    def _parse_logcluster(output):
-        output = output.splitlines()
-        
-        matches = list()
-        template_id = 1
-        for o in range(0, len(output), 3): # every 3rd line is a template
-            m = output[o].strip()
-            fixedLine = re.escape(m)
-            replacement = _findReplacement(fixedLine).strip()
-            template = Template(template_id, replacement, m)
-            matches.append(template)
-            template_id += 1
+    Args:
+        lines (iterable LogLine): an iterable of LogLine named tuples
 
-        # Make sure that small get done before large
-        # TODO do the correct thing someday
-        '''
-        correct way:
+    Kwargs:
+        logcluster_kwargs (dict): a dictionary containing command-line options to pass to logcluster.pl
 
-        For each pair of regexes r and s for languages L(r) and L(s)
-          Find the corresponding Deterministic Finite Automata M(r) and M(s)   [1]
-            Compute the cross-product machine M(r x s) and assign accepting states
-               so that it computes L(r) - L(s)
-            Use a DFS or BFS of the the M(r x s) transition table to see if any
-               accepting state can be reached from the start state
-            If no, you can eliminate s because L(s) is a subset of L(r).
-            Reassign accepting states so that M(r x s) computes L(s) - L(r)
-            Repeat the steps above to see if it's possible to eliminate r
-
-        '''
-        simple_cmp = lambda x, y: len(y.match) - len(x.match)
-        matches = sorted(matches, cmp=simple_cmp)
-        matches = [Template(m.id, re.compile(m.match+'$'), m.str) for m in matches]
-        return matches
-
-    def _findReplacement(s):
-        # pattern = r'\*\{(\d*).(\d*)\}'
-        pattern = r'\\ \\\*\\\{(\d*)\\,(\d)\\}'
-        matchObj = re.finditer(pattern, s, re.M | re.I)
-        b = s
-
-        if matchObj:
-            for m in matchObj:
-                newString = r'(:?\ \S+){%i,%i}' % (int(m.groups()[0]),
-                                                   int(m.groups()[1]))
-                # the r is very important
-                newFound = r'\\ \\\*\\\{%i\\,%i\\}' % (int(m.groups()[0]),
-                                                       int(m.groups()[1]))
-                b = re.sub(newFound, newString, b)
-            return b
-        return s
-    
-    #rite lines to temporary file.
-    temp = tempfile.TemporaryFile()
+    Returns:
+        templates (list Template): a list of Template named tuples
+    """
+    # Write lines to temporary file.
+    temp = tempfile.NamedTemporaryFile()
     for line in lines:
-        temp.write("%s\n" % line.msg)
-    
-    #command = ["perl", "./logcluster-0.03/logcluster.pl", "--lfilter", self.lfilter,
-    #               "--template", self.template, "--support", str(self.support), "--input", self.filepath]
+        temp.write("%s\n" % line.text)
+   
+    # Consume command-line args from kwargs['logcluster_kwargs'].
     command = ["perl", LOGCLUSTER,]
     logcluster_args = kwargs.get("logcluster_kwargs", {})
     for k, v in logcluster_args.items():
         command.append("--%s" % k)
         command.append(v)
     command.append("--input")
-    command.append(filepath)
+    command.append(temp.name)
 
+    # Store stdout of subprocess into output. Note that stderr is still normally routed.
     output = subprocess.check_output(command)
-   
+  
+    # Temp file is deleted when calling close().
     temp.close()
 
-    templates = _parse_logcluster(output)
+    templates = lc_reader._parse_logcluster(output)
     return templates
 
 def stringmatch(lines, *args, **kwargs):
+    """
+    This function uses the StringMatch algorithm to perform clustering and line pattern mining.
+    See the paper "One Graph Is Worth a Thousand Logs: Uncovering Hidden Structures in Massive System Event Logs" by Aharon, Barash, Cohen, and Mordechai for further details on the algorithm.
+
+    The name "StringMatch" was taken from another paper: (Aharon et al do not name their algorithm).
+
+    Args:
+        lines: (iterable LogLine): an iterable of LogLine named tuples
+    
+    Kwargs:
+        batch_size (int): batch_size to pass to StringMatch (default: 5000)
+        skip_count (int): skip_count to pass to StringMatch (default: 0)
+        threshold (float): threshold to pass to StringMatch, must be between 0 and 1 (default: 0.75)
+        min_samples (int): min_samples to pass to StringMatch (default: 25)
+
+    Returns:
+        templates (list Template): a list of Template named tuples
+    """
     batch_size = kwargs.get("batch_size", 5000)
     skip_count = kwargs.get("skip_count", 0)
     threshold = kwargs.get("threshold", 0.75)
     min_samples = kwargs.get("min_samples", 25)
 
-    clusters = sm.get_clusters(lines, batch_size, skip_count, threshold, min_samples)
+    clusters = StringMatch.get_clusters(lines, batch_size, skip_count, threshold, min_samples)
     template_id = 1
     templates = []
     for cluster in clusters:
@@ -109,6 +88,15 @@ def stringmatch(lines, *args, **kwargs):
     return templates
 
 def baler(lines):
+    """
+    This function uses the Baler tool, created by Sandia National Labs.
+    The tool is expected to be released in Q1 2016, so this code will be updated when that happens.
+
+    Args:
+        lines (iterable LogLine): an iterable of LogLine named tuples
+    Returns:
+        templates (list Template): a list of Template named tuples
+    """
     pass
 
 # Add additional template processors here.
