@@ -80,7 +80,6 @@ def readTemplates(sc, templateFile):
 
     for t in templateRDD:
         stripped = r''+t.strip().rstrip()
-        print stripped
         escaped = re.escape(stripped)
         replaced = unescapeSkips(escaped)
         matches.append(replaced)
@@ -95,7 +94,6 @@ def readTemplates(sc, templateFile):
                          getWordSkipNames(re.compile(m)))
         templateLines.append(t)
 
-    print templateLines
     return templateLines
 
 
