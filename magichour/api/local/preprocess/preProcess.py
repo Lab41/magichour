@@ -3,6 +3,9 @@ import re
 
 from collections import namedtuple
 from magichour.api.local.named_tuples import LogLine, Transform
+from magichour.api.local.logging_util import get_logger
+
+logger = get_logger(__name__)
 
 """
 def memoize(f):
@@ -25,6 +28,7 @@ def get_transforms(file_path):
             transforms.append(transform)
     return transforms
 
+# for tbird.log.500k: preprocess.get_lines("/Users/kylez/lab41/magichour/magichour/magichour/api/local/preprocess/tbird.log.500k", 0, 10, skip_num_chars=22)
 def get_lines(file_path, ts_start_index, ts_end_index, ts_format=None, skip_num_chars=0):
     # If file ends with .gz open with gzip, otherwise open normally.
     fp = gzip.open(file_path, 'rb') if file_path.lower().endswith('.gz') else open(file_path, 'r')
