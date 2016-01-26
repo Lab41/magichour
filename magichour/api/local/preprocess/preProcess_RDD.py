@@ -1,12 +1,15 @@
-
 from collections import namedtuple
 import re
 
+LogLine = namedtuple('LogLine', ['ts', 'msg',
+                                 'processed', 'dictionary',
+                                 'template', 'templateId', 'templateDict'])
+
+TemplateLine = namedtuple('TemplateLine', ['id', 'template', 'skipWords'])
+
+
 TransformLine = namedtuple('TransformLine',
                            ['id', 'type', 'NAME', 'transform', 'compiled'])
-
-LogLine = namedtuple('LogLine', ['ts', 'msg',
-                                 'processed', 'dictionary', 'supportId'])
 
 
 def rdd_TransformLine(line):
@@ -24,30 +27,17 @@ def rdd_TransformLine(line):
     if line.lstrip()[0] != '#':
         # id,type,name,transform
         l = line.lstrip().rstrip().split(',', 3)
-        return TransformLine(int(l[0]), l[1], l[2], l[3], re.compile(l[3]))
+        return TransformLine(int(l[0]),
+                             l[1],
+                             l[2],
+                             l[3],
+                             re.compile(l[3]))
     else:
         return TransformLine('COMMENT',
                              'COMMENT',
                              'COMMENT',
                              'COMMENT',
                              'COMMENT')
-
-
-def rdd_LogLine(line):
-    '''
-    process a log line into a RDD
-
-    Args:
-        line(string): string from the logline
-
-    Returns:
-        retval(LogLine): fills in the first two portions of the LogLine
-                         namedtuple
-    '''
-
-    # depends on tbird log structure
-    l = line.strip().rstrip().split(' ', 3)
-    return LogLine(float(l[2]), l[3], None, None, None)
 
 
 def lineRegexReplacement(line, logTrans):
@@ -81,7 +71,7 @@ def lineRegexReplacement(line, logTrans):
 
     processed = ' '.join(text.split())
     retVal = LogLine(line.ts, line.msg.lstrip().rstrip(),
-                     processed.lstrip().rstrip(), replaceDict, None)
+                     processed.lstrip().rstrip(), replaceDict, None, None, None)
 
     return retVal
 
@@ -117,18 +107,18 @@ def readTransforms(sc, transFile):
 
 def logPreProcess(sc, logTrans, rrdLogLine):
     '''
-        take a series of loglines and pre-process the lines
-        replace ipaddresses, directories, urls, etc with constants
-        keep a dictionary of the replacements done to the line
+    take a series of loglines and pre-process the lines
+    replace ipaddresses, directories, urls, etc with constants
+    keep a dictionary of the replacements done to the line
 
-        Args:
-            sc(sparkContext): spark context
-            logTrans(string): location fo the transFile in HDFS
-            logFile(string): location of the log data in HDFS
+    Args:
+        sc(sparkContext): spark context
+        logTrans(string): location fo the transFile in HDFS
+        logFile(string): location of the log data in HDFS
 
-        Returns:
-            retval(RDD(LogLines)): preprocessed log lines ready for next
-                                   stage of processing
+    Returns:
+        retval(RDD(LogLines)): preprocessed log lines ready for next
+                               stage of processing
    '''
 
     # following done to make sure that the broadcast gets to the function
