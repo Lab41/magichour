@@ -1,4 +1,5 @@
 from collections import namedtuple
+from collections import defaultdict
 import re
 
 LogLine = namedtuple('LogLine', ['ts', 'msg',
@@ -10,6 +11,7 @@ TemplateLine = namedtuple('TemplateLine', ['id', 'template', 'skipWords'])
 
 TransformLine = namedtuple('TransformLine',
                            ['id', 'type', 'NAME', 'transform', 'compiled'])
+
 
 def badWay(r1, r2):
     '''
@@ -139,14 +141,30 @@ def unescapeSkips(s):
 
 
 def rdd_MatchLine(line, templates):
+    '''
+    assign a log line to a templateId or -1 if no match
+    keep track of any skip word replacements, return additional
+    informaiton in the LogLine named tuple
+
+    Args:
+        line(LogLine): logline being classified
+        templates(list(TemplateLine)): templates to attempt to match to
+                                       broadcast variable
+    Returns:
+        retval(LogLine): LogLine  with the final 3 fields filled in
+                         template - actual template used for match
+                         templateId - number of the template
+                         templateDict- dictionary of skip word replacements
+    '''
 
     for templateLine in templates.value:
         skipFound = templateLine.template.search(line.processed)
-        templateDict = dict()
+        templateDict = defaultdict(list)
 
+        # TODO double check that the defaultdict is working as expected
         if skipFound:
             for i in range(len(templateLine.skipWords)):
-                    templateDict[templateLine.skipWords[i]] = skipFound.groups()[i]
+                    templateDict[templateLine.skipWords[i]].append(skipFound.groups()[i])
 
             return LogLine(line.ts,
                            line.msg,
@@ -167,6 +185,18 @@ def rdd_MatchLine(line, templates):
 
 
 def matchTemplates(sc, templateFile, rddLogLine):
+    '''
+    assign a line to a template, keeping track of replacements as it goes
+
+    Args:
+        sc(sparkContext):
+        templateFile(string): URI to the template file
+        rddLogLine(RDD(LogLine)): RDD of LogLines to assign
+    Returns:
+        retval(RDD(LogLine)): additional fields of the LogLine named tuple
+                              filled in, specifically
+                              template,templateId,templateDict
+    '''
 
     templates = readTemplates(sc, templateFile)
     templateBroadcast = sc.broadcast(templates)
