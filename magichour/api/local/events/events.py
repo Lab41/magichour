@@ -1,10 +1,10 @@
 from fp_growth import find_frequent_itemsets
-from PARIS import paris
+from magichour.lib.PARIS import paris
 
 # both algorithms accept list of iterables representing transactional windows
 
 def paris(windows, r_slack):
-    A, R = PARIS(windows, r_slack)
+    A, R = paris.PARIS(windows, r_slack)
     # return itemsets
 
 def fp_growth(windows, min_support):
