@@ -1,3 +1,13 @@
+"""
+This module contains the different algorithms that were evaluated for discovering log file templates (format strings).
+
+Add additional template processors to this file.
+
+Functions in this module should accept an iterable of LogLines.
+Functions should return an iterable of Templates.
+(see named tuple definition in magichour.api.local.named_tuples)
+"""
+
 import tempfile
 import re
 
@@ -15,6 +25,12 @@ def logcluster(lines, *args, **kwargs):
     The current implementation writes loglines to a temporary file then feeds it to the logcluster command line tool (perl).
     Eventually, the goal is to fully translate logcluster.pl into python to eliminate this step.
 
+    Behavior of this function differs depending on combinations of lines and file_path:
+    lines AND file_path set: write lines to file at file_path
+    lines BUT NOT file_path set: write lines to temporary file
+    file_path BUT NOT lines: pass file_path directly into logcluster
+    NEITHER lines NOR file_path: throw exception
+
     Args:
         lines (iterable LogLine): an iterable of LogLine named tuples
 
@@ -25,27 +41,27 @@ def logcluster(lines, *args, **kwargs):
     Returns:
         templates (list Template): a list of Template named tuples
     """
-    passed_file_path = kwargs.pop("file_path", None)
-
+    file_path = kwargs.pop("file_path", None)
     fp = None
-    if lines:
-        # Write lines to temporary file for logcluster.pl.
-        fp = tempfile.NamedTemporaryFile()
-        file_path = fp.name
-        logger.debug("Writing lines to temporary file: %s", file_path)
+
+    if lines and file_path:
+        logger.info("Writing lines to file: %s", file_path)
         LogCluster.write_file(lines, file_path)
-    elif passed_file_path:
-        # Use existing file path for logcluster.pl.
-        file_path = passed_file_path
-        logger.debug("Using existing lines in file: %s", file_path)
-    else:
-        raise Exception("Either (1) lines must not be None or (2) must pass keyword argument file_path.")
+    elif lines and not file_path:
+        fp = tempfile.NamedTemporaryFile()
+        logger.info("Writing lines to temporary file: %s", file_path)
+        LogCluster.write_file(lines, file_path)
+        file_path = fp.name
+    elif not lines and file_path:
+        logger.info("Using existing lines in file: %s", file_path)
+    else: #not lines and not passed_file_path
+        raise Exception("Must pass either argument 'lines' or keyword argument 'file_path' (or both).")
 
     output = LogCluster.run_on_file(file_path, *args, **kwargs)
 
     if fp:
         # Temporary files are deleted when closed.
-        logger.debug("Closing file: %s", file_path)
+        logger.info("Closing file: %s", file_path)
         fp.close()
 
     templates = LogCluster.parse_output(output)
@@ -98,7 +114,3 @@ def baler(lines):
         templates (list Template): a list of Template named tuples
     """
     pass
-
-# Add additional template processors here.
-# The template processor should accept an iterable of named tuples (lines)
-# It should also return

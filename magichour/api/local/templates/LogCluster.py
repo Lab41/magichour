@@ -26,12 +26,12 @@ def run_on_file(file_path, *args, **kwargs):
     command.append("--input")
     command.append(file_path)
 
-    logger.debug("Calling subprocess: %s" % command)
+    logger.info("Calling subprocess: %s" % command)
 
     # Store stdout of subprocess into output. Note that stderr is still normally routed.
     p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
     for err_line in p.stderr:
-        logger.error(err_line.strip())
+        logger.info(err_line.strip())
     output = p.stdout.read()
     return output
 
