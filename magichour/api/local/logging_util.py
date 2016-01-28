@@ -1,10 +1,12 @@
 from collections import namedtuple
 import logging
 
+reload(logging)
+
 # Disables this logging level + all levels below.
 # Set to None if you want to enable all logging.
 # Set to logging.CRITICAL if you want to disable all logging.
-DISABLE_LOGGING_LEVEL = None # logging.CRITICAL
+DISABLE_LOGGING_LEVEL = logging.DEBUG  # logging.CRITICAL
 
 HandlerInfo = namedtuple("HandlerInfo", ["handler", "level", "formatter"])
 loggers = {}
@@ -22,7 +24,7 @@ def disable_logging(level=None):
     if level:
         logging.disable(level)
 
-def get_logger(name, level=logging.DEBUG, handler_infos=None):
+def get_logger(name, level=logging.INFO, handler_infos=None):
     disable_logging(DISABLE_LOGGING_LEVEL) 
 
     if name in loggers:

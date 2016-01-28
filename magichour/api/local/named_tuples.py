@@ -9,4 +9,4 @@ Transform = namedtuple('Transform', ['id', 'type', 'name', 'transform', 'compile
 Template = namedtuple("Template", ["id", "match", "str"])
 
 
-TimedTemplate = namedtuple("TimedTemplate", ["t", "template_id"])
+TimedTemplate = namedtuple("TimedTemplate", ["ts", "template_id"])
