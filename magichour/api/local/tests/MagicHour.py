@@ -20,14 +20,14 @@ def main():
     logger = logging.getLogger(__name__)
 
     # Read data directory, store lines into var lines
-    logger.debug("Opening file (%s)." % options.filename)
+    logger.info("Opening file (%s)." % options.filename)
     open_fn = gzip.open if options.filename.endswith(".gz") else open
     with open_fn(options.filename) as f:
         if options.num_lines == -1:
-            logger.debug("Reading entire file.")
+            logger.info("Reading entire file.")
             lines = f.readlines()
         else:
-            logger.debug("Reading %s lines." % options.num_lines)
+            logger.info("Reading %s lines." % options.num_lines)
             lines = list(islice(f, options.num_lines))
 
     # Parse lines into (t, line)
