@@ -14,7 +14,7 @@ import re
 from magichour.lib.StringMatch import StringMatch
 from magichour.api.local.named_tuples import Template
 from magichour.api.local.templates import LogCluster
-from magichour.api.local.logging_util import get_logger
+from magichour.api.local.logging_util import get_logger, log_exc
 
 logger = get_logger(__name__)
 
@@ -49,15 +49,18 @@ def logcluster(lines, *args, **kwargs):
         LogCluster.write_file(lines, file_path)
     elif lines and not file_path:
         fp = tempfile.NamedTemporaryFile()
+        file_path = fp.name
         logger.info("Writing lines to temporary file: %s", file_path)
         LogCluster.write_file(lines, file_path)
-        file_path = fp.name
     elif not lines and file_path:
         logger.info("Using existing lines in file: %s", file_path)
     else: #not lines and not passed_file_path
-        raise Exception("Must pass either argument 'lines' or keyword argument 'file_path' (or both).")
+        log_exc(logger, "Must pass either argument 'lines' or keyword argument 'file_path' (or both).")
 
-    output = LogCluster.run_on_file(file_path, *args, **kwargs)
+    support = kwargs.pop("support", None)
+    if not support:
+        log_exc(logger, "Must pass kwarg 'support'.")
+    output = LogCluster.run_on_file(file_path, support, *args, **kwargs)
 
     if fp:
         # Temporary files are deleted when closed.
