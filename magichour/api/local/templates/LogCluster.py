@@ -15,7 +15,7 @@ def write_file(lines, file_path):
         for line in lines:
             fp.write("%s\n" % line.text)
 
-def run_on_file(file_path, *args, **kwargs):
+def run_on_file(file_path, support, *args, **kwargs):
     command = ["perl", LOGCLUSTER,]
     #logcluster_args = kwargs.get("logcluster_kwargs", {})
     #for k, v in logcluster_args.items():
@@ -25,9 +25,11 @@ def run_on_file(file_path, *args, **kwargs):
         command.append(v)
     command.append("--input")
     command.append(file_path)
+    command.append("--support")
+    command.append(support)
 
     logger.info("Calling subprocess: %s" % command)
-
+    
     # Store stdout of subprocess into output. Note that stderr is still normally routed.
     p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
     for err_line in p.stderr:

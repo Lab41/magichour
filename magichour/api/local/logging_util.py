@@ -47,3 +47,7 @@ def get_logger(name, level=logging.INFO, handler_infos=None):
 
     loggers[name] = logger
     return logger
+
+def log_exc(logger, msg, exc_type=Exception):
+    logger.error(msg)
+    raise exc_type(msg)
