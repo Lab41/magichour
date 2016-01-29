@@ -74,19 +74,19 @@ def main():
                 break
             else:
                 try:
-                    ts = datetime.datetime.strptime(line[:14], '%b %d %H:%M:%S')
-                    yield LogLine(ts.replace(year=2015), line.strip()[:15])
+                    ls = line.split(' ', 1)
+                    ts = float(ls[0])#datetime.datetime.strptime(ls[0], '%b %d %H:%M:%S')
+                    yield LogLine(ts, ls[1].rstrip())
                     success_full += 1
                 except:
-                    pass
-                    #raise
+                    raise
 
 
     clusters = get_clusters(dataset_iterator(fIn), num_msgs, skip_count, threshold, MIN_SAMPLES_FOR_SPLIT)
 
     index = 0
     for cluster in clusters:
-        index = cluster.print_groups(index)
+        index = cluster.print_groups(index, include_text=True)
 
 if __name__ == "__main__":
     main()
