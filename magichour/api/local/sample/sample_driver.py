@@ -1,4 +1,4 @@
-from magichour.api.local.logging_util import get_logger
+from magichour.api.local.logging_util import get_logger, log_time
 
 from magichour.api.local.preprocess import preprocess
 from magichour.api.local.templates import templates, apply
@@ -9,22 +9,6 @@ import cPickle as pickle
 import time
 
 logger = get_logger(__name__)
-
-# Stick this as a decorator on any function to print the # of time spent in that function.
-def log_time(f):
-    def wrapper(*args, **kwargs):
-        tstart = time.time()
-        result = f(*args, **kwargs)
-        m, s = divmod(time.time()-tstart, 60)
-        msg = "Time in %s(): "
-        if m == 0:
-            logger.info(msg+"%s seconds", f.__name__, s)
-        else:
-            logger.info(msg+"%s minutes, %s seconds", f.__name__, m, s)
-        return result
-    return wrapper
-
-###
 
 @log_time
 def read_transforms_substep(transforms_file):
