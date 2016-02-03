@@ -2,13 +2,15 @@ import os
 import re
 import subprocess
 
-from magichour.api.local.named_tuples import Template
-from magichour.api.local.logging_util import get_logger
+from magichour.api.local.util.log import get_logger
+from magichour.api.local.util.namedtuples import Template
 
 logger = get_logger(__name__)
 
 cur_dir = os.path.dirname(__file__)
-LOGCLUSTER = os.path.abspath(os.path.join(cur_dir, "../../../lib/LogCluster/logcluster-0.03/logcluster.pl"))
+lib_dir = os.path.abspath(os.path.join(cur_dir, "..", "..", "..", "..", "lib"))
+LOGCLUSTER = os.path.join(lib_dir, "LogCluster", "logcluster-0.03", "logcluster.pl")
+#LOGCLUSTER = os.path.abspath(os.path.join(cur_dir, "../../../../lib/LogCluster/logcluster-0.03/logcluster.pl"))
 
 def write_file(lines, file_path):
     with open(file_path, 'wb') as fp:
