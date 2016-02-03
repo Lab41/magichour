@@ -1,8 +1,9 @@
 import functools
 import multiprocessing
+from itertools import chain, islice
 
-from magichour.api.local.named_tuples import TimedTemplate
-from magichour.api.local.logging_util import get_logger
+from magichour.api.local.util.log import get_logger
+from magichour.api.local.util.namedtuples import TimedTemplate, TimedEvent, ModelEvalWindow
 
 logger = get_logger(__name__)
 
@@ -19,7 +20,7 @@ def apply_templates(templates, loglines, mp=True):
     In effect this will produce a list of which templates occurred at which times.
     -1 is the template_id that is used for a logline which was unable to be matched to a template.
 
-    The templates accepted by this function is exactly the output of functions in templates.py
+    The templates accepted by this function is exactly the output of functions in template.py
     This function has the option of running in either multiprocessing mode (mp=True by default) or not.
 
     Args:
@@ -45,3 +46,14 @@ def apply_templates(templates, loglines, mp=True):
         for logline in loglines:
             timed_templates.append(process_line(templates, logline))
     return timed_templates
+
+#####
+
+def apply_events(events, windows, mp=False):
+    timed_events = []
+    for window in windows:
+        for event in events:
+            if event.template_ids.issubset(set([timed_template.template_id for timed_template in window.timed_templates])):
+                timed_event = TimedEvent(window.start_time, window.end_time, event.id)
+                timed_events.append(timed_event)
+    return timed_events

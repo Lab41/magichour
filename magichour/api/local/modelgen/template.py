@@ -8,13 +8,13 @@ Functions should return an iterable of Templates.
 (see named tuple definition in magichour.api.local.named_tuples)
 """
 
-import tempfile
 import re
+import tempfile
 
+from magichour.api.local.modelgen.LogCluster import LogCluster
+from magichour.api.local.util.log import get_logger, log_exc
+from magichour.api.local.util.namedtuples import Template
 from magichour.lib.StringMatch import StringMatch
-from magichour.api.local.named_tuples import Template
-from magichour.api.local.templates import LogCluster
-from magichour.api.local.logging_util import get_logger, log_exc
 
 logger = get_logger(__name__)
 

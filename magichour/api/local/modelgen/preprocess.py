@@ -1,24 +1,23 @@
 import gzip
 import re
 
-from collections import namedtuple
-from magichour.api.local.named_tuples import LogLine, Transform
-from magichour.api.local.logging_util import get_logger
+from magichour.api.local.util.log import get_logger
+from magichour.api.local.util.namedtuples import LogLine, Transform
 
 logger = get_logger(__name__)
 
-"""
-def memoize(f):
-    memo = {}
-    def wrapper(*args, **kwargs):
-        if f.__name__ not in memo or not memo[f.__name__]:
-            memo[f.__name__] = f(*args, **kwargs)
-        return memo[f.__name__]
-    return wrapper
-"""
 
-#@memoize
 def get_transforms(file_path):
+    """
+    Reads transforms from a file and returns a list of Transform named tuples. The output is meant to be fed into
+    get_transformed_lines().
+
+    Args:
+        file_path: a path to a transforms file. See documentation for proper format for the transforms file.
+
+    Returns:
+        transforms: list of Transforms
+    """
     transforms = []
     with open(file_path, 'r') as fp:
         next(fp)
@@ -28,7 +27,7 @@ def get_transforms(file_path):
             transforms.append(transform)
     return transforms
 
-# for tbird.log.500k: preprocess.get_lines("/Users/kylez/lab41/magichour/magichour/magichour/api/local/preprocess/tbird.log.500k", 0, 10, skip_num_chars=22)
+
 def get_lines(file_path, ts_start_index, ts_end_index, ts_format=None, skip_num_chars=0):
     # If file ends with .gz open with gzip, otherwise open normally.
     fp = gzip.open(file_path, 'rb') if file_path.lower().endswith('.gz') else open(file_path, 'r')
@@ -44,6 +43,7 @@ def get_lines(file_path, ts_start_index, ts_end_index, ts_format=None, skip_num_
         yield LogLine(ts, text, None, None , None)
     fp.close()
 
+
 def get_transformed_lines(lines, transforms): 
     for logline in lines:
         replaceDict = {}
@@ -54,9 +54,7 @@ def get_transformed_lines(lines, transforms):
                 if replaceList:
                     replaceDict[transform.name] = replaceList
                 transformed = transform.compiled.sub(transform.name, transformed, 0)
-
             # Handle other transform types here.
             # if transform.type == 'EXAMPLE':
                 # do stuff
-
         yield LogLine(logline.ts, transformed, None, replaceDict, None)
