@@ -54,10 +54,11 @@ class Leaf(object):
         for line in self.log_lines:
             try:
                 if include_text:
-                    print '%s,%d,%s'%(mktime(line.ts.timetuple()), index, line.text)
+                    print '%s,%d,%s'%(line.ts, index, line.text)
                 else:
-                    print '%s,%d,%s'%(mktime(line.ts.timetuple()), index)
+                    print '%s,%d'%(line.ts, index)
             except:
+                raise
                 print ',%d'%(index)
         return index + 1
 

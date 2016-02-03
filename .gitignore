@@ -1,5 +1,5 @@
 .DS_Store
 *.pyc
 *.swp
-**/.ropeproject/**
-**/.ipynb_checkpoints/**
+**/.ropeproject
+**/.ipynb_checkpoints
