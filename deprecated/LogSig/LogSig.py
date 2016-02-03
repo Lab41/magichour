@@ -26,8 +26,10 @@ def signal_handler(signal, frame):
          Args:
              signal
              frame
+
          Returns:
              None
+
          Globals:
              globalStop: loop guard
     '''
@@ -42,6 +44,7 @@ def makeHash(s):
         make a md5 string rep of an input string
         Args:
             s(string): input string
+
         Returns:
             stringDigest(string): string representation of the hex digest
 
@@ -61,6 +64,7 @@ def tuple2Str(a):
 
          Args:
              a(tuple): tuple of strings
+
          Returns:
              concatTuple(string): concatenation string
     '''
@@ -78,6 +82,7 @@ def str2Counter(X):
 
         Args:
             X(string): string to tokenize and count
+
         Returns:
             stats(collections.Counter)
     '''
@@ -223,6 +228,7 @@ def logSig_localSearch(D, G, k, maxIter):
             k(int) : number of groups to partition
             maxIter(int): maximum interations to perform before giving up
                           on convergence
+
         Returns:
             C(list(Counters)): partition statisitics
     '''
@@ -284,6 +290,7 @@ def dataset_iterator(fIn, num_lines):
         Args:
             fIn(file): input file handle to read from
             num_lines(int): number of lines to read at once
+
         Returns:
             retVal(LogLine): a parsed logline
     '''
@@ -323,6 +330,7 @@ def openFile(name, mode):
             name(string): name of file to open, if the filename ends in a
                           '.gz' extension then treat file as a gzip
             mode(string): mode to open the file as
+
         Returns:
             retval(file): filehandle
     '''

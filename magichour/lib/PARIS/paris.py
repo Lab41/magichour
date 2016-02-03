@@ -2,8 +2,9 @@ from __future__ import division
 import random
 from math import floor
 from collections import Counter, defaultdict
-from itertools import combinations
+from itertools import combinations, islice
 from copy import deepcopy
+import gzip
 
 #alphabet_size = 200
 alphabet_size = 194
@@ -91,13 +92,19 @@ def get_best_representation(di, A, verbose=False):
 
     min_atom_ind =-1
     min_distance = paris_distance(di, A, curr_r, r_slack) + 1.0/len(di)*len(curr_r)
+
+    potential_atoms = []
+    for i in range(len(A)):
+        if len(di.intersection(A[i])) > 0:
+            potential_atoms.append(i)
+
     # Keep adding atoms to the representation until we are unable to improve the result
     while min_atom_ind is not None:
         # Find atom to add to the representation that minimizes total distance
         min_atom_ind = None
-        for i in range(len(A)):
+        for i in potential_atoms:
             # Only check distance for items where there is some intersection between the line and the atom
-            if i not in curr_r and len(di.intersection(A[i])) > 0:
+            if i not in curr_r: #and len(di.intersection(A[i])) > 0:
                 attempted_r = deepcopy(curr_r)
                 attempted_r.add(i)
                 dist = paris_distance(di, A, attempted_r, r_slack) + 1.0/len(di)*len(attempted_r)
@@ -270,7 +277,7 @@ def PARIS(D, r_slack, num_iterations=3):
             E = get_error(D, A, R_next, set())
             new_atom = design_atom(E) # Don't skip any atoms
             if new_atom is not None:
-                A_next = deepcopy(A)
+                A_next = A# deepcopy(A)
                 A_next.append(new_atom)
                 R_next = [get_best_representation(D[ind], A_next, verbose=False) for ind in range(len(D))]
                 new_error = PCF(D, A_next, R_next, verbose=False)
@@ -282,6 +289,7 @@ def PARIS(D, r_slack, num_iterations=3):
                     new_error = None
                     print 'Adding Atom: ',  new_error, prev_error, new_atom
                 else:
+                    A = A[:-1]
                     print 'Not Adding atom:', new_error, prev_error, new_atom
         print new_error, prev_error, new_atom
         print 'ALL ATOMS: ', A
@@ -294,25 +302,29 @@ def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, gro
     transactions = defaultdict(set)
     lookup_table = {}
     line_count = 0
+    if log_file.endswith('.gz'):
+        fIn = gzip.open(log_file)
+    else:
+        fIn = open(log_file)
+
     # Iterate through lines building up a lookup table to map Group to template and to build up transactions
-    for line in open(log_file):
-        if line_count_limit and line_count < line_count_limit:
-            line = line.strip().split(',')
+    for line in islice(fIn, line_count_limit):
+        line = line.strip().split(',')
 
-            # Extract fileds
-            time = float(line[0])
-            group = int(line[1])
-            if group not in lookup_table:
-                # Add to lookup table if we haven't seen this group before for displaying the results
-                template = ','.join(line[2:])
-                lookup_table[group] = template
+        # Extract fields
+        time = float(line[0])
+        group = int(line[1])
+        if group not in lookup_table:
+            # Add to lookup table if we haven't seen this group before for displaying the results
+            template = ','.join(line[2:])
+            lookup_table[group] = template
 
-            # Based on window add to transactions
-            if group not in groups_to_skip:
-                window = int(time/window_size)
-                transactions[window].add(group)
-                # TODO: Allow for overlap here
-                line_count +=1
+        # Based on window add to transactions
+        if group not in groups_to_skip:
+            window = int(time/window_size)
+            transactions[window].add(group)
+            # TODO: Allow for overlap here
+            line_count +=1
 
     # PARIS expects a list of sets and not a dictionary, pull values
     D = transactions.values()
@@ -324,6 +336,9 @@ def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, gro
         for group in a:
             print group, lookup_table[group]
         print '--------------------------------------'
+
+    for a in A:
+        print ' '.join(map(str, a))
 
 def test_with_syntheticdata():
     # Generate synthetic data
@@ -371,7 +386,7 @@ def main():
     parser.add_option("-n", "--num_lines", dest="num_lines", default=None, type=int)
 
     (options, args) = parser.parse_args()
-    run_paris_on_document(options.filename, options.window_size, options.num_lines)
+    run_paris_on_document(options.filename, options.window_size, line_count_limit=options.num_lines)
 
 if __name__ == "__main__":
     main()

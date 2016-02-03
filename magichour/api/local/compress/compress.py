@@ -18,6 +18,7 @@ def openFile(name, mode):
         name(string): name of file to open, if name ends in '.gz'
                       file is treated as a gzip file for i/o
         mode(string): mode to open the file as
+
     Returns:
         retval(file): filehandle
     '''
@@ -35,6 +36,7 @@ def makeTransformedLine(l, transforms):
     Args:
         l(LogLine): namedTuple containing a logline
         transforms(list(TransformLine)): series of regex transforms to apply
+
     Returns:
         retval(LogLine): LogLine namedTuple with replacements made
     '''
@@ -64,6 +66,7 @@ def escapeCrap(x):
 
     Args:
         x(string): string with possibly unsafe characters
+
     Returns:
         retval(string): string with escapements
 
@@ -79,6 +82,7 @@ def makeReplacement(s):
 
     Args:
         s(string): string to search
+
     Returns:
         retval(string): string with replacement
     '''
@@ -106,6 +110,7 @@ def procSupports(l):
 
     Args:
         l(list(strings)): list of lines in the procSupports output file
+
     Returns:
         retval(list(_sre.SRE_Pattern)): list of compiled regex to search for
     '''
@@ -128,6 +133,7 @@ def readTransforms(sFile):
 
     Args:
         sFile(file): filehandle to the tranform file
+
     Returns:
         retval(list(TransformLine)): a listing of TransformLine named tuples
                                      each line describes a normalizaiton regex
@@ -148,6 +154,7 @@ def getWordSkipNames(s):
 
     Args:
         s(_sre.SRE_Pattern): compiled regex to match a logline
+
     Returns:
         retval(list(string)): list of the skip patterns found in s
     '''
@@ -168,18 +175,19 @@ def getWordSkipNames(s):
 
 def matchSupport(procLogLine, support):
     '''
-        determine if the support is matched, also determine if
-        there are word skip replacemnets wich need to be tracked
-        for a matched logsupport line
+    determine if the support is matched, also determine if
+    there are word skip replacemnets wich need to be tracked
+    for a matched logsupport line
 
-        Args:
-            procLogLine(LogLine): logline to further investigate
-            support(_sre_.SRE_Pattern):
-        Returns:
-            retval(LogLine): logline named tuple with skip words and
-                             preprocessing words
-                             assigned to a specific support or -1 if
-                             no support exists
+    Args:
+        procLogLine(LogLine): logline to further investigate
+        support(_sre_.SRE_Pattern):
+
+    Returns:
+        retval(LogLine): logline named tuple with skip words and
+        preprocessing words
+        assigned to a specific support or -1 if
+        no support exists
     '''
 
     retVal = None
@@ -227,6 +235,7 @@ def writeHeader(supports, oFile):
     Args:
         supports(list(_sre.SRE_Pattern)): list of compiled regex
         oFile(file): file handle for io
+
     Returns:
         None
     '''
@@ -242,6 +251,7 @@ def writeOutput(o, oFile):
     Args:
         o(OutLine): namedTuple to output
         oFile(file): filehandle for io
+
     Returns:
         None
     '''
@@ -274,6 +284,12 @@ def main(argv):
     header valueN
     [format args]
     timestamp,headerID (index to header), args
+
+    Args:
+        argv(list(string)): arguments sent to the program
+
+    Returns:
+        None
 
     '''
     logLines = openFile(argv[0], 'r')
