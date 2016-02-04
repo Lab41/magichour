@@ -43,7 +43,7 @@ read_lines_kwargs = {"skip_num_chars": 22}
 
 logcluster_kwargs = {"support": "50"}
 
-window_size = 60
+modelgen_windows_kwargs = {"window_size": 60, "tfidf_threshold": 0}
 
 paris_kwargs = {"r_slack": None}
 fp_growth_kwargs = {"min_support": 0.005, "iterations": 10000} #only return 10000 itemsets, iterations = -1 will return all
@@ -65,7 +65,7 @@ def main():
     write_pickle_file(timed_templates, timed_templates_file)
     #timed_templates = read_pickle_file(timed_templates_file)
     
-    modelgen_windows = genwindow_step(timed_templates, window_size)
+    modelgen_windows = genwindow_step(timed_templates, **modelgen_windows_kwargs)
     write_pickle_file(modelgen_windows, modelgen_windows_file)
     #modelgen_windows = read_pickle_file(modelgen_windows_file)
 
