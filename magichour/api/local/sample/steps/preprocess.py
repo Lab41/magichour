@@ -13,7 +13,7 @@ def read_transforms_substep(transforms_file):
 
 def read_lines_substep(log_file, *args, **kwargs):
     logger.info("Reading log lines from file: %s" % log_file)
-    lines = preprocess.get_lines(log_file, *args, **kwargs)
+    lines = preprocess.read_log_file(log_file, *args, **kwargs)
     return lines
 
 
@@ -40,4 +40,4 @@ def preprocess_step(log_file, transforms_file, *args, **kwargs):
 
 @log_time
 def preprocess_auditd_step(log_file, *args, **kwargs):
-    return [line for line in preprocess.get_auditd_lines(log_file)]
+    return [line for line in preprocess.read_auditd_file(log_file)]

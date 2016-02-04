@@ -19,7 +19,7 @@ def genwindow_step(timed_templates, *args, **kwargs):
     gen_windows = modelgen.uniqify_windows(gen_windows)
 
     threshold = kwargs.pop("tfidf_threshold", None)
-    if threshold:
+    if threshold is not None:
         logger.info("Applying a tfidf filter to each window's template_ids. (threshold = %s)", threshold)
         gen_windows = modelgen.tf_idf_filter_window(gen_windows, threshold)
     else:

@@ -68,11 +68,39 @@ def apply_templates(templates, loglines, mp=True, process_auditd=False):
 
 #####
 
+from collections import Counter
+
+
+def count_templates(window):
+    c = Counter()
+    for timed_template in window.timed_templates:
+        c[timed_template.template_id] += 1
+    return c
+
+
+def counter_issubset(counter1, counter2):
+    return not counter1 - counter2
+
+
 def apply_events(events, windows, mp=False):
+    event_counters = {event.id : Counter(event.template_ids) for event in events}
     timed_events = []
     for window in windows:
+        template_counts = count_templates(window)
         for event in events:
-            if event.template_ids.issubset(set([timed_template.template_id for timed_template in window.timed_templates])):
+            num_occurrences = 0
+            is_subset = True
+            cur_counts = None
+            while is_subset:
+                if cur_counts:
+                    is_subset = counter_issubset(event_counters[event.id], cur_counts)
+                    cur_counts = cur_counts - event_counters[event.id]
+                else:
+                    is_subset = counter_issubset(event_counters[event.id], template_counts)
+                    cur_counts = template_counts - event_counters[event.id]
+                if is_subset:
+                    num_occurrences += 1
+            for occurrence in xrange(0, num_occurrences):
                 timed_event = TimedEvent(window.start_time, window.end_time, event.id)
                 timed_events.append(timed_event)
     return timed_events
