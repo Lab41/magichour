@@ -1,4 +1,5 @@
 import functools
+import re
 import multiprocessing
 from itertools import chain, islice
 
@@ -14,7 +15,18 @@ def process_line(templates, logline):
     # -1 = did not match any template
     return TimedTemplate(logline.ts, -1)
 
-def apply_templates(templates, loglines, mp=True):
+def process_auditd_line(templates, logline):
+    first_key_val_pair = logline.text.split(' ', 1)[0]
+    key, audit_msg_type = first_key_val_pair.split('=')
+    if key != 'type':
+        raise ValueError('Does not match expected format: %s'%logline.text)
+
+    if audit_msg_type not in templates:
+        raise KeyError("type=%s not in dictionary"%audit_msg_type)
+
+    return TimedTemplate(logline.ts, templates[audit_msg_type])
+
+def apply_templates(templates, loglines, mp=True, process_auditd=False):
     """
     Applies the templates on an iterable. This function creates a list of TimedTemplate named tuples.
     In effect this will produce a list of which templates occurred at which times.
@@ -29,22 +41,29 @@ def apply_templates(templates, loglines, mp=True):
 
     Kwargs:
         mp: whether or not to run in multiprocessing mode (default: True)
+        process_auditd: whether or not to use specialized auditd processing (default: False)
 
     Returns:
         timed_templates: a list of TimedTemplate named tuples that represent which templates occurred at which times in the log file.
 
     """
+    # Change processing mode for auditd data
+    if process_auditd:
+        process_function = process_auditd_line
+    else:
+        process_function = process_line
+
     if mp:
         # Use multiprocessing.Pool to use multiple CPUs
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        f = functools.partial(process_line, templates)
+        f = functools.partial(process_function, templates)
 
         timed_templates = pool.map(func=f, iterable=loglines)
     else:
         # Do this the naive way with one CPU
         timed_templates = []
         for logline in loglines:
-            timed_templates.append(process_line(templates, logline))
+            timed_templates.append(process_function(templates, logline))
     return timed_templates
 
 #####

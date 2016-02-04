@@ -36,3 +36,8 @@ def preprocess_step(log_file, transforms_file, *args, **kwargs):
     # get_transformed_lines returns a generator. This converts it to a list.
     transformed_lines = _transformed_lines_to_list_substep(transformed_lines)
     return transformed_lines
+
+
+@log_time
+def preprocess_auditd_step(log_file, *args, **kwargs):
+    return [line for line in preprocess.get_auditd_lines(log_file)]

@@ -18,9 +18,12 @@ def genwindow_step(timed_templates, *args, **kwargs):
     logger.info("Removing duplicate entries from each window's template_ids.")
     gen_windows = modelgen.uniqify_windows(gen_windows)
 
-    threshold = kwargs.pop("tfidf_threshold", 0)
-    logger.info("Applying a tfidf filter to each window's template_ids. (threshold = %s)", threshold)
-    gen_windows = modelgen.tf_idf_filter_window(gen_windows, threshold)
+    threshold = kwargs.pop("tfidf_threshold", None)
+    if threshold:
+        logger.info("Applying a tfidf filter to each window's template_ids. (threshold = %s)", threshold)
+        gen_windows = modelgen.tf_idf_filter_window(gen_windows, threshold)
+    else:
+        logger.info("Skipping tfidf filter")
     logger.info("==========End custom post processing==========")
 
     return gen_windows
