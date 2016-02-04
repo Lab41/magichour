@@ -80,6 +80,13 @@ def get_lines(file_path, ts_start_index, ts_end_index, ts_format=None, skip_num_
         yield LogLine(ts, text, None, None , None)
     fp.close()
 
+def get_auditd_lines(file_path):
+    # If file ends with .gz open with gzip, otherwise open normally.
+    fp = gzip.open(file_path, 'rb') if file_path.lower().endswith('.gz') else open(file_path, 'r')
+    for line in fp:
+        ts = float(re.search('audit\(([0-9]+.[0-9]+)', line).group(1))
+        yield LogLine(ts, line.rstrip(), None, None, None)
+    fp.close()
 
 def get_transformed_lines(lines, transforms):
     """
