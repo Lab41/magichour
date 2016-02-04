@@ -68,6 +68,31 @@ def apply_templates(templates, loglines, mp=True, process_auditd=False):
 
 #####
 
+from collections import Counter
+
+
+def count_templates(window):
+    c = Counter()
+    for timed_template in window.timed_templates:
+        c[timed_template.template_id] += 1
+    return c
+
+
+def apply_events(events, windows, mp=False):
+    event_counters = {event.id : Counter(event.template_ids) for event in events}
+    timed_events = []
+    for window in windows:
+        template_counts = count_templates(window)
+        for event in events:
+            union = template_counts | event_counters[event.id]
+            num_occurrences = min(union.values())
+            for occurrence in xrange(0, num_occurrences):
+                timed_event = TimedEvent(window.start_time, window.end_time, event.id)
+                timed_events.append(timed_event)
+    return timed_events
+
+
+"""
 def apply_events(events, windows, mp=False):
     timed_events = []
     for window in windows:
@@ -76,3 +101,4 @@ def apply_events(events, windows, mp=False):
                 timed_event = TimedEvent(window.start_time, window.end_time, event.id)
                 timed_events.append(timed_event)
     return timed_events
+"""
