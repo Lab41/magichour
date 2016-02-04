@@ -3,7 +3,7 @@ import multiprocessing
 from collections import Counter
 
 from magichour.api.local.util.log import get_logger
-from magichour.api.local.util.namedtuples import TimedTemplate, TimedEvent, ModelEvalWindow
+from magichour.api.local.util.namedtuples import TimedTemplate, TimedEvent
 
 logger = get_logger(__name__)
 
