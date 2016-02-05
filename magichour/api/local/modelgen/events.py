@@ -7,16 +7,20 @@ from magichour.api.local.util.log import get_logger
 from magichour.api.local.util.modelgen import get_nonsubsets
 from magichour.api.local.util.namedtuples import Event
 
-from magichour.lib.PARIS import paris
+from magichour.lib.PARIS import paris as paris_lib
 
 logger = get_logger(__name__)
 
 # windows = list of Window named tuples
 # return list of Event named tuples
 
-def paris(windows, r_slack):
-    A, R = paris.PARIS(windows, r_slack)
-    # return itemsets
+def paris(windows, r_slack, num_iterations):
+    ws = [set([template_id for template_id in w.template_ids]) for w in windows]
+    A, R = paris_lib.PARIS(ws, r_slack, num_iterations=num_iterations)
+
+    itemsets = [frozenset(a) for a in A]
+    ret = [Event(id=str(uuid.uuid4()), template_ids=template_ids) for template_ids in itemsets]
+    return ret
 
 def fp_growth(windows, min_support, iterations=0): 
     itemsets = []

@@ -55,7 +55,7 @@ def run_auditd_pipeline(options):
         fp_growth_kwargs = {"min_support": 0.03, "iterations": -1} #only return 10000 itemsets, iterations = -1 will return all
         gen_events = event_step(modelgen_windows, "fp_growth", **fp_growth_kwargs)
     elif options.event_gen == 'paris':
-        paris_kwargs = {"r_slack": None}
+        paris_kwargs = {"r_slack": 0, "num_iterations":3}
         gen_events = event_step(modelgen_windows, "paris", **paris_kwargs) # WIP
     else:
         raise NotImplementedError('%s Not implemented'%options.event_gen)

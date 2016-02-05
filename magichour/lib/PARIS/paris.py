@@ -6,19 +6,11 @@ from itertools import combinations, islice
 from copy import deepcopy
 import gzip
 
-#alphabet_size = 200
-alphabet_size = 194
-#num_elements_per_atom = 8
-num_elements_per_atom = 40
+from magichour.api.local.util.log import get_logger, log_time
 
-num_K = 50 # Number of atoms
-L = 3 # number of atoms in dataset
-N = 300 # 3000 # Number of sets
-r = 1#.51
-r_count = int(floor(r*num_elements_per_atom))
-r_slack = num_elements_per_atom - r_count
 
-#print num_K,L,N,r, r_count, r_slack
+logger = get_logger(__name__)
+
 
 def xor(s1, s2, skip_in_s2=0):
     """
@@ -45,7 +37,7 @@ def paris_distance(di, A, R, r_count):
 
     return xor(di, total_rep, r_count)/len(di)
 
-def PCF(D, A, R, tau=.5, verbose=False):
+def PCF(D, A, R, tau=.5, r_slack=0, verbose=False):
     '''
     Calculate the full PARIS cost function given a set of Documents, Atoms, and a representation
     '''
@@ -79,7 +71,7 @@ def PCF(D, A, R, tau=.5, verbose=False):
     return total_cost
 
 
-def get_best_representation(di, A, verbose=False):
+def get_best_representation(di, A, verbose=False, r_slack=None):
     '''
     Get best possible representation for di given a set of atoms A
     '''
@@ -118,7 +110,7 @@ def get_best_representation(di, A, verbose=False):
             curr_r.add(min_atom_ind)
     return curr_r
 
-def design_atom(E):
+def design_atom(E, r_slack=0):
     '''
     Implementation of the atom design function described in the PARIS paper
 
@@ -137,11 +129,11 @@ def design_atom(E):
     Aj_next = set(c.most_common(1)[0][0])
 
     # Baseline error as the error in the current error set
-    prev_el = PCF(E, [Aj], [set() for ind in range(len(E))]) # Empty representation set
+    prev_el = PCF(E, [Aj], [set() for ind in range(len(E))], r_slack=r_slack) # Empty representation set
 
     # Compute the error with the atom based on the most common pair of items in E
-    R_next = [get_best_representation(E[ind], [Aj_next], verbose=False) for ind in range(len(E))]
-    el = PCF(E, [Aj_next], R_next, verbose=False)
+    R_next = [get_best_representation(E[ind], [Aj_next], verbose=False, r_slack=r_slack) for ind in range(len(E))]
+    el = PCF(E, [Aj_next], R_next, r_slack=r_slack)
 
     # Iterate until the atom updates stop improving the overall cost
     while el < prev_el:
@@ -159,8 +151,8 @@ def design_atom(E):
             Aj_next.add(d.most_common(1)[0][0])
 
         # Update best representation and compute cost
-        R_next = [get_best_representation(E[ind], [Aj_next], verbose=False) for ind in range(len(E))]
-        el = PCF(E, [Aj_next], R_next, verbose=False)
+        R_next = [get_best_representation(E[ind], [Aj_next], verbose=False, r_slack=r_slack) for ind in range(len(E))]
+        el = PCF(E, [Aj_next], R_next, r_slack=r_slack)
 
     if Aj is None:
         print 'No atom created'
@@ -203,11 +195,9 @@ def PARIS(D, r_slack, num_iterations=3):
     A = []
 
     for iteration in range(num_iterations):
-        print '==========================='
-        print '==STARTING WITH %d ATOMS==='%len(A)
-        print '==========================='
+        logger.info('==STARTING WITH %d ATOMS==='%len(A))
         # Representation Stage
-        R = [get_best_representation(D[ind], A) for ind in range(len(D))]
+        R = [get_best_representation(D[ind], A, r_slack=r_slack) for ind in range(len(D))]
 
         # Update Stage: Iterate through atoms replacing if possible
         for a_index_to_update in range(len(A)-1, -1, -1): # iterate backwards
@@ -215,14 +205,15 @@ def PARIS(D, r_slack, num_iterations=3):
             E = get_error2(D, A, R, a_index_to_ignore)
             new_a = design_atom(E)
             if new_a is not None and new_a != A[a_index_to_update]:
-                print 'Replacing Atom: Index [%d], Items in Common [%d], Items Different [%d]'%(a_index_to_update,
-                        len(A[a_index_to_update].symmetric_difference(new_a)),len(new_a.intersection(A[a_index_to_update])))
+                logger.info('Replacing Atom: Index [%d], Items in Common [%d], Items Different [%d]'%(a_index_to_update,
+                        len(A[a_index_to_update].symmetric_difference(new_a)),
+                        len(new_a.intersection(A[a_index_to_update]))))
                 del A[a_index_to_update]
                 A.append(new_a)
 
         # Reduction Phase
-        R = [get_best_representation(D[ind], A, verbose=False) for ind in range(len(D))]
-        prev_error = PCF(D, A, R)
+        R = [get_best_representation(D[ind], A, verbose=False, r_slack=r_slack) for ind in range(len(D))]
+        prev_error = PCF(D, A, R, r_slack=r_slack)
         next_error = prev_error
         should_stop = False
         while next_error <= prev_error and not should_stop:
@@ -240,7 +231,7 @@ def PARIS(D, r_slack, num_iterations=3):
             # Check to see if there are any
             for i in range(len(A)-1, -1, -1): # Increment backwards so indexes don't change
                 if atom_counts[i] == 0:
-                    print "Removing Atom:", i, A[i]
+                    logger.info( "Removing Atom:", i, A[i] )
                     del A[i]
                     should_stop = False
 
@@ -253,23 +244,21 @@ def PARIS(D, r_slack, num_iterations=3):
                     atoms_to_join.append((a1,a2))
 
             if len(atoms_to_join) > 0:
-                print 'Atoms that should be joined:', atoms_to_join
+                logger.info('Atoms that should be joined:', atoms_to_join)
 
             # Check for atoms that have a mostly overlapping set of items
             for (a1, a2) in combinations(range(len(A)), 2):
                 if len(A[a1].intersection(A[a2])) > .9*r*max(len(A[a1]), len(A[a2])):
                     atoms_to_join.append((a1, a2))
             if len(atoms_to_join) > 0:
-                print 'Atoms that should be joined:', atoms_to_join
+                logger.info('Atoms that should be joined:', atoms_to_join)
 
-            R = [get_best_representation(D[ind], A, verbose=False) for ind in range(len(D))]
-            next_error = PCF(D, A, R)
-
-
+            R = [get_best_representation(D[ind], A, verbose=False, r_slack=r_slack) for ind in range(len(D))]
+            next_error = PCF(D, A, R, r_slack=r_slack)
 
         # Create new atoms
         new_atom = -1
-        prev_error = PCF(D, A, R, verbose=False)
+        prev_error = PCF(D, A, R, r_slack=r_slack)
         new_error = None
         R_next = R
         while (new_error is None or new_error < prev_error) and new_atom is not None:
@@ -279,22 +268,21 @@ def PARIS(D, r_slack, num_iterations=3):
             if new_atom is not None:
                 A_next = A# deepcopy(A)
                 A_next.append(new_atom)
-                R_next = [get_best_representation(D[ind], A_next, verbose=False) for ind in range(len(D))]
-                new_error = PCF(D, A_next, R_next, verbose=False)
+                R_next = [get_best_representation(D[ind], A_next, verbose=False, r_slack=r_slack) for ind in range(len(D))]
+                new_error = PCF(D, A_next, R_next, r_slack=r_slack)
 
                 if new_error < prev_error:
                     A = A_next
                     R = R_next
                     prev_error = new_error
                     new_error = None
-                    print 'Adding Atom: ',  new_error, prev_error, new_atom
+                    logger.info('Adding Atom: %s\t%s\t%s'%(new_error, prev_error, new_atom))
                 else:
                     A = A[:-1]
-                    print 'Not Adding atom:', new_error, prev_error, new_atom
-        print new_error, prev_error, new_atom
-        print 'ALL ATOMS: ', A
+                    logger.info('Not Adding atom: %s\t%s\t%s'%(new_error, prev_error, new_atom))
+        logger.info('End of iteration cost:', new_error, prev_error, new_atom)
 
-    print 'Num ATOMS: ', len(A)
+    logger.info('Num ATOMS: ', len(A))
     return A, R
 
 def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, groups_to_skip=set([-1])):
@@ -341,6 +329,18 @@ def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, gro
         print ' '.join(map(str, a))
 
 def test_with_syntheticdata():
+        #alphabet_size = 200
+    alphabet_size = 194
+    #num_elements_per_atom = 8
+    num_elements_per_atom = 40
+
+    num_K = 50 # Number of atoms
+    L = 3 # number of atoms in dataset
+    N = 300 # 3000 # Number of sets
+    r = 1#.51
+    r_count = int(floor(r*num_elements_per_atom))
+    r_slack = num_elements_per_atom - r_count
+
     # Generate synthetic data
     # Define our atoms
     random.seed(1024)
