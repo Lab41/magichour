@@ -4,3 +4,4 @@
 **/.ropeproject
 **/.ipynb_checkpoints
 *.pickle
+docs/_*
