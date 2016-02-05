@@ -33,8 +33,8 @@ def rdd_window(sc, logLineRDD, windowLen, withCounts=False):
     if withCounts:
         win = logLineRDD.map(lambda line: window(line, windowLen))
         return win.groupByKey()\
-                  .mapValues(lambda x, y: Counter(y))
+                  .map(lambda (x, y): Counter(y))
     else:
         win = logLineRDD.map(lambda line: window(line, windowLen))
         return win.groupByKey()\
-                  .map(lambda x, y: set(y))
+                  .map(lambda (x, y): set(y))
