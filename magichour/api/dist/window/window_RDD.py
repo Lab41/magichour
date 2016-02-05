@@ -28,13 +28,15 @@ def rdd_window(sc, logLineRDD, windowLen, withCounts=False):
 
     Returns:
         retval(RDD(LogLines): RDD of logs read from the LogFile URI
+                              NOTE: the list dedupes then return a list
+                              as follow on processing takes a RDD list
     '''
 
     if withCounts:
         win = logLineRDD.map(lambda line: window(line, windowLen))
         return win.groupByKey()\
-                  .map(lambda (x, y): Counter(y))
+                  .map(lambda (x, y): list(Counter(y).iteritems()))
     else:
         win = logLineRDD.map(lambda line: window(line, windowLen))
         return win.groupByKey()\
-                  .map(lambda (x, y): set(y))
+                  .map(lambda (x, y): list(set(y)))
