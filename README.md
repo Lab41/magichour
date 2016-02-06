@@ -5,6 +5,10 @@
 
 Contributors welcome! If you want to contribute, please issue a pull request.
 
+### Read The Docs
+
+Please see our Read The Docs page at <http://magichour.readthedocs.org/en/latest/>.
+
 ## About
 - - -
 

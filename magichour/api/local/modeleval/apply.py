@@ -1,10 +1,9 @@
 import functools
-import re
 import multiprocessing
-from itertools import chain, islice
+from collections import Counter
 
 from magichour.api.local.util.log import get_logger
-from magichour.api.local.util.namedtuples import TimedTemplate, TimedEvent, ModelEvalWindow
+from magichour.api.local.util.namedtuples import TimedTemplate, TimedEvent
 
 logger = get_logger(__name__)
 
@@ -67,8 +66,6 @@ def apply_templates(templates, loglines, mp=True, process_auditd=False):
     return timed_templates
 
 #####
-
-from collections import Counter
 
 
 def count_templates(window):
