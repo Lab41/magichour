@@ -138,8 +138,8 @@ def makeLookupDicts(eventdef):
     return(template2event, event2template)
 
 
-def eventEval_RDD(sc, rddlogLines, templateURI,
-               windowLength=120):
+def eventEvalRDD(sc, rddlogLines, templateURI,
+              windowLength=120):
     '''
     Performs the event generation from incomming LogLine rdd
 

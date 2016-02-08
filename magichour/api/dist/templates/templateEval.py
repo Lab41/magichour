@@ -1,8 +1,5 @@
-sc.addPyFile('magichour/magichour/api/dist/preprocess/readLog_RDD.py')
-sc.addPyFile('magichour/magichour/api/dist/preprocess/preProcess_RDD.py')
-
-from readLog_RDD import rdd_ReadLog
-from preProcess_RDD import rdd_preProcess
+from magichour.api.dist.preprocess.readLog import readLogRDD
+from magichour.api.dist.preprocess.preProcess import preProcessRDD
 
 from collections import namedtuple
 from collections import defaultdict
@@ -146,7 +143,7 @@ def unescapeSkips(s):
     return s
 
 
-def rdd_MatchLine(line, templates):
+def matchLine(line, templates):
     '''
     assign a log line to a templateId or -1 if no match
     keep track of any skip word replacements, return additional
@@ -206,10 +203,10 @@ def matchTemplates(sc, templateFile, rddLogLine):
 
     templates = readTemplates(sc, templateFile)
     templateBroadcast = sc.broadcast(templates)
-    return rddLogLine.map(lambda line: rdd_MatchLine(line, templateBroadcast))
+    return rddLogLine.map(lambda line: matchLine(line, templateBroadcast))
 
 
-def templateEval_RDD(sc, logInURI, transformURI, templateURI):
-    rddLogs = rdd_ReadLog(sc, logInURI)
-    pre_processedLogs = rdd_preProcess(sc, transformURI, rddLogs)
+def templateEvalRDD(sc, logInURI, transformURI, templateURI):
+    rddLogs = readLogRDD(sc, logInURI)
+    pre_processedLogs = preProcessRDD(sc, transformURI, rddLogs)
     return matchTemplates(sc, templateURI, pre_processedLogs)

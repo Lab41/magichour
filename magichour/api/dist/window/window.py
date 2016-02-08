@@ -1,7 +1,7 @@
 from collections import Counter
 
 
-def window(line, windowLen):
+def collide(line, windowLen):
     '''
     make a key from the time
 
@@ -17,7 +17,7 @@ def window(line, windowLen):
     return (win, line.templateId)
 
 
-def rdd_window(sc, logLineRDD, windowLen, withCounts=False):
+def windowRDD(sc, logLineRDD, windowLen, withCounts=False):
     '''
     read a log/directory into LogLine RDD format
     NOTE: only ts, and msg are populated
@@ -33,10 +33,10 @@ def rdd_window(sc, logLineRDD, windowLen, withCounts=False):
     '''
 
     if withCounts:
-        win = logLineRDD.map(lambda line: window(line, windowLen))
+        win = logLineRDD.map(lambda line: collide(line, windowLen))
         return win.groupByKey()\
                   .map(lambda (x, y): list(Counter(y).iteritems()))
     else:
-        win = logLineRDD.map(lambda line: window(line, windowLen))
+        win = logLineRDD.map(lambda line: collide(line, windowLen))
         return win.groupByKey()\
                   .map(lambda (x, y): list(set(y)))
