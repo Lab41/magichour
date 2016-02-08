@@ -1,8 +1,5 @@
-sc.addPyFile('magichour/magichour/api/dist/preprocess/readLog_RDD.py')
-sc.addPyFile('magichour/magichour/api/dist/preprocess/preProcess_RDD.py')
-
-from readLog_RDD import rdd_ReadLog
-from preProcess_RDD import rdd_preProcess
+from magichour.api.dist.preprocess import rdd_ReadLog
+from magichour.api.dist.preprocess import rdd_PreProcess
 
 from collections import namedtuple
 from collections import defaultdict
@@ -211,5 +208,5 @@ def matchTemplates(sc, templateFile, rddLogLine):
 
 def templateEval_RDD(sc, logInURI, transformURI, templateURI):
     rddLogs = rdd_ReadLog(sc, logInURI)
-    pre_processedLogs = rdd_preProcess(sc, transformURI, rddLogs)
+    pre_processedLogs = rdd_PreProcess(sc, transformURI, rddLogs)
     return matchTemplates(sc, templateURI, pre_processedLogs)
