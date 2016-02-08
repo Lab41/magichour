@@ -78,12 +78,14 @@ def run_auditd_pipeline(options):
         logger.info("Discovered events:")
         logger.info("\n"+pformat(e))
 
+    """
     modeleval_windows = evalwindow_step(timed_templates, options.window_size)
     if options.save_intermediate:
         modeleval_windows_file = os.path.join(options.pickle_cache_dir, "modeleval_windows.pickle")
         write_pickle_file(modeleval_windows, modeleval_windows_file)
+    """
 
-    timed_events = evalapply_step(gen_events, modeleval_windows)
+    timed_events = evalapply_step(gen_events, timed_templates, loglines)
     if options.save_intermediate:
         timed_events_file = os.path.join(options.pickle_cache_dir, "timed_events.pickle")
         write_pickle_file(timed_events, timed_events_file)

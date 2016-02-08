@@ -17,9 +17,9 @@ def read_lines_substep(log_file, *args, **kwargs):
     return lines
 
 
-def transformed_lines_substep(lines, transforms):
+def transform_lines_substep(lines, transforms):
     logger.info("Transforming log lines...")
-    transformed_lines = preprocess.get_transformed_lines(lines, transforms)
+    transformed_lines = preprocess.transform_lines(lines, transforms)
     return transformed_lines
 
 
@@ -29,9 +29,8 @@ def _transformed_lines_to_list_substep(transformed_lines):
 
 @log_time
 def preprocess_step(log_file, transforms_file, *args, **kwargs):
-    transforms = read_transforms_substep(transforms_file)
     lines = read_lines_substep(log_file, *args, **kwargs)
-    transformed_lines = transformed_lines_substep(lines, transforms)
+    transformed_lines = transform_lines_substep(lines, transforms_file)
 
     # get_transformed_lines returns a generator. This converts it to a list.
     transformed_lines = _transformed_lines_to_list_substep(transformed_lines)

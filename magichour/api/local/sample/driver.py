@@ -88,12 +88,13 @@ def main():
     logger.info("Discovered events:")
     logger.info("\n"+pformat(e))
     """
-
+    """
     modeleval_windows = evalwindow_step(timed_templates, window_size)
     write_pickle_file(modeleval_windows, modeleval_windows_file)
     #modeleval_windows = read_pickle_file(modeleval_windows_file)
+    """
 
-    timed_events = evalapply_step(gen_events, modeleval_windows)
+    timed_events = evalapply_step(gen_events, timed_templates, loglines)
     write_pickle_file(timed_events, timed_events_file)
     #timed_events = read_pickle_file(timed_events_file)
 

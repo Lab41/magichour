@@ -8,6 +8,7 @@ TODO: Add the ability to write custom preprocessing functions other than just tr
 
 import gzip
 import re
+import uuid
 
 from magichour.api.local.util.log import get_logger
 from magichour.api.local.util.namedtuples import LogLine, Transform
@@ -57,13 +58,13 @@ def read_log_file(file_path, ts_start_index, ts_end_index, ts_format=None, skip_
         else:
             ts = float(ts_str)
         text = line[:ts_start_index].join(line[ts_end_index:]).strip()
-        yield LogLine(ts, text, None, None , None)
+        yield LogLine(str(uuid.uuid4()), ts, text, None, None , None)
 
 
 def read_auditd_file(file_path):
     for line in _read_lines(file_path):
         ts = float(re.search('audit\(([0-9]+.[0-9]+)', line).group(1))
-        yield LogLine(ts, line.rstrip(), None, None, None)
+        yield LogLine(str(uuid.uuid4()), ts, line.rstrip(), None, None, None)
 
 
 #####
@@ -125,4 +126,4 @@ def transform_lines(lines, transforms_file):
             # Handle other transform types here.
             # if transform.type == 'EXAMPLE':
                 # do stuff
-        yield LogLine(logline.ts, transformed, None, replaceDict, None)
+        yield LogLine(str(uuid.uuid4()), logline.ts, transformed, None, replaceDict, None)
