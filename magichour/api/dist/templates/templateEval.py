@@ -206,7 +206,7 @@ def matchTemplates(sc, templateFile, rddLogLine):
     return rddLogLine.map(lambda line: matchLine(line, templateBroadcast))
 
 
-def templateEval_RDD(sc, logInURI, transformURI, templateURI):
-    rddLogs = readLog(sc, logInURI)
-    pre_processedLogs = preProcess(sc, transformURI, rddLogs)
+def templateEvalRDD(sc, logInURI, transformURI, templateURI):
+    rddLogs = readLogRDD(sc, logInURI)
+    pre_processedLogs = preProcessRDD(sc, transformURI, rddLogs)
     return matchTemplates(sc, templateURI, pre_processedLogs)

@@ -1,6 +1,6 @@
 from pyspark.mllib.fpm import FPGrowth
 
-def mlFPGrowth(transactionsRDD, minSupport=0.2, numPartitions=10):
+def FPGrowthRDD(transactionsRDD, minSupport=0.2, numPartitions=10):
     '''
     perform the FPGrowth algorithm
 

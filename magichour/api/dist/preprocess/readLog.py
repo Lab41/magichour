@@ -53,7 +53,7 @@ def logLine(line, logFile):
                    None)
 
 
-def readLog(sc, logFile):
+def readLogRDD(sc, logFile):
     '''
     read a log/directory into LogLine RDD format
     NOTE: only ts, and msg are populated
