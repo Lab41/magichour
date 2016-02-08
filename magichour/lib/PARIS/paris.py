@@ -37,7 +37,7 @@ def paris_distance(di, A, R, r_count):
 
     return xor(di, total_rep, r_count)/len(di)
 
-def PCF(D, A, R, tau=.5, r_slack=0, verbose=False):
+def PCF(D, A, R, tau=1, r_slack=0, verbose=False):
     '''
     Calculate the full PARIS cost function given a set of Documents, Atoms, and a representation
     '''
@@ -55,8 +55,8 @@ def PCF(D, A, R, tau=.5, r_slack=0, verbose=False):
 
         # PCFB
         if len(D[ind]) != 0:
-            #pcfb += float(len(R[ind]))/len(D[ind])
-            pcfb += float(len([w for i in R[ind] for w in A[i]]))/len(D[ind])
+            pcfb += float(len(R[ind]))/len(D[ind])
+            #pcfb += float(len([w for i in R[ind] for w in A[i]]))/len(D[ind])
     if verbose:
        print 'PCFA:', pcfa
        print 'PCFB:', pcfb
@@ -64,7 +64,7 @@ def PCF(D, A, R, tau=.5, r_slack=0, verbose=False):
     # PCFC
     pcfc = tau*len(A)
 
-    total_cost = 5*pcfa + pcfb + pcfc
+    total_cost = pcfa + pcfb + pcfc
     if verbose:
         print 'PCFC:', tau*len(A)
         print 'TOTAL: ', total_cost
@@ -97,7 +97,7 @@ def get_best_representation(di, A, verbose=False, r_slack=None):
         for i in potential_atoms:
             # Only check distance for items where there is some intersection between the line and the atom
             if i not in curr_r: #and len(di.intersection(A[i])) > 0:
-                attempted_r = deepcopy(curr_r)
+                attempted_r = curr_r #deepcopy(curr_r)
                 attempted_r.add(i)
                 dist = paris_distance(di, A, attempted_r, r_slack) + 1.0/len(di)*len(attempted_r)
                 if verbose:
@@ -105,6 +105,8 @@ def get_best_representation(di, A, verbose=False, r_slack=None):
                 if min_distance is None or dist < min_distance:
                     min_distance = dist
                     min_atom_ind = i
+
+                attempted_r.remove(i)
 
         if min_atom_ind is not None:
             curr_r.add(min_atom_ind)
@@ -231,7 +233,7 @@ def PARIS(D, r_slack, num_iterations=3):
             # Check to see if there are any
             for i in range(len(A)-1, -1, -1): # Increment backwards so indexes don't change
                 if atom_counts[i] == 0:
-                    logger.info( "Removing Atom:", i, A[i] )
+                    logger.info( "Removing Atom: %s %s"%(i, A[i] ))
                     del A[i]
                     should_stop = False
 
@@ -244,14 +246,14 @@ def PARIS(D, r_slack, num_iterations=3):
                     atoms_to_join.append((a1,a2))
 
             if len(atoms_to_join) > 0:
-                logger.info('Atoms that should be joined:', atoms_to_join)
+                logger.info('Atoms that should be joined: %s'%atoms_to_join)
 
             # Check for atoms that have a mostly overlapping set of items
             for (a1, a2) in combinations(range(len(A)), 2):
-                if len(A[a1].intersection(A[a2])) > .9*r*max(len(A[a1]), len(A[a2])):
+                if len(A[a1].intersection(A[a2])) > .9*max(len(A[a1]), len(A[a2])):
                     atoms_to_join.append((a1, a2))
             if len(atoms_to_join) > 0:
-                logger.info('Atoms that should be joined:', atoms_to_join)
+                logger.info('Atoms that should be joined: %s'%atoms_to_join)
 
             R = [get_best_representation(D[ind], A, verbose=False, r_slack=r_slack) for ind in range(len(D))]
             next_error = PCF(D, A, R, r_slack=r_slack)
@@ -274,15 +276,15 @@ def PARIS(D, r_slack, num_iterations=3):
                 if new_error < prev_error:
                     A = A_next
                     R = R_next
+                    logger.info('Adding Atom: %s\t%s\t%s'%(new_error, prev_error, new_atom))
                     prev_error = new_error
                     new_error = None
-                    logger.info('Adding Atom: %s\t%s\t%s'%(new_error, prev_error, new_atom))
                 else:
                     A = A[:-1]
                     logger.info('Not Adding atom: %s\t%s\t%s'%(new_error, prev_error, new_atom))
-        logger.info('End of iteration cost:', new_error, prev_error, new_atom)
+        logger.info('End of iteration cost: %s, %s, %s'%(new_error, prev_error, new_atom))
 
-    logger.info('Num ATOMS: ', len(A))
+    logger.info('Num ATOMS: %s '%len(A))
     return A, R
 
 def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, groups_to_skip=set([-1])):
