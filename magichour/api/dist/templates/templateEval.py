@@ -1,5 +1,5 @@
-from magichour.api.dist.preprocess import readLog
-from magichour.api.dist.preprocess import preProcess
+from magichour.api.dist.preprocess.readLog import readLogRDD
+from magichour.api.dist.preprocess.preProcess import preProcessRDD
 
 from collections import namedtuple
 from collections import defaultdict

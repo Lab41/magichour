@@ -1,6 +1,6 @@
-from magichour.api.dist.preprocess import readLog
-from magichour.api.dist.preprocess import preProcess
-from magichour.lib.LogCluster import log_cluster
+from magichour.api.dist.preprocess.readLog import readLogRDD
+from magichour.api.dist.preprocess.preProcess import preProcessRDD
+from magichour.lib.LogCluster.LogCluster import log_cluster
 
 
 def templateGenRDD(sc, logInURI, transformURI, support):

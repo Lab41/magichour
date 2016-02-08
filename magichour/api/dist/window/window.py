@@ -17,7 +17,7 @@ def collide(line, windowLen):
     return (win, line.templateId)
 
 
-def window(sc, logLineRDD, windowLen, withCounts=False):
+def windowRDD(sc, logLineRDD, windowLen, withCounts=False):
     '''
     read a log/directory into LogLine RDD format
     NOTE: only ts, and msg are populated

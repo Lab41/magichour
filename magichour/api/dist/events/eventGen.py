@@ -1,5 +1,5 @@
-from magichour.api.dist.window import window
-from magichour.api.dist.FPGrowth import FPGrowth
+from magichour.api.dist.window.window import windowRDD
+from magichour.api.dist.FPGrowth.FPGrowth import FPGrowthRDD
 
 
 def eventGenRDD(sc, transactions,
