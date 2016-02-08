@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-LogLine = namedtuple("LogLine", ["ts", "text", "processed", "replacements", "supportId"])
+LogLine = namedtuple("LogLine", ["id", "ts", "text", "processed", "replacements", "supportId"])
 
 
 Transform = namedtuple('Transform', ['id', 'type', 'name', 'transform', 'compiled'])
@@ -9,7 +9,7 @@ Transform = namedtuple('Transform', ['id', 'type', 'name', 'transform', 'compile
 Template = namedtuple("Template", ["id", "match", "str"])
 
 
-TimedTemplate = namedtuple("TimedTemplate", ["ts", "template_id"])
+TimedTemplate = namedtuple("TimedTemplate", ["ts", "template_id", "logline_id"])
 
 
 ModelGenWindow = namedtuple("ModelGenWindow", ["template_ids"])
@@ -23,4 +23,4 @@ ModelEvalWindow = namedtuple("ModelEvalWindow", ["start_time", "end_time", "time
 Event = namedtuple("Event", ["id", "template_ids"])
 
 
-TimedEvent = namedtuple("TimedEvent", ["start_time", "end_time", "event_id"])
+TimedEvent = namedtuple("TimedEvent", ["event_id", "timed_templates"])
