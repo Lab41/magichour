@@ -29,7 +29,7 @@ def procLogLine(line, logFile):
     return line.strip().rstrip().split(' ', 3)[2:]
 
 
-def rdd_LogLine(line, logFile):
+def logLine(line, logFile):
     '''
     process a log line into a RDD
 
@@ -53,7 +53,7 @@ def rdd_LogLine(line, logFile):
                    None)
 
 
-def rdd_ReadLog(sc, logFile):
+def readLog(sc, logFile):
     '''
     read a log/directory into LogLine RDD format
     NOTE: only ts, and msg are populated
@@ -66,4 +66,4 @@ def rdd_ReadLog(sc, logFile):
     '''
     sparkLogFile = sc.textFile(logFile)
 
-    return sparkLogFile.map(lambda line: rdd_LogLine(line, logFile))
+    return sparkLogFile.map(lambda line: logLine(line, logFile))

@@ -12,7 +12,7 @@ TransformLine = namedtuple('TransformLine',
                            ['id', 'type', 'NAME', 'transform', 'compiled'])
 
 
-def rdd_TransformLine(line):
+def transformLine(line):
     '''
     process transformations into RDD format
 
@@ -97,7 +97,7 @@ def readTransforms(sc, transFile):
     simpleTransformations = sc.textFile(transFile)
 
     # parse loglines
-    logTransforms = simpleTransformations.map(rdd_TransformLine).cache()
+    logTransforms = simpleTransformations.map(transformLine).cache()
 
     trans = logTransforms.collect()
 
@@ -130,7 +130,7 @@ def logPreProcess(sc, logTrans, rrdLogLine):
     return rrdLogLine.map(lambda line: lineRegexReplacement(line, logTrans))
 
 
-def rdd_preProcess(sc, logTrans, rrdLogLine):
+def preProcess(sc, logTrans, rrdLogLine):
     '''
     make a rdd of preprocessed loglines
 

@@ -138,7 +138,7 @@ def makeLookupDicts(eventdef):
     return(template2event, event2template)
 
 
-def rdd_events(sc, rddlogLines, templateURI, windowLength):
+def events(sc, rddlogLines, templateURI, windowLength):
     '''
     Performs the event generation from incomming LogLine rdd
 
