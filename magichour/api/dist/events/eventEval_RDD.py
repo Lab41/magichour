@@ -138,17 +138,18 @@ def makeLookupDicts(eventdef):
     return(template2event, event2template)
 
 
-def rdd_events(sc, rddlogLines, templateURI, windowLength):
+def eventEval_RDD(sc, rddlogLines, templateURI,
+               windowLength=120):
     '''
     Performs the event generation from incomming LogLine rdd
 
     Args:
         sc(sparkContext):
         rddlogLines(LogLines): rdd of LogLines created by earlier processing
-        templateURI: URI to the file describing the event templates
-        each line of hte file  is a space seperated list of templates
+        templateURI(str): URI to the file describing the event templates
+        each line of the file  is a space seperated list of templates
         a specific event is sensative to
-        windowLength: window length to evalutate events in (seconds)
+        windowLength(int): window length to evalutate events in (seconds)
 
     Returns:
         retval(rdd tuple(tuple(eventId,windowID),tuple(LogLines)))
