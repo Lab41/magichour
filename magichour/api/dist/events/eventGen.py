@@ -31,12 +31,12 @@ def eventGenRDD(sc, transactions,
                 windowLen=120):
     retval = list()
     windowed = windowRDD(sc, transactions, windowLen, False)
-    temp = FPGrowthRDD(windowed, minSupport, numPartitions)
+    temp = FPGrowthRDD(windowed, minSupport, numPartitions).collect()
 
     items = [frozenset(fi.items) for fi in temp]
     pruned_items = list(get_longest_sets_possible(items))
     for item in pruned_items:
-        line = ' '.join([str(i) for i in sorted(item, key=int) if i! = -1])
+        line = ' '.join([str(i) for i in sorted(item, key=int) if i != -1])
         retval.append(line)
 
     return retval
