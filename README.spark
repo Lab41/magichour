@@ -1,0 +1,2 @@
+make sure to make the zip of all our python code for the spark library.
+zip -r ~/magichour.zip ./magichour
