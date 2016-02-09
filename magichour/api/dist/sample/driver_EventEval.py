@@ -21,6 +21,6 @@ sc.addPyFile('magichour.zip')
 
 eventDefs = 'hdfs://namenode/magichour/eventDefs'
 windowSeconds = 500
-testing = eventEvalRDD(sc, rddlogLines, eventDefs, windowSeconds)
+test = eventEvalRDD(sc, rddlogLines, eventDefs, windowSeconds)
 
-testing.collect()
+test.collect()
