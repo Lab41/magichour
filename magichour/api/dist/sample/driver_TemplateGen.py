@@ -8,4 +8,6 @@ logInURI = 'hdfs://namenode/magichour/tbird/xaa.gz'
 logOutURI = 'hdfs://namenode/magichour/tbird.xaa.templateGenRDD'
 
 test = templateGenRDD(sc, logInURI, transformURI, support)
-test.saveAsPickleFile(logOutURI)
+
+for i in test:
+    print ' '.join(i)
