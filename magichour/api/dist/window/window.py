@@ -6,7 +6,7 @@ def collide(line, windowLen):
     make a key from the time
 
     Args:
-        line(LogLine): a log line that has been through template processing
+        line(DistributedLogLine): a log line that has been through template processing
         windowLen(int): length of the window in seconds
 
     Returns:
@@ -19,7 +19,7 @@ def collide(line, windowLen):
 
 def windowRDD(sc, logLineRDD, windowLen, withCounts=False):
     '''
-    read a log/directory into LogLine RDD format
+    read a log/directory into DistributedLogLine RDD format
     NOTE: only ts, and msg are populated
     Args:
         sc(sparkContext)
@@ -27,7 +27,7 @@ def windowRDD(sc, logLineRDD, windowLen, withCounts=False):
         withCounts(boolean): return counts with the items seen within the window
 
     Returns:
-        retval(RDD(LogLines): RDD of logs read from the LogFile URI
+        retval(RDD(DistributedLogLines): RDD of logs read from the LogFile URI
                               NOTE: the list dedupes then return a list
                               as follow on processing takes a RDD list
     '''

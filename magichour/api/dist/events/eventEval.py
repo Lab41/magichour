@@ -6,11 +6,11 @@ def eventWindow(line, windowLength):
     alias events to the same key based off time
 
     Args:
-        line(LogLine):
+        line(DistributedLogLine):
         windowLength(int): Length in seconds of the window to apply
 
     Retval:
-        retval(tuple(window,LogLine))
+        retval(tuple(window,DistributedLogLine))
     '''
     key = (line.supportId, int(line.ts/windowLength))
     value = line
@@ -23,15 +23,15 @@ def shipEvents(line, t2e):
     When a template comes in, emit one value
     for each event that the template is in. making the new
     key (eventID,WindowID)
-    value(LogLine)
+    value(DistributedLogLine)
 
     Args:
-        line(LogLine)
+        line(DistributedLogLine)
         t23(Broadcast(defaultDict(set))): maps a template to the
                                      sensitized events
 
     Returns:
-        retval(list(tuple(tuple(eventID,windowID), LogLine)))
+        retval(list(tuple(tuple(eventID,windowID), DistributedLogLine)))
 
     '''
     outList = list()
@@ -65,11 +65,11 @@ def makeEventsFromLines(line, e2t):
                 has the effect of spreading out the templates chosen]
 
     Args:
-        line(LogLine):
+        line(DistributedLogLine):
         e2t(Broadcast(defaultDict(set))): mapping between events and templates
 
     Returns:
-        retval(list(tuple(tuple(eventID,windowID),tuple(LogLines))))
+        retval(list(tuple(tuple(eventID,windowID),tuple(DistributedLogLines))))
     '''
 
     key, iterable = line
@@ -141,18 +141,18 @@ def makeLookupDicts(eventdef):
 def eventEvalRDD(sc, rddlogLines, templateURI,
               windowLength=120):
     '''
-    Performs the event generation from incomming LogLine rdd
+    Performs the event generation from incomming DistributedLogLine rdd
 
     Args:
         sc(sparkContext):
-        rddlogLines(LogLines): rdd of LogLines created by earlier processing
-        templateURI(str): URI to the file describing the event templates
-        each line of the file  is a space seperated list of templates
-        a specific event is sensative to
-        windowLength(int): window length to evalutate events in (seconds)
+        rddlogLines(DistributedLogLines): rdd of DistributedLogLines created
+        by earlier processing templateURI(str): URI to the file describing the
+        event templates each line of the file  is a space seperated list of
+        templates a specific event is sensative to windowLength(int): window
+        length to evalutate events in (seconds)
 
     Returns:
-        retval(rdd tuple(tuple(eventId,windowID),tuple(LogLines)))
+        retval(rdd tuple(tuple(eventId,windowID),tuple(DistributedLogLines)))
 
     '''
     temp = sc.textFile(templateURI)

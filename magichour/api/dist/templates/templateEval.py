@@ -1,19 +1,10 @@
 from magichour.api.dist.preprocess.readLog import readLogRDD
 from magichour.api.dist.preprocess.preProcess import preProcessRDD
+from magichour.api.local.util.namedtuples import DistributedLogLine
+from magichour.api.local.util.namedtuples import DistributedTemplateLine
 
-from collections import namedtuple
 from collections import defaultdict
 import re
-
-LogLine = namedtuple('LogLine', ['ts', 'msg',
-                                 'processed', 'dictionary',
-                                 'template', 'templateId', 'templateDict'])
-
-TemplateLine = namedtuple('TemplateLine', ['id', 'template', 'skipWords'])
-
-
-TransformLine = namedtuple('TransformLine',
-                           ['id', 'type', 'NAME', 'transform', 'compiled'])
 
 
 def badWay(r1, r2):
@@ -103,9 +94,9 @@ def readTemplates(sc, templateFile):
     templateLines = list()
     for index, m in enumerate(matches):
         # match end of line too
-        t = TemplateLine(index,
-                         re.compile(m + '$'),
-                         getWordSkipNames(re.compile(m)))
+        t = DistributedTemplateLine(index,
+                                    re.compile(m + '$'),
+                                    getWordSkipNames(re.compile(m)))
         templateLines.append(t)
 
     return templateLines
@@ -169,22 +160,22 @@ def matchLine(line, templates):
             for i in range(len(templateLine.skipWords)):
                     templateDict[templateLine.skipWords[i]].append(skipFound.groups()[i])
 
-            return LogLine(line.ts,
-                           line.msg,
-                           line.processed,
-                           line.dictionary,
-                           templateLine.template.pattern,
-                           templateLine.id,
-                           templateDict)
+            return DistributedLogLine(line.ts,
+                                      line.text,
+                                      line.processed,
+                                      line.dictionary,
+                                      templateLine.template.pattern,
+                                      templateLine.id,
+                                      templateDict)
 
     # could not find a template match
-    return LogLine(line.ts,
-                   line.msg,
-                   line.processed,
-                   line.dictionary,
-                   None,
-                   -1,
-                   templateDict)
+    return DistributedLogLine(line.ts,
+                              line.text,
+                              line.processed,
+                              line.dictionary,
+                              None,
+                              -1,
+                              templateDict)
 
 
 def matchTemplates(sc, templateFile, rddLogLine):
