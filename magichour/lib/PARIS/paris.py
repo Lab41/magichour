@@ -246,9 +246,9 @@ def PARIS(D, r_slack, num_iterations=3, tau=1.0):
                     actual_prob = count/total_count
                     if actual_prob > 2.0 * joint_likelihood_if_indepenent:
                         atoms_to_join.append((a1,a2))
-                        #edited_atoms.add(a1)
-                        #edited_atoms.add(a2)
-                        edited_atoms.update(range(len(A)))
+                        edited_atoms.add(a1)
+                        edited_atoms.add(a2)
+                        #edited_atoms.update(range(len(A))) # Only allow edit/iteration
 
             if len(atoms_to_join) > 0:
                 logger.info('Atoms that should be joined: %s'%atoms_to_join)
@@ -258,9 +258,9 @@ def PARIS(D, r_slack, num_iterations=3, tau=1.0):
                 for (a1, a2) in combinations(range(len(A)), 2):
                     if a1 not in edited_atoms and a2 not in edited_atoms and len(A[a1].intersection(A[a2])) > .9*max(len(A[a1]), len(A[a2])):
                         atoms_to_join.append((a1, a2))
-                        #edited_atoms.add(a1)
-                        #edited_atoms.add(a2)
-                        edited_atoms.update(range(len(A)))
+                        edited_atoms.add(a1)
+                        edited_atoms.add(a2)
+                        #edited_atoms.update(range(len(A)))  # Only allow edit/iteration
 
                 if len(atoms_to_join) > 0:
                     logger.info('Overlapping atoms that should be joined: %s'%atoms_to_join)
@@ -268,19 +268,27 @@ def PARIS(D, r_slack, num_iterations=3, tau=1.0):
             if len(atoms_to_join)>0:
                 deleted_atoms = set()
                 def get_new_count(a1, deleted_atoms):
+                    '''
+                    Small helper function to account for deleted atoms
+                    '''
                     num_less_than_a1 = len([a for a in deleted_atoms if a < a1])
                     return a1 - num_less_than_a1
                 for (a1, a2) in atoms_to_join:
+                    # Delete a1
                     a1_updated = get_new_count(a1, deleted_atoms)
-                    a2_updated = get_new_count(a2, deleted_atoms)
-                    should_stop = False
                     a_new = A[a1_updated]
-                    a_new.update(A[a2_updated])
                     del A[a1_updated]
-                    del A[a2_updated]
                     deleted_atoms.add(a1)
+
+                    # Delete a2
+                    a2_updated = get_new_count(a2, deleted_atoms)
+                    a_new.update(A[a2_updated])
+                    del A[a2_updated]
                     deleted_atoms.add(a2)
+
                     A.append(a_new)
+                    should_stop = False
+
 
             R = [get_best_representation(D[ind], A, verbose=False, r_slack=r_slack) for ind in range(len(D))]
             next_error = PCF(D, A, R, r_slack=r_slack, tau=tau)
