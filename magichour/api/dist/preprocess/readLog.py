@@ -1,21 +1,11 @@
-from collections import namedtuple
-
-LogLine = namedtuple('LogLine', ['ts', 'msg',
-                                 'processed', 'dictionary',
-                                 'template', 'templateId', 'templateDict'])
-
-TemplateLine = namedtuple('TemplateLine', ['id', 'template', 'skipWords'])
-
-
-TransformLine = namedtuple('TransformLine',
-                           ['id', 'type', 'NAME', 'transform', 'compiled'])
+from magichour.api.local.util.namedtuples import DistributedLogLine
 
 
 def procLogLine(line, logFile):
     '''
     handles the logfile specific parsing input lines into 2 parts
     ts: timestamp float
-    msg: the rest of the message
+    text: the rest of the message
 
     Args:
         line(string): text to process
@@ -24,7 +14,7 @@ def procLogLine(line, logFile):
                          based off different directories
 
     Returns:
-        retval(list[string,string]): [ts, msg]
+        retval(list[string,string]): [ts, text]
     '''
     return line.strip().rstrip().split(' ', 3)[2:]
 
@@ -40,29 +30,29 @@ def logLine(line, logFile):
                          based on the base of the URI
 
     Returns:
-        retval(LogLine): fills in the first two portions of the LogLine
-                         namedtuple
+        retval(DistributedLogLine): fills in the first two portions of
+        the LogLine namedtuple
     '''
     l = procLogLine(line, logFile)
-    return LogLine(float(l[0]),
-                   l[1],
-                   None,
-                   None,
-                   None,
-                   None,
-                   None)
+    return DistributedLogLine(float(l[0]),
+                              l[1],
+                              None,
+                              None,
+                              None,
+                              None,
+                              None)
 
 
 def readLogRDD(sc, logFile):
     '''
     read a log/directory into LogLine RDD format
-    NOTE: only ts, and msg are populated
+    NOTE: only ts, and text are populated
     Args:
         sc(sparkContext)
         logFile(string): URI to file toprocess
 
     Returns:
-        retval(RDD(LogLines): RDD of logs read from the LogFile URI
+        retval(RDD(DistributedLogLines): RDD of logs read from the LogFile URI
     '''
     sparkLogFile = sc.textFile(logFile)
 

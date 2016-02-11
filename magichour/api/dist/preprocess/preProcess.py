@@ -1,15 +1,7 @@
-from collections import namedtuple
 import re
 
-LogLine = namedtuple('LogLine', ['ts', 'msg',
-                                 'processed', 'dictionary',
-                                 'template', 'templateId', 'templateDict'])
-
-TemplateLine = namedtuple('TemplateLine', ['id', 'template', 'skipWords'])
-
-
-TransformLine = namedtuple('TransformLine',
-                           ['id', 'type', 'NAME', 'transform', 'compiled'])
+from magichour.api.local.util.namedtuples import DistributedLogLine
+from magichour.api.local.util.namedtuples import DistributedTransformLine
 
 
 def transformLine(line):
@@ -27,17 +19,17 @@ def transformLine(line):
     if line.lstrip()[0] != '#':
         # id,type,name,transform
         l = line.lstrip().rstrip().split(',', 3)
-        return TransformLine(int(l[0]),
-                             l[1],
-                             l[2],
-                             l[3],
-                             re.compile(l[3]))
+        return DistributedTransformLine(int(l[0]),
+                                        l[1],
+                                        l[2],
+                                        l[3],
+                                        re.compile(l[3]))
     else:
-        return TransformLine('COMMENT',
-                             'COMMENT',
-                             'COMMENT',
-                             'COMMENT',
-                             'COMMENT')
+        return DistributedTransformLine('COMMENT',
+                                        'COMMENT',
+                                        'COMMENT',
+                                        'COMMENT',
+                                        'COMMENT')
 
 
 def lineRegexReplacement(line, logTrans):
@@ -46,37 +38,37 @@ def lineRegexReplacement(line, logTrans):
     all the remplacements peformed in a dictionary(list)
 
     Args:
-        line(LogLine): logline to work on
+        line(DistributedLogLine): logline to work on
 
     Globals:
         transforms(RDD(TransformLine)): replacemnts to make with
 
     Returns:
-        retval(LogLine): logline with the processed, and dictionary portions
-                         filled in
+        retval(DistributedLogLine): logline with the processed
+        and dictionary portions filled in
     '''
 
-    text = line.msg.strip()
+    text = line.text.strip()
     replaceDict = dict()
 
     for t in logTrans.value:
         if t.type == 'REPLACE':
             replaceList = t.compiled.findall(text)
             if replaceList:
-                replaceDict[t.NAME] = replaceList
-            text = t.compiled.sub(t.NAME, text, 0)
+                replaceDict[t.name] = replaceList
+            text = t.compiled.sub(t.name, text, 0)
 
         if t.type == 'REPLACELIST':
             print 'REPLACELIST not implemented yet'
 
     processed = ' '.join(text.split())
-    retVal = LogLine(line.ts,
-                     line.msg.lstrip().rstrip(),
-                     processed.lstrip().rstrip(),
-                     replaceDict,
-                     None,
-                     None,
-                     None)
+    retVal = DistributedLogLine(line.ts,
+                                line.text.lstrip().rstrip(),
+                                processed.lstrip().rstrip(),
+                                replaceDict,
+                                None,
+                                None,
+                                None)
 
     return retVal
 
@@ -122,7 +114,7 @@ def logPreProcess(sc, logTrans, rrdLogLine):
         logFile(string): location of the log data in HDFS
 
     Returns:
-        retval(RDD(LogLines)): preprocessed log lines ready for next
+        retval(RDD(DistributedLogLines)): preprocessed log lines ready for next
                                stage of processing
    '''
 
@@ -140,8 +132,8 @@ def preProcessRDD(sc, logTrans, rrdLogLine):
             logFile(string): location of the log data in HDFS
 
     Returns:
-            retval(RDD(LogLines)): preprocessed log lines ready for next
-                                   stage of processing
+            retval(RDD(DistributedLogLines)): preprocessed log lines ready for
+            next stage of processing
     '''
 
     lTrans = readTransforms(sc, logTrans)

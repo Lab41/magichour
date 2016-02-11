@@ -1,20 +1,18 @@
 from magichour.api.dist.events.eventEval import eventEvalRDD
-from collections import namedtuple
-from random import randint
+from magichour.api.loacl.util.namedtuples import DistributedLogLine
 
-LogLine = namedtuple('LogLine', ['ts', 'msg',
-                                 'processed', 'dictionary', 'supportId'])
+from random import randint
 
 logList = list()
 
 for i in range(1000):
-    a = LogLine(int(i), 'message=%i' % i,
-                None,
-                None,
-                int(randint(1, 5)))
+    a = DistributedLogLine(int(i), 'message=%i' % i,
+                           None,
+                           None,
+                           int(randint(1, 5)))
     logList.append(a)
 
-rddlogLines= sc.parallelize(logList)
+rddlogLines = sc.parallelize(logList)
 
 sc.addPyFile('magichour.zip')
 
