@@ -1,4 +1,5 @@
 import functools
+import re
 import multiprocessing
 from collections import Counter
 
@@ -16,19 +17,20 @@ def process_line(templates, logline):
     return TimedTemplate(logline.ts, -1, logline.id)
 
 
+re_type = re.compile(r'type=(\S+)')
 def process_auditd_line(templates, logline):
-    first_key_val_pair = logline.text.split(' ', 1)[0]
-    key, audit_msg_type = first_key_val_pair.split('=')
-    if key != 'type':
-        raise ValueError('Does not match expected format: %s'%logline.text)
+    audit_msg_type = re_type.search(logline.text)
+    if not audit_msg_type:
+        raise ValueError('Does not match expected auditd format; missing type=TYPE: %s'%logline.text)
 
+    audit_msg_type = audit_msg_type.group(1)
     if audit_msg_type not in templates:
         raise KeyError("type=%s not in dictionary"%audit_msg_type)
 
     return TimedTemplate(logline.ts, templates[audit_msg_type], logline.id)
 
 
-def apply_templates(templates, loglines, mp=True, process_auditd=False):
+def apply_templates(templates, loglines, mp=True, type_template_auditd=False, **kwargs):
     """
     Applies the templates on an iterable. This function creates a list of TimedTemplate named tuples.
     In effect this will produce a list of which templates occurred at which times.
@@ -43,14 +45,14 @@ def apply_templates(templates, loglines, mp=True, process_auditd=False):
 
     Kwargs:
         mp: whether or not to run in multiprocessing mode (default: True)
-        process_auditd: whether or not to use specialized auditd processing (default: False)
+        type_template_auditd: whether or not to use specialized auditd type template processing (default: False)
 
     Returns:
         timed_templates: a list of TimedTemplate named tuples that represent which templates occurred at which times in the log file.
 
     """
-    # Change processing mode for auditd data
-    if process_auditd:
+    # Change processing mode for auditd data by Templating based on type=TYPE
+    if type_template_auditd:
         process_function = process_auditd_line
     else:
         process_function = process_line
