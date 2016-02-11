@@ -162,7 +162,7 @@ def calc_overlap(candidate_timed_template, orig_timed_template, logline_dict):
                     overlap += len(cand_v) * weight_per_char
     return (jaccard_keys * key_weight) + (jaccard_vals * (1-key_weight))
     """
-    return jaccard_dicts(candidate, orig)
+    return jaccard_dicts(candidate, orig) if candidate and orig else 0
 
 
 """
