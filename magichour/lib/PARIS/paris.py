@@ -1,10 +1,7 @@
 from __future__ import division
-import random
 from math import floor
 from collections import Counter, defaultdict
 from itertools import combinations, islice
-from copy import deepcopy
-import gzip
 
 from magichour.api.local.util.log import get_logger, log_time
 
@@ -37,7 +34,7 @@ def paris_distance(di, A, R, r_count):
 
     return xor(di, total_rep, r_count)/len(di)
 
-def PCF(D, A, R, tau=1, r_slack=0, verbose=False):
+def PCF(D, A, R, tau=50, r_slack=0, verbose=False):
     '''
     Calculate the full PARIS cost function given a set of Documents, Atoms, and a representation
     '''
@@ -97,7 +94,7 @@ def get_best_representation(di, A, verbose=False, r_slack=None):
         for i in potential_atoms:
             # Only check distance for items where there is some intersection between the line and the atom
             if i not in curr_r: #and len(di.intersection(A[i])) > 0:
-                attempted_r = curr_r #deepcopy(curr_r)
+                attempted_r = curr_r
                 attempted_r.add(i)
                 dist = paris_distance(di, A, attempted_r, r_slack) + 1.0/len(di)*len(attempted_r)
                 if verbose:
@@ -112,7 +109,7 @@ def get_best_representation(di, A, verbose=False, r_slack=None):
             curr_r.add(min_atom_ind)
     return curr_r
 
-def design_atom(E, r_slack=0):
+def design_atom(E, r_slack=0, tau=1):
     '''
     Implementation of the atom design function described in the PARIS paper
 
@@ -131,17 +128,17 @@ def design_atom(E, r_slack=0):
     Aj_next = set(c.most_common(1)[0][0])
 
     # Baseline error as the error in the current error set
-    prev_el = PCF(E, [Aj], [set() for ind in range(len(E))], r_slack=r_slack) # Empty representation set
+    prev_el = PCF(E, [Aj], [set() for ind in range(len(E))], r_slack=r_slack, tau=tau) # Empty representation set
 
     # Compute the error with the atom based on the most common pair of items in E
     R_next = [get_best_representation(E[ind], [Aj_next], verbose=False, r_slack=r_slack) for ind in range(len(E))]
-    el = PCF(E, [Aj_next], R_next, r_slack=r_slack)
+    el = PCF(E, [Aj_next], R_next, r_slack=r_slack, tau=tau)
 
     # Iterate until the atom updates stop improving the overall cost
     while el < prev_el:
         # Previous iteration was good so that becomes the new baseline
         prev_el = el
-        Aj = deepcopy(Aj_next)
+        Aj = Aj_next
 
         # Add most common element in remaining unrepresented component of E
         #     Only count Documents that are currently using the atom in their representation
@@ -154,8 +151,10 @@ def design_atom(E, r_slack=0):
 
         # Update best representation and compute cost
         R_next = [get_best_representation(E[ind], [Aj_next], verbose=False, r_slack=r_slack) for ind in range(len(E))]
-        el = PCF(E, [Aj_next], R_next, r_slack=r_slack)
+        el = PCF(E, [Aj_next], R_next, r_slack=r_slack, tau=tau)
 
+    if len(d) > 0:
+        Aj_next.remove(d.most_common(1)[0][0])
     if Aj is None:
         print 'No atom created'
     return Aj
@@ -193,7 +192,7 @@ def get_error2(D, A, R, a_index_to_ignore):
             E.append(set())
     return E
 
-def PARIS(D, r_slack, num_iterations=3):
+def PARIS(D, r_slack, num_iterations=3, tau=1.0):
     A = []
 
     for iteration in range(num_iterations):
@@ -205,7 +204,7 @@ def PARIS(D, r_slack, num_iterations=3):
         for a_index_to_update in range(len(A)-1, -1, -1): # iterate backwards
             a_index_to_ignore = set([a_index_to_update])
             E = get_error2(D, A, R, a_index_to_ignore)
-            new_a = design_atom(E)
+            new_a = design_atom(E, r_slack=r_slack, tau=tau)
             if new_a is not None and new_a != A[a_index_to_update]:
                 logger.info('Replacing Atom: Index [%d], Items in Common [%d], Items Different [%d]'%(a_index_to_update,
                         len(A[a_index_to_update].symmetric_difference(new_a)),
@@ -215,10 +214,11 @@ def PARIS(D, r_slack, num_iterations=3):
 
         # Reduction Phase
         R = [get_best_representation(D[ind], A, verbose=False, r_slack=r_slack) for ind in range(len(D))]
-        prev_error = PCF(D, A, R, r_slack=r_slack)
+        prev_error = PCF(D, A, R, r_slack=r_slack, tau=tau)
         next_error = prev_error
         should_stop = False
-        while next_error <= prev_error and not should_stop:
+        while len(A) > 0 and next_error <= prev_error and not should_stop:
+            logger.info('Starting Reduction Phase with %d Atoms'%len(A))
             prev_error = next_error
             atom_counts = Counter()
             atom_combo_counts = Counter()
@@ -239,39 +239,75 @@ def PARIS(D, r_slack, num_iterations=3):
 
             # check to see for every pair if it occurs more than twice it's likelihood
             atoms_to_join = []
+            edited_atoms = set()
             for ((a1, a2), count) in atom_combo_counts.items():
-                joint_likelihood_if_indepenent = atom_counts[a1] * atom_counts[a2] /total_count/total_count
-                actual_prob = count/total_count
-                if actual_prob > 2.0 * joint_likelihood_if_indepenent:
-                    atoms_to_join.append((a1,a2))
+                if a1 not in edited_atoms and a2 not in edited_atoms:
+                    joint_likelihood_if_indepenent = atom_counts[a1] * atom_counts[a2] /total_count/total_count
+                    actual_prob = count/total_count
+                    if actual_prob > 2.0 * joint_likelihood_if_indepenent:
+                        atoms_to_join.append((a1,a2))
+                        edited_atoms.add(a1)
+                        edited_atoms.add(a2)
+                        #edited_atoms.update(range(len(A))) # Only allow edit/iteration
 
             if len(atoms_to_join) > 0:
                 logger.info('Atoms that should be joined: %s'%atoms_to_join)
 
             # Check for atoms that have a mostly overlapping set of items
-            for (a1, a2) in combinations(range(len(A)), 2):
-                if len(A[a1].intersection(A[a2])) > .9*max(len(A[a1]), len(A[a2])):
-                    atoms_to_join.append((a1, a2))
-            if len(atoms_to_join) > 0:
-                logger.info('Atoms that should be joined: %s'%atoms_to_join)
+            if len(atoms_to_join) == 0:
+                for (a1, a2) in combinations(range(len(A)), 2):
+                    if a1 not in edited_atoms and a2 not in edited_atoms and len(A[a1].intersection(A[a2])) > .9*max(len(A[a1]), len(A[a2])):
+                        atoms_to_join.append((a1, a2))
+                        edited_atoms.add(a1)
+                        edited_atoms.add(a2)
+                        #edited_atoms.update(range(len(A)))  # Only allow edit/iteration
+
+                if len(atoms_to_join) > 0:
+                    logger.info('Overlapping atoms that should be joined: %s'%atoms_to_join)
+
+            if len(atoms_to_join)>0:
+                deleted_atoms = set()
+                def get_new_count(a1, deleted_atoms):
+                    '''
+                    Small helper function to account for deleted atoms
+                    '''
+                    num_less_than_a1 = len([a for a in deleted_atoms if a < a1])
+                    return a1 - num_less_than_a1
+                for (a1, a2) in atoms_to_join:
+                    # Delete a1
+                    a1_updated = get_new_count(a1, deleted_atoms)
+                    a_new = A[a1_updated]
+                    del A[a1_updated]
+                    deleted_atoms.add(a1)
+
+                    # Delete a2
+                    a2_updated = get_new_count(a2, deleted_atoms)
+                    a_new.update(A[a2_updated])
+                    del A[a2_updated]
+                    deleted_atoms.add(a2)
+
+                    A.append(a_new)
+                    should_stop = False
+
 
             R = [get_best_representation(D[ind], A, verbose=False, r_slack=r_slack) for ind in range(len(D))]
-            next_error = PCF(D, A, R, r_slack=r_slack)
+            next_error = PCF(D, A, R, r_slack=r_slack, tau=tau)
+            logger.info('ERRORS: next(%s) original(%s) Should Stop: %s'%(next_error, prev_error, should_stop))
 
         # Create new atoms
         new_atom = -1
-        prev_error = PCF(D, A, R, r_slack=r_slack)
+        prev_error = PCF(D, A, R, r_slack=r_slack, tau=tau)
         new_error = None
         R_next = R
         while (new_error is None or new_error < prev_error) and new_atom is not None:
 
             E = get_error(D, A, R_next, set())
-            new_atom = design_atom(E) # Don't skip any atoms
+            new_atom = design_atom(E, r_slack=r_slack, tau=tau) # Don't skip any atoms
             if new_atom is not None:
-                A_next = A# deepcopy(A)
+                A_next = A
                 A_next.append(new_atom)
                 R_next = [get_best_representation(D[ind], A_next, verbose=False, r_slack=r_slack) for ind in range(len(D))]
-                new_error = PCF(D, A_next, R_next, r_slack=r_slack)
+                new_error = PCF(D, A_next, R_next, r_slack=r_slack, tau=tau)
 
                 if new_error < prev_error:
                     A = A_next
@@ -288,6 +324,7 @@ def PARIS(D, r_slack, num_iterations=3):
     return A, R
 
 def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, groups_to_skip=set([-1])):
+    import gzip
 
     transactions = defaultdict(set)
     lookup_table = {}
@@ -331,6 +368,7 @@ def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, gro
         print ' '.join(map(str, a))
 
 def test_with_syntheticdata():
+    import random
         #alphabet_size = 200
     alphabet_size = 194
     #num_elements_per_atom = 8

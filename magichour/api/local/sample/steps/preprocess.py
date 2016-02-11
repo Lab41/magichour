@@ -13,7 +13,12 @@ def read_transforms_substep(transforms_file):
 
 def read_lines_substep(log_file, *args, **kwargs):
     logger.info("Reading log lines from file: %s" % log_file)
-    lines = preprocess.read_log_file(log_file, *args, **kwargs)
+    if kwargs.get('gettime_auditd'):
+        # Read timestamp in auditd format
+        preprocess_read_log_function = preprocess.read_auditd_file
+    else:
+        preprocess_read_log_function = preprocess.read_log_file
+    lines = preprocess_read_log_function(log_file, *args, **kwargs)
     return lines
 
 
@@ -28,15 +33,16 @@ def _transformed_lines_to_list_substep(transformed_lines):
 
 
 @log_time
-def preprocess_step(log_file, transforms_file, *args, **kwargs):
+def preprocess_step(log_file, transforms_file=None, *args, **kwargs):
     lines = read_lines_substep(log_file, *args, **kwargs)
-    transformed_lines = transform_lines_substep(lines, transforms_file)
+    if transforms_file:
+        transformed_lines = transform_lines_substep(lines, transforms_file)
+    elif kwargs.get('type_template_auditd'):
+        transformed_lines = lines
+    else:
+        raise ValueError('transforms_file is required unless type_template_auditd==True')
 
     # get_transformed_lines returns a generator. This converts it to a list.
     transformed_lines = _transformed_lines_to_list_substep(transformed_lines)
+
     return transformed_lines
-
-
-@log_time
-def preprocess_auditd_step(log_file, *args, **kwargs):
-    return [line for line in preprocess.read_auditd_file(log_file)]
