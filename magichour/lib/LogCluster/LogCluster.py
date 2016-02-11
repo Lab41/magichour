@@ -115,8 +115,9 @@ def log_cluster(sc, log_lines, support):
 
     frequent_words = sc.broadcast(set(frequent_word_dict.keys()))
 
-    return log_lines.map(lambda x: extract_patterns(x, frequent_words))\
+    clusters = log_lines.map(lambda x: extract_patterns(x, frequent_words))\
                   .groupByKey()\
                   .filter(lambda (freq_word_pattern, pattern): len(pattern) > support)\
                   .map(collapse_patterns)\
                   .collect()
+    return [' '.join(cluster) for cluster in clusters]

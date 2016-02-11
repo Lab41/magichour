@@ -146,10 +146,11 @@ def eventEvalRDD(sc, rddlogLines, templateURI,
     Args:
         sc(sparkContext):
         rddlogLines(DistributedLogLines): rdd of DistributedLogLines created
-        by earlier processing templateURI(str): URI to the file describing the
-        event templates each line of the file  is a space seperated list of
-        templates a specific event is sensative to windowLength(int): window
-        length to evalutate events in (seconds)
+        by earlier processing 
+        templateURI(str): URI to the file describing the event templates 
+        each line of the file  is a space separated list of templates
+        a specific event is sensitive to
+        windowLength(int): window length to evaluate events in (seconds)
 
     Returns:
         retval(rdd tuple(tuple(eventId,windowID),tuple(DistributedLogLines)))
