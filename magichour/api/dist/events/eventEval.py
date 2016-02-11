@@ -1,5 +1,5 @@
 from collections import defaultdict
-
+from magichour.api.local.util.namedtuples import TimedEvent
 
 def eventWindow(line, windowLength):
     '''
@@ -12,7 +12,7 @@ def eventWindow(line, windowLength):
     Retval:
         retval(tuple(window,DistributedLogLine))
     '''
-    key = (line.supportId, int(line.ts/windowLength))
+    key = (line.templateId, int(line.ts/windowLength))
     value = line
     return (key, value)
 
@@ -96,8 +96,8 @@ def makeEventsFromLines(line, e2t):
         tempDict.clear()
         tempSet.clear()
         for inner in range(outer, len(tList)):
-            tempDict[tList[inner].supportId] = tList[inner]
-            tempSet.add(tList[inner].supportId)
+            tempDict[tList[inner].templateId] = tList[inner]
+            tempSet.add(tList[inner].templateId)
             if lookingFor == tempSet:
                 # print "FOUND:",tempSet
                 temp = tuple(tempDict.itervalues())
@@ -105,17 +105,22 @@ def makeEventsFromLines(line, e2t):
                 outSet.add(output)
                 break
     # print "returning:",outSet
-    return list(outSet)
+
+    output_vals = []
+    for key,event_tuple in outSet:
+        output_val = TimedEvent(event_id=key[0], timed_templates=list(event_tuple))
+        output_vals.append(output_val)
+    return output_vals
 
 
-def makeLookupDicts(eventdef):
+def makeLookupDicts(eventDefs):
     '''
     make the lookup dictionaries used for translating
     between templates and events which care about specific
     templates
 
     Args:
-        eventdef(list(str)): list of templates which go together
+        eventDefs(list(Event)): list of templates which go together
 
     Returns:
         retval(tuple(defaultdict(set),defaultdict(set))):
@@ -123,22 +128,19 @@ def makeLookupDicts(eventdef):
     '''
     template2event = defaultdict(set)
     event2template = defaultdict(set)
-
-    for n, l in enumerate(eventdef):
-        # print '******',n,l
-        items = l.rstrip().lstrip().split()
-        for i in items:
-            # print n,i
-            event2template[int(n)].add(int(i))
+    for eventDef in eventDefs:
+        items = eventDef.template_ids
+        for item in items:
+            event2template[eventDef.id].add(int(item))
 
     for k, v in event2template.iteritems():
         for item in v:
-            template2event[int(item)].add(int(k))
+            template2event[item].add(int(k))
 
     return(template2event, event2template)
 
 
-def eventEvalRDD(sc, rddlogLines, templateURI,
+def eventEvalRDD(sc, rddlogLines, eventList,
               windowLength=120):
     '''
     Performs the event generation from incomming DistributedLogLine rdd
@@ -147,19 +149,15 @@ def eventEvalRDD(sc, rddlogLines, templateURI,
         sc(sparkContext):
         rddlogLines(DistributedLogLines): rdd of DistributedLogLines created
         by earlier processing 
-        templateURI(str): URI to the file describing the event templates 
-        each line of the file  is a space separated list of templates
-        a specific event is sensitive to
+        eventList(list(Event)): List of event definitions
         windowLength(int): window length to evaluate events in (seconds)
 
     Returns:
         retval(rdd tuple(tuple(eventId,windowID),tuple(DistributedLogLines)))
 
     '''
-    temp = sc.textFile(templateURI)
-    eventdef = temp.collect()
 
-    t2e, e2t = makeLookupDicts(eventdef)
+    t2e, e2t = makeLookupDicts(eventList)
     t2e_B = sc.broadcast(t2e)
     e2t_B = sc.broadcast(e2t)
 
