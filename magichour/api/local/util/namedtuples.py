@@ -5,7 +5,7 @@ LogLine = namedtuple('LogLine', ['id', 'ts', 'text', 'processed', 'replacements'
 
 
 '''
-DistributedLine
+DistributedLine - moves information between various stages of algorithms
 
 ts - float(timestamp)
 text -original message
@@ -24,9 +24,27 @@ DistributedLogLine = namedtuple('DLL',
                               'processed', 'pDict',
                               'template', 'templateId', 'tDict'])
 
+'''
+DistributedTransformLine - used for storing how to perform preProcessing
+
+id - int: id of the transform
+type - str: enum of how to handle the transform
+name - str: name to use when replacing information
+transform - str: how to perform the replacement given the type
+compiled - compiled regex: compiled regex if applicable to the transform
+'''
+
 DistributedTransformLine = namedtuple('DTrL',
                                   ['id', 'type', 'name',
                                    'transform', 'compiled'])
+
+'''
+DistributedTemplateLine - helps determind which templates match a logline
+
+id - int: id of the template
+template - compiled regex: compiled regex to match a template
+skipWords - list: list of skipwords found in the regex
+'''
 
 DistributedTemplateLine = namedtuple('DTeL', ['id', 'template', 'skipWords'])
 

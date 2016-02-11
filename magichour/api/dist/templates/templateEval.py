@@ -163,7 +163,7 @@ def matchLine(line, templates):
             return DistributedLogLine(line.ts,
                                       line.text,
                                       line.processed,
-                                      line.dictionary,
+                                      line.pDict,
                                       templateLine.template.pattern,
                                       templateLine.id,
                                       templateDict)
@@ -172,7 +172,7 @@ def matchLine(line, templates):
     return DistributedLogLine(line.ts,
                               line.text,
                               line.processed,
-                              line.dictionary,
+                              line.pDict,
                               None,
                               -1,
                               templateDict)
