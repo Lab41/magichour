@@ -184,7 +184,7 @@ def matchTemplates(sc, templateFile, rddLogLine):
 
     Args:
         sc(sparkContext):
-        templateFile(string): URI to the template file
+        templateFile(string): URI to the template file (text file with one template per line)
         rddLogLine(RDD(LogLine)): RDD of LogLines to assign
     Returns:
         retval(RDD(LogLine)): additional fields of the LogLine named tuple
