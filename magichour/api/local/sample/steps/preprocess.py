@@ -36,7 +36,8 @@ def _transformed_lines_to_list_substep(transformed_lines):
 def preprocess_step(log_file, transforms_file=None, *args, **kwargs):
     lines = read_lines_substep(log_file, *args, **kwargs)
     if transforms_file:
-        transformed_lines = transform_lines_substep(lines, transforms_file)
+        transforms = read_transforms_substep(transforms_file)
+        transformed_lines = transform_lines_substep(lines, transforms)
     elif kwargs.get('type_template_auditd'):
         transformed_lines = lines
     else:

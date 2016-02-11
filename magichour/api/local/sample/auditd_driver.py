@@ -37,7 +37,8 @@ def run_auditd_pipeline(options):
     for log_file in glob.glob(os.path.join(options.data_dir, '*')):
         loglines.extend(preprocess_step(log_file, transforms_file=options.transforms_file, **auditd_kwargs))
 
-    (countLines, countUniqueLines, percentUniqueLines, uniqLines) = cardinality_transformed_lines(loglines, options.verbose)
+    # count cardinality; print unique lines if verbose and there are actually transforms to apply
+    (countLines, countUniqueLines, percentUniqueLines, uniqLines) = cardinality_transformed_lines(loglines, options.verbose and options.transforms_file)
 
     if options.save_intermediate:
         transformed_lines_file = os.path.join(options.pickle_cache_dir, "transformed_lines.pickle")
