@@ -1,0 +1,4 @@
+#id,type,NAME,transform
+00,REPLACE,STRING,=("[^"]*")
+01,REPLACE,OPVALUE,op=(\S+(?: \S+)*?) \w+=
+02,REPLACE,VALUE,(?<!type)=([^']\S*)

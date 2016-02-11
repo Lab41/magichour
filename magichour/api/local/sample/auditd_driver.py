@@ -1,12 +1,14 @@
 import os
 import glob
 
+from magichour.api.local.modelgen.preprocess import cardinality_transformed_lines
+
 from magichour.api.local.sample.steps.evalapply import evalapply_step
 from magichour.api.local.sample.steps.evalwindow import evalwindow_step
 from magichour.api.local.sample.steps.event import event_step
 from magichour.api.local.sample.steps.genapply import genapply_step
 from magichour.api.local.sample.steps.genwindow import genwindow_step
-from magichour.api.local.sample.steps.preprocess import preprocess_step, preprocess_auditd_step
+from magichour.api.local.sample.steps.preprocess import preprocess_step
 from magichour.api.local.sample.steps.template import template_step
 
 from magichour.api.local.util.log import get_logger, log_time
@@ -28,19 +30,37 @@ def get_auditd_templates(auditd_templates_file):
 
 @log_time
 def run_auditd_pipeline(options):
-    # Read in auditd template definitions
-    auditd_templates = get_auditd_templates(options.auditd_templates_file)
-
-    # Skip traditional preprocessing for auditd
+    auditd_kwargs = {'gettime_auditd': True, 
+                     'type_template_auditd': not options.transforms_file}  # use type_templates if no transforms file
+    
     loglines = []
     for log_file in glob.glob(os.path.join(options.data_dir, '*')):
-        loglines.extend(preprocess_auditd_step(log_file))
+        loglines.extend(preprocess_step(log_file, transforms_file=options.transforms_file, **auditd_kwargs))
+
+    (countLines, countUniqueLines, percentUniqueLines, uniqLines) = cardinality_transformed_lines(loglines, options.verbose)
+
     if options.save_intermediate:
         transformed_lines_file = os.path.join(options.pickle_cache_dir, "transformed_lines.pickle")
         write_pickle_file(loglines, transformed_lines_file)
 
-    auditd_genapply_kwargs = {'process_auditd': True}
-    timed_templates = genapply_step(loglines, auditd_templates, **auditd_genapply_kwargs)
+    if auditd_kwargs.get('type_template_auditd'):
+        # Read in auditd template definitions
+        templates = get_auditd_templates(options.auditd_templates_file)
+    else:
+        # Generate templates
+        if options.template_gen =='logcluster':
+            logcluster_kwargs = {"support": "50"}
+            templates = template_step(loglines, "logcluster", **logcluster_kwargs)
+        elif options.template_gen =='stringmatch':
+            templates = template_step(loglines, "stringmatch") # WIP
+        else:
+            raise NotImplementedError('%s Template generation method not implemented'%options.template_gen)
+
+        if options.save_intermediate:
+            templates_file = os.path.join(options.pickle_cache_dir, "templates.pickle")
+            write_pickle_file(templates, templates_file)
+
+    timed_templates = genapply_step(loglines, templates, **auditd_kwargs)
     if options.save_intermediate:
         timed_templates_file = os.path.join(options.pickle_cache_dir, "timed_templates.pickle")
         write_pickle_file(timed_templates, timed_templates_file)
@@ -64,10 +84,14 @@ def run_auditd_pipeline(options):
         events_file = os.path.join(options.pickle_cache_dir, "events.pickle")
         write_pickle_file(gen_events, events_file)
 
-
     if options.verbose:
         # Print templates
-        template_d = {template_id : template for (template_id, template) in [(auditd_templates[template], template) for template in auditd_templates]}
+        if auditd_kwargs.get('type_template_auditd'):
+            template_list = [(templates[template], template) for template in templates]
+        else:
+            template_list = [(template.id, template) for template in templates]
+            
+        template_d = {template_id : template for (template_id, template) in template_list}
         e = []
         for event in gen_events:
             ts = []
@@ -96,7 +120,9 @@ def main():
     from argparse import ArgumentParser
     parser = ArgumentParser()
     parser.add_argument('-d', '--data-dir', dest="data_dir", help="Input log directory")
-    parser.add_argument('--auditd_templates_file', dest="auditd_templates_file", help="CSV Mapping Auditd types to ids")
+    parser.add_argument('-t', '--transforms-file', dest="transforms_file", help="Transforms mapping file", default=None)
+    parser.add_argument('--auditd_templates_file', dest="auditd_templates_file", help="CSV Mapping Auditd types to ids", default=None)
+    parser.add_argument('--template-gen', choices=['logcluster', 'stringmatch'])
     parser.add_argument('--event-gen', choices=['fp-growth', 'paris'])
 
     control_args =  parser.add_argument_group('Control Parameters')
