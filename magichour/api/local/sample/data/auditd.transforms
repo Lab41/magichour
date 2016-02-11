@@ -1,0 +1,7 @@
+#id,type,NAME,transform
+00,REPLACE,IPADDR,((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))
+01,REPLACE,FLOAT,([0-9]+\.[0-9]+)(?:[^0-9a-zA-Z_.]+|$)
+02,REPLACE,FINGERPRINT,(([0-9a-fA-F]{2}:){15}[0-9a-fA-F]{2})
+03,REPLACE,ETHHEX,(?:unit|dev)=(?:ifup@)?veth([0-9a-fA-F]{6,})(?:\W|$)
+04,REPLACE,HEX,(?:a\d+|arch|cmd|proctitle)=([0-9a-fA-F]+)(?:\W|$)
+05,REPLACE,INT,[:=](?:(?:/dev/)?(?:pts/?|tty/?))?(\d+)(?:\W|$)
