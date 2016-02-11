@@ -5,3 +5,4 @@
 **/.ipynb_checkpoints
 *.pickle
 docs/_*
+build
