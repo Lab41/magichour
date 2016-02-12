@@ -158,6 +158,8 @@ def cardinality_transformed_lines(lines, verbose=False):
             uniqLines: dictionary[uniq_line_text] = number of occurrences of uniq_line
     """
     from collections import defaultdict
+    from pprint import pformat
+
     uniqLines = defaultdict(int)
     for logline in lines:
         uniqLines[logline.text] += 1
@@ -167,7 +169,9 @@ def cardinality_transformed_lines(lines, verbose=False):
     logger.info("Transform cardinality: (%d / %d) = %f%%; (uniqueTransformedLines / totalLines) = %%uniqueTransformedLines" % (countUniqueLines, countLines, percentUniqueLines))
     if verbose:
         sorted_uniqLines = [(uniqLines[text], text) for text in sorted(uniqLines.keys())]
+        e = []
         for occurrences, text in sorted_uniqLines:
-            print "%10d: %s" % (occurrences, text)
-
+            e.append("%10d: %s" % (occurrences, text))
+        logger.info("Transformed Lines: %d" % countUniqueLines)
+        logger.info("\n"+pformat(e))
     return (countLines, countUniqueLines, percentUniqueLines, uniqLines)
