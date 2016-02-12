@@ -16,6 +16,27 @@ def one_to_others_iter(values):
         yield (cur_value, others)
 
 def silhouette_coefficient(val, same_cluster_vals, closest_cluster_vals):
+    """
+    The Silhouette Coefficient is defined for each sample and is composed of two scores:
+        a: The mean distance between a sample and all other points in the same class.
+        b: The mean distance between a sample and all other points in the next nearest cluster.
+    The Silhouette Coefficient s for a single sample is then given as:
+        s = b - a / max(a, b)
+
+    The score is bounded between -1 for incorrect clustering and +1 for highly dense clustering.
+    Scores around zero indicate overlapping clusters.
+    The score is higher when clusters are dense and well separated, which relates to a standard concept of a cluster.
+
+    See http://scikit-learn.org/stable/modules/clustering.html#silhouette-coefficient for more details.
+
+    Args:
+        val: the value for which to calculate the silhouette coefficient
+        same_cluster_vals: list of other values in the same cluster as val
+        closest_cluster_vals: list of values in the closest other cluster to val
+
+    Returns:
+        s: the silhouette coefficient for val
+    """
     a = mean_distance(val, same_cluster_vals)
     b = mean_distance(val, closest_cluster_vals)
     s = (b - a) / max(a, b)
