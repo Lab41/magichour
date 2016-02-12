@@ -60,7 +60,7 @@ def run_auditd_pipeline(options):
     else:
         # Generate templates
         if options.template_gen =='logcluster':
-            logcluster_kwargs = {"support": "50"}
+            logcluster_kwargs = {"support": str(options.support)}
             templates = template_step(loglines, "logcluster", **logcluster_kwargs)
         elif options.template_gen =='stringmatch':
             templates = template_step(loglines, "stringmatch") # WIP
@@ -106,7 +106,7 @@ def run_auditd_pipeline(options):
         template_d = {template_id : template for (template_id, template) in template_list}
         e = []
         for event in gen_events:
-            ts = []
+            ts = ["event_id: %s" % event.id]
             for template_id in event.template_ids:
                 ts.append("%s: %s" % (template_id, template_d[template_id]))
             e.append(ts)
@@ -138,6 +138,9 @@ def run_auditd_pipeline(options):
 
 def main():
     from argparse import ArgumentParser
+    import sys
+    
+    logger.info('args: %s', ' '.join(sys.argv[1:]))
     parser = ArgumentParser()
     parser.add_argument('-f', '--data-file', dest="data_file", help="Input log file")
     parser.add_argument('-d', '--data-dir', dest="data_dir", help="Input log directory")
@@ -148,6 +151,7 @@ def main():
 
     control_args =  parser.add_argument_group('Control Parameters')
     control_args.add_argument('-w', '--window_size', default=60, help='Window size to use (seconds)')
+    control_args.add_argument('-s', '--support', default=50, help='Logcluster support (# occurrences required for Template)')
 
     optional_args =  parser.add_argument_group('Debug Arguments')
     optional_args.add_argument('-v', '--verbose', dest='verbose', default=False, action="count",
