@@ -19,7 +19,7 @@ preprocessed_log_rdd = read_logs_from_uri(sc,
 templates = gen_tamplate_from_logs(sc, raw_log_rdd, transformURI, support)
 
 # Persist to disk for subsequent Analysis
-templates.pickleFile(template_output_URI)
+sc.parallelize(templates, 1).pickleFile(template_output_URI)
 
 for i in templates:
     print ' '.join(i)

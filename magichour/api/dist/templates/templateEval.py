@@ -65,39 +65,36 @@ def getWordSkipNames(s):
     return retVal
 
 
-def readTemplates(sc, templateFile):
+def readTemplates(templateList):
     '''
     returns a list of regex for replacement processing
 
     Args:
-        sc(sparkContext): spark context
-        templateFile(string): uri to the transform file in HDFS
+        templateList(list(string)): List of templates to transform into distributed log lines
 
     Returns:
         retval(list(TemplateLine)) list of template lines
     '''
 
-    # map the templateFile
-    templates = sc.textFile(templateFile)
 
-    templateRDD = templates.collect()
-
+    match_to_raw_str = dict()
     matches = list()
-
-    for t in templateRDD:
+    for t in templateList:
         stripped = r'' + t.strip().rstrip()
         escaped = re.escape(stripped)
         replaced = unescapeSkips(escaped)
         matches.append(replaced)
+        match_to_raw_str[replaced] = t.strip()
 
     matches = rankMatches(matches)
 
     templateLines = list()
     for index, m in enumerate(matches):
         # match end of line too
-        t = DistributedTemplateLine(index,
-                                    re.compile(m + '$'),
-                                    getWordSkipNames(re.compile(m)))
+        t = DistributedTemplateLine(id=index,
+                                    template=re.compile(m + '$'),
+                                    skipWords=getWordSkipNames(re.compile(m)),
+                                    raw_str=match_to_raw_str[m])
         templateLines.append(t)
 
     return templateLines
