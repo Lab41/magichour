@@ -40,7 +40,7 @@ def run_auditd_pipeline(options):
     if options.data_file:
         log_files.append(options.data_file)
     if options.data_dir:
-        log_files.append(glob.glob(os.path.join(options.data_dir, '*')))
+        log_files.extend(glob.glob(os.path.join(options.data_dir, '*')))
     if not log_files or (not options.data_file and not options.data_dir):
         raise RuntimeError('No input specified/available')
     

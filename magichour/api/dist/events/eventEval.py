@@ -144,7 +144,7 @@ def makeLookupDicts(eventDefs):
 def eventEvalRDD(sc, rddlogLines, eventList,
                  windowLength=120):
     '''
-    Performs the event generation from incomming DistributedLogLine rdd
+    Performs the event generation from incoming DistributedLogLine rdd
 
     Args:
         sc(sparkContext):
