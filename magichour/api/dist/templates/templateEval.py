@@ -5,6 +5,7 @@ from magichour.api.local.util.namedtuples import DistributedTemplateLine
 
 from collections import defaultdict
 import re
+import json
 
 
 def badWay(r1, r2):
@@ -163,19 +164,19 @@ def matchLine(line, templates):
             return DistributedLogLine(line.ts,
                                       line.text,
                                       line.processed,
-                                      line.pDict,
+                                      json.dumps(line.pDict),
                                       templateLine.template.pattern,
                                       templateLine.id,
-                                      templateDict)
+                                      json.dumps(templateDict))
 
     # could not find a template match
     return DistributedLogLine(line.ts,
                               line.text,
                               line.processed,
-                              line.pDict,
+                              json.dumps(line.pDict),
                               None,
                               -1,
-                              templateDict)
+                              json.dumps(templateDict))
 
 
 def matchTemplates(sc, templates, rddLogLine):
