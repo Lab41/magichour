@@ -73,7 +73,7 @@ def apply_templates(templates, loglines, mp=True, type_template_auditd=False, **
 
 #####
 
-
+"""
 def count_templates(window):
     c = Counter()
     for timed_template in window.timed_templates:
@@ -108,7 +108,7 @@ def apply_events_old(events, windows, mp=False):
                 timed_events.append(timed_event)
     return timed_events
 
-
+"""
 #####
 
 from collections import defaultdict
