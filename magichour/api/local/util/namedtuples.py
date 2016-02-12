@@ -69,3 +69,24 @@ Event = namedtuple('Event', ['id', 'template_ids'])
 
 
 TimedEvent = namedtuple('TimedEvent', ['event_id', 'timed_templates'])
+
+
+def strTimedEvent(timed_event):
+    from datetime import datetime
+
+    tt = timed_event.timed_templates
+    L = len(tt)
+    if L == 0:
+        return ""
+    t_start = tt[0].ts
+    t_end = tt[-1].ts
+    t_median =  tt[L/2].ts if L%2 > 0 else (tt[L/2-1].ts + tt[L/2].ts)/2.0
+    duration = t_end - t_start
+    median_offset = t_median - t_start         
+    dt_start = datetime.utcfromtimestamp(t_start)
+    dt_end = datetime.utcfromtimestamp(t_end)
+    dt_median = datetime.utcfromtimestamp(t_median)
+    dt_duration = dt_end - dt_start
+    dt_median_offset = dt_median - dt_start
+
+    return "TimedEvent: event_id=%s, start=%14.3f, end=%14.3f, median=%14.3f, duration=%10.3f, median_offset=%10.3f; s=%s, e=%s, m=%s, d=%s, mo=%s" % (timed_event.event_id, t_start, t_end, t_median, duration, median_offset, dt_start, dt_end, dt_median, dt_duration, dt_median_offset)         

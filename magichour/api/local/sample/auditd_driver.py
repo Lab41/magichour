@@ -12,6 +12,7 @@ from magichour.api.local.sample.steps.preprocess import preprocess_step
 from magichour.api.local.sample.steps.template import template_step
 
 from magichour.api.local.util.log import get_logger, log_time
+from magichour.api.local.util.namedtuples import strTimedEvent
 from magichour.api.local.util.pickl import read_pickle_file, write_pickle_file
 
 logger = get_logger(__name__)
@@ -73,7 +74,7 @@ def run_auditd_pipeline(options):
 
 
     if options.event_gen =='fp-growth':
-        fp_growth_kwargs = {"min_support": 0.03, "iterations": -1} #only return 10000 itemsets, iterations = -1 will return all
+        fp_growth_kwargs = {"min_support": 0.03, "iterations": -1, "tfidf_threshold":0} #only return 10000 itemsets, iterations = -1 will return all
         gen_events = event_step(modelgen_windows, "fp_growth", **fp_growth_kwargs)
     elif options.event_gen == 'paris':
         paris_kwargs = {"r_slack": 0, "num_iterations":3}
@@ -100,7 +101,7 @@ def run_auditd_pipeline(options):
                 ts.append("%s: %s" % (template_id, template_d[template_id]))
             e.append(ts)
         from pprint import pformat
-        logger.info("Discovered events:")
+        logger.info("Discovered events: %d" % len(gen_events))
         logger.info("\n"+pformat(e))
 
     """
@@ -114,6 +115,15 @@ def run_auditd_pipeline(options):
     if options.save_intermediate:
         timed_events_file = os.path.join(options.pickle_cache_dir, "timed_events.pickle")
         write_pickle_file(timed_events, timed_events_file)
+
+    if options.verbose:
+        # Print timed event summary
+        e = []
+        for event in timed_events:
+            s = strTimedEvent(event)
+            e.append(s)
+        logger.info("Timed events: %d" % len(timed_events))
+        logger.info("\n"+pformat(e))
 
     logger.info("Done!")
 
