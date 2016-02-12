@@ -94,7 +94,7 @@ def readTemplates(templateList):
         t = DistributedTemplateLine(id=index,
                                     template=re.compile(m + '$'),
                                     skipWords=getWordSkipNames(re.compile(m)),
-                                    raw_str=match_to_raw_str[m])
+                                    rawStr=match_to_raw_str[m])
         templateLines.append(t)
 
     return templateLines

@@ -44,9 +44,10 @@ DistributedTemplateLine - helps determind which templates match a logline
 id - int: id of the template
 template - compiled regex: compiled regex to match a template
 skipWords - list: list of skipwords found in the regex
+rawStr - str: The raw string used to generate the tempalte/skipWords
 '''
 
-DistributedTemplateLine = namedtuple('DTeL', ['id', 'template', 'skipWords'])
+DistributedTemplateLine = namedtuple('DTeL', ['id', 'template', 'skipWords', 'rawStr'])
 
 Transform = namedtuple('Transform', ['id', 'type', 'name', 'transform', 'compiled'])
 
