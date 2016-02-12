@@ -108,7 +108,7 @@ def log_cluster(sc, log_lines, support):
          support(int): Threshold # of occurrences before a pattern can be included
 
     Returns:
-        list[list[str]]: Returns a list of pattern strings (where the pattern is a list of strings) for the log lines
+        list[DistributedTemplateLine]: Returns a list of DistributedTemplateLine objects defining the templates
     """
     frequent_word_dict = log_lines.flatMap(parse_words)\
                                  .reduceByKey(lambda x,y: x+y)\
@@ -125,5 +125,5 @@ def log_cluster(sc, log_lines, support):
 
     templates = [' '.join(cluster) for cluster in clusters]
 
-    transformed_templates = templates
+    transformed_templates = readTemplates(templates)
     return transformed_templates

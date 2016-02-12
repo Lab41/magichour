@@ -178,13 +178,13 @@ def matchLine(line, templates):
                               templateDict)
 
 
-def matchTemplates(sc, templateFile, rddLogLine):
+def matchTemplates(sc, templates, rddLogLine):
     '''
     assign a line to a template, keeping track of replacements as it goes
 
     Args:
         sc(sparkContext):
-        templateFile(string): URI to the template file (text file with one template per line)
+        templates(list(DistributedTemplateLine)): List of DistributedTemplateLine objects
         rddLogLine(RDD(LogLine)): RDD of LogLines to assign
     Returns:
         retval(RDD(LogLine)): additional fields of the LogLine named tuple
@@ -192,12 +192,9 @@ def matchTemplates(sc, templateFile, rddLogLine):
                               template,templateId,templateDict
     '''
 
-    templates = readTemplates(sc, templateFile)
     templateBroadcast = sc.broadcast(templates)
     return rddLogLine.map(lambda line: matchLine(line, templateBroadcast))
 
 
-def templateEvalRDD(sc, logInURI, transformURI, templateURI):
-    rddLogs = readLogRDD(sc, logInURI)
-    pre_processedLogs = preProcessRDD(sc, transformURI, rddLogs)
-    return matchTemplates(sc, templateURI, pre_processedLogs)
+def templateEvalRDD(sc, templates, rddLogLine):
+    return matchTemplates(sc, templates, rddLogLine)

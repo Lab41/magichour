@@ -1,7 +1,7 @@
 sc.addPyFile('magichour.zip')
 
-from magichour.api.dist.templates.templateGen import gen_tamplate_from_logs
-from magichour.api.dist.preprocess.readLog import readLogRDD
+from magichour.api.dist.templates.templateGen import gen_tamplate_from_logs, read_logs_from_uri
+
 
 transforms_URI = 'hdfs://namenode/magichour/simpleTrans'
 raw_log_URI = 'hdfs://namenode/magichour/tbird.500k.gz'
@@ -16,7 +16,7 @@ preprocessed_log_rdd = read_logs_from_uri(sc,
                                           transforms_URI=transforms_URI).cache()
 
 # Generate Tempaltes
-templates = gen_tamplate_from_logs(sc, raw_log_rdd, transformURI, support)
+templates = gen_tamplate_from_logs(sc, preprocessed_log_rdd, support)
 
 # Persist to disk for subsequent Analysis
 sc.parallelize(templates, 1).pickleFile(template_output_URI)
