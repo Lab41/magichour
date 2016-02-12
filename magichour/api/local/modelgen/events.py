@@ -16,7 +16,7 @@ logger = get_logger(__name__)
 
 def paris(windows, r_slack, num_iterations, tau):
     ws = [set([template_id for template_id in w.template_ids]) for w in windows]
-    A, R = paris_lib.PARIS(ws, r_slack, num_iterations=num_iterations, tau)
+    A, R = paris_lib.PARIS(ws, r_slack, num_iterations=num_iterations, tau=tau)
 
     itemsets = [frozenset(a) for a in A]
     ret = [Event(id=str(uuid.uuid4()), template_ids=template_ids) for template_ids in itemsets]
