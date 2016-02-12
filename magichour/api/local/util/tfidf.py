@@ -23,7 +23,7 @@ def tf_idf_filter(elemss, threshold):
         new_elems = []
         for elem in elems:
             score = idf(elem, elemss) # tf_idf(elem, elems, elemss)
-            if score > threshold:
+            if score >= threshold:
                 new_elems.append(elem)
         new_elemss.append(new_elems)
     return new_elemss
