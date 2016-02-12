@@ -35,8 +35,8 @@ def windowRDD(sc, logLineRDD, windowLen, withCounts=False):
     if withCounts:
         win = logLineRDD.map(lambda line: collide(line, windowLen))
         return win.groupByKey()\
-                  .map(lambda (x, y): list(Counter(y).iteritems()))
+                  .map(lambda x_y: list(Counter(x_y[1]).iteritems()))
     else:
         win = logLineRDD.map(lambda line: collide(line, windowLen))
         return win.groupByKey()\
-                  .map(lambda (x, y): list(set(y)))
+                  .map(lambda x_y1: list(set(x_y1[1])))

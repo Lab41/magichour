@@ -35,10 +35,10 @@ def get_longest_sets_possible(input_sets):
 
 
 def event_gen_fp_growth(sc, log_lines,
-                minSupport=0.2,
-                numPartitions=10,
-                windowLen=120,
-                remove_junk_drawer=True):
+                        minSupport=0.2,
+                        numPartitions=10,
+                        windowLen=120,
+                        remove_junk_drawer=True):
     retval = list()
     windowed = windowRDD(sc, log_lines, windowLen, False)
     temp = FPGrowthRDD(windowed, minSupport, numPartitions).collect()
@@ -47,19 +47,33 @@ def event_gen_fp_growth(sc, log_lines,
     pruned_items = list(get_longest_sets_possible(items))
     if remove_junk_drawer:
         for item_id, item in enumerate(pruned_items):
-            event = Event(id=item_id, template_ids=[i for i in sorted(item, key=int) if i != -1])
+            event = Event(
+                id=item_id, template_ids=[
+                    i for i in sorted(
+                        item, key=int) if i != -1])
             retval.append(event)
     else:
         for item_id, item in enumerate(pruned_items):
-            event = Event(id=item_id, template_ids=[i for i in sorted(item, key=int)])
+            event = Event(
+                id=item_id, template_ids=[
+                    i for i in sorted(
+                        item, key=int)])
             retval.append(event)
 
     return retval
 
+
 def event_gen_word2vec(sc, log_lines, window_size=60):
-    D = log_lines.map(lambda logline: (int(logline.ts/window_size), (logline.ts, logline.templateId)))\
-                .groupByKey()\
-                .map(lambda (window,loglines): [str(templateId) for (ts,templateId) in sorted(loglines)])
+    D = log_lines.map(
+        lambda logline: (
+            int(logline.ts / window_size),
+            (logline.ts,
+             logline.templateId))) .groupByKey() .map(
+        lambda window_loglines: [
+            str(templateId) for (
+                ts,
+                templateId) in sorted(
+                window_loglines[1])])
 
     # Run Word2Vec
     model = Word2Vec().setVectorSize(16).setSeed(42).fit(D)
@@ -74,7 +88,8 @@ def event_gen_word2vec(sc, log_lines, window_size=60):
 
     # Clsutering
     output_events = defaultdict(list)
-    for i, val in enumerate(hdbscan.HDBSCAN(min_cluster_size=2).fit_predict(vectors)):
+    for i, val in enumerate(hdbscan.HDBSCAN(
+            min_cluster_size=2).fit_predict(vectors)):
         output_events[val].append(labels[i])
 
     # Create event objects

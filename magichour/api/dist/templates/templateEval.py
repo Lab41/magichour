@@ -22,7 +22,7 @@ def badWay(r1, r2):
     Repeat the steps above to see if it's possible to eliminate r
     '''
 
-    return(len(r2)-len(r1))
+    return(len(r2) - len(r1))
 
 
 def rankMatches(m):
@@ -58,7 +58,8 @@ def getWordSkipNames(s):
     if matchObj:
         for m in matchObj:
             vals = m.groups()
-            fpattern = r'((?:\ {0,1}\S+){%i,%i})' % (int(vals[0]), int(vals[1]))
+            fpattern = r'((?:\ {0,1}\S+){%i,%i})' % (
+                int(vals[0]), int(vals[1]))
             retVal.append(fpattern)
 
     return retVal
@@ -84,7 +85,7 @@ def readTemplates(sc, templateFile):
     matches = list()
 
     for t in templateRDD:
-        stripped = r''+t.strip().rstrip()
+        stripped = r'' + t.strip().rstrip()
         escaped = re.escape(stripped)
         replaced = unescapeSkips(escaped)
         matches.append(replaced)
@@ -126,8 +127,8 @@ def unescapeSkips(s):
                                                       int(m.groups()[1]))
 
             # the r is very important
-            newFound = r'\\\(\\:\\\?\\ S\\\+\\\)\\\{%i\\,%i\\\}' % (int(m.groups()[0]),
-                                                                    int(m.groups()[1]))
+            newFound = r'\\\(\\:\\\?\\ S\\\+\\\)\\\{%i\\,%i\\\}' % (
+                int(m.groups()[0]), int(m.groups()[1]))
             b = re.sub(newFound, newString, b)
 
         return b
@@ -158,7 +159,9 @@ def matchLine(line, templates):
         # TODO double check that the defaultdict is working as expected
         if skipFound:
             for i in range(len(templateLine.skipWords)):
-                    templateDict[templateLine.skipWords[i]].append(skipFound.groups()[i])
+                templateDict[
+                    templateLine.skipWords[i]].append(
+                    skipFound.groups()[i])
 
             return DistributedLogLine(line.ts,
                                       line.text,
