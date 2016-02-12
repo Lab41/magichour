@@ -63,7 +63,7 @@ def read_log_file(file_path, ts_start_index, ts_end_index, ts_format=None, skip_
 
 def read_auditd_file(file_path, **kwargs):
     for line in _read_lines(file_path):
-        ts = float(re.search('audit\(([0-9]+.[0-9]+)', line).group(1))
+        ts = float(re.search(r'audit\(([0-9]+\.[0-9]+)', line).group(1))
         yield LogLine(str(uuid.uuid4()), ts, line.rstrip(), None, None, None)
 
 
