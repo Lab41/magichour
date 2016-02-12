@@ -1,5 +1,7 @@
 from collections import namedtuple
 
+from magichour.api.dist.templates.templateEval import readTemplates
+
 def parse_words(log_lines):
     """
     Take single LogLine and split words for input to a word count
@@ -106,7 +108,7 @@ def log_cluster(sc, log_lines, support):
          support(int): Threshold # of occurrences before a pattern can be included
 
     Returns:
-        list[list[str]]: Returns a list of pattern strings (where the pattern is a list of strings) for the log lines
+        list[DistributedTemplateLine]: Returns a list of DistributedTemplateLine objects defining the templates
     """
     frequent_word_dict = log_lines.flatMap(parse_words)\
                                  .reduceByKey(lambda x,y: x+y)\
@@ -120,4 +122,8 @@ def log_cluster(sc, log_lines, support):
                   .filter(lambda (freq_word_pattern, pattern): len(pattern) > support)\
                   .map(collapse_patterns)\
                   .collect()
-    return [' '.join(cluster) for cluster in clusters]
+
+    templates = [' '.join(cluster) for cluster in clusters]
+
+    transformed_templates = readTemplates(templates)
+    return transformed_templates

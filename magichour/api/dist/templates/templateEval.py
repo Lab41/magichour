@@ -65,39 +65,36 @@ def getWordSkipNames(s):
     return retVal
 
 
-def readTemplates(sc, templateFile):
+def readTemplates(templateList):
     '''
     returns a list of regex for replacement processing
 
     Args:
-        sc(sparkContext): spark context
-        templateFile(string): uri to the transform file in HDFS
+        templateList(list(string)): List of templates to transform into distributed log lines
 
     Returns:
         retval(list(TemplateLine)) list of template lines
     '''
 
-    # map the templateFile
-    templates = sc.textFile(templateFile)
 
-    templateRDD = templates.collect()
-
+    match_to_raw_str = dict()
     matches = list()
-
-    for t in templateRDD:
+    for t in templateList:
         stripped = r'' + t.strip().rstrip()
         escaped = re.escape(stripped)
         replaced = unescapeSkips(escaped)
         matches.append(replaced)
+        match_to_raw_str[replaced] = t.strip()
 
     matches = rankMatches(matches)
 
     templateLines = list()
     for index, m in enumerate(matches):
         # match end of line too
-        t = DistributedTemplateLine(index,
-                                    re.compile(m + '$'),
-                                    getWordSkipNames(re.compile(m)))
+        t = DistributedTemplateLine(id=index,
+                                    template=re.compile(m + '$'),
+                                    skipWords=getWordSkipNames(re.compile(m)),
+                                    rawStr=match_to_raw_str[m])
         templateLines.append(t)
 
     return templateLines
@@ -181,13 +178,13 @@ def matchLine(line, templates):
                               templateDict)
 
 
-def matchTemplates(sc, templateFile, rddLogLine):
+def matchTemplates(sc, templates, rddLogLine):
     '''
     assign a line to a template, keeping track of replacements as it goes
 
     Args:
         sc(sparkContext):
-        templateFile(string): URI to the template file (text file with one template per line)
+        templates(list(DistributedTemplateLine)): List of DistributedTemplateLine objects
         rddLogLine(RDD(LogLine)): RDD of LogLines to assign
     Returns:
         retval(RDD(LogLine)): additional fields of the LogLine named tuple
@@ -195,12 +192,9 @@ def matchTemplates(sc, templateFile, rddLogLine):
                               template,templateId,templateDict
     '''
 
-    templates = readTemplates(sc, templateFile)
     templateBroadcast = sc.broadcast(templates)
     return rddLogLine.map(lambda line: matchLine(line, templateBroadcast))
 
 
-def templateEvalRDD(sc, logInURI, transformURI, templateURI):
-    rddLogs = readLogRDD(sc, logInURI)
-    pre_processedLogs = preProcessRDD(sc, transformURI, rddLogs)
-    return matchTemplates(sc, templateURI, pre_processedLogs)
+def templateEvalRDD(sc, templates, rddLogLine):
+    return matchTemplates(sc, templates, rddLogLine)
