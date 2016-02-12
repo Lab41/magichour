@@ -1,6 +1,7 @@
 from collections import defaultdict
 from magichour.api.local.util.namedtuples import TimedEvent
 
+
 def eventWindow(line, windowLength):
     '''
     alias events to the same key based off time
@@ -12,7 +13,7 @@ def eventWindow(line, windowLength):
     Retval:
         retval(tuple(window,DistributedLogLine))
     '''
-    key = (line.templateId, int(line.ts/windowLength))
+    key = (line.templateId, int(line.ts / windowLength))
     value = line
     return (key, value)
 
@@ -99,16 +100,16 @@ def makeEventsFromLines(line, e2t):
             tempDict[tList[inner].templateId] = tList[inner]
             tempSet.add(tList[inner].templateId)
             if lookingFor == tempSet:
-                # print "FOUND:",tempSet
                 temp = tuple(tempDict.itervalues())
                 output = (key, temp)
                 outSet.add(output)
                 break
-    # print "returning:",outSet
 
     output_vals = []
-    for key,event_tuple in outSet:
-        output_val = TimedEvent(event_id=key[0], timed_templates=list(event_tuple))
+    for key, event_tuple in outSet:
+        output_val = TimedEvent(
+            event_id=key[0],
+            timed_templates=list(event_tuple))
         output_vals.append(output_val)
     return output_vals
 
@@ -141,14 +142,14 @@ def makeLookupDicts(eventDefs):
 
 
 def eventEvalRDD(sc, rddlogLines, eventList,
-              windowLength=120):
+                 windowLength=120):
     '''
     Performs the event generation from incomming DistributedLogLine rdd
 
     Args:
         sc(sparkContext):
         rddlogLines(DistributedLogLines): rdd of DistributedLogLines created
-        by earlier processing 
+        by earlier processing
         eventList(list(Event)): List of event definitions
         windowLength(int): window length to evaluate events in (seconds)
 
