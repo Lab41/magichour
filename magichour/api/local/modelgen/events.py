@@ -42,7 +42,7 @@ def fp_growth(windows, min_support, iterations=0):
             itemsets.append(template_ids)
 
     logger.info("Removing subsets from fp_growth output...")
-    itemsets = get_nonsubsets(itemsets)
+    if len(itemsets): itemsets = get_nonsubsets(itemsets)
 
     ret = [Event(id=str(uuid.uuid4()), template_ids=template_ids) for template_ids in itemsets]
     return ret
