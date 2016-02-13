@@ -31,8 +31,8 @@ def get_auditd_templates(auditd_templates_file):
 
 @log_time
 def run_auditd_pipeline(options):
-    auditd_kwargs = {'gettime_auditd': True, 
-                     'type_template_auditd': not options.transforms_file}  # use type_templates if no transforms file
+    auditd_kwargs = {'gettime_auditd': options.auditd, 
+                     'type_template_auditd': not options.transforms_file}  # use auditd type_templates if no transforms file
     
     loglines = []
     
@@ -60,7 +60,7 @@ def run_auditd_pipeline(options):
     else:
         # Generate templates
         if options.template_gen =='logcluster':
-            logcluster_kwargs = {"support": str(options.support)}
+            logcluster_kwargs = {"support": str(options.template_support)}
             templates = template_step(loglines, "logcluster", **logcluster_kwargs)
         elif options.template_gen =='stringmatch':
             templates = template_step(loglines, "stringmatch") # WIP
@@ -83,10 +83,10 @@ def run_auditd_pipeline(options):
 
 
     if options.event_gen =='fp-growth':
-        fp_growth_kwargs = {"min_support": 0.03, "iterations": -1, "tfidf_threshold":0} #only return 10000 itemsets, iterations = -1 will return all
+        fp_growth_kwargs = {"min_support": options.min_support, "iterations": options.iterations, "tfidf_threshold":options.tfidf_threshold}
         gen_events = event_step(modelgen_windows, "fp_growth", **fp_growth_kwargs)
     elif options.event_gen == 'paris':
-        paris_kwargs = {"r_slack": 0, "num_iterations":3}
+        paris_kwargs = {"r_slack": options.r_slack, "num_iterations":options.num_iterations, "tau": options.tau}
         gen_events = event_step(modelgen_windows, "paris", **paris_kwargs) # WIP
     else:
         raise NotImplementedError('%s Not implemented'%options.event_gen)
@@ -145,13 +145,26 @@ def main():
     parser.add_argument('-f', '--data-file', dest="data_file", help="Input log file")
     parser.add_argument('-d', '--data-dir', dest="data_dir", help="Input log directory")
     parser.add_argument('-t', '--transforms-file', dest="transforms_file", help="Transforms mapping file")
-    parser.add_argument('--auditd_templates_file', dest="auditd_templates_file", help="CSV Mapping Auditd types to ids")
     parser.add_argument('--template-gen', choices=['logcluster', 'stringmatch'], required=True)
     parser.add_argument('--event-gen', choices=['fp-growth', 'paris'], required=True)
 
-    control_args =  parser.add_argument_group('Control Parameters')
+    source_args =  parser.add_argument_group('Source-specific Parameters')
+    source_args.add_argument('--auditd', default=True, help='Input is auditd logs', action="store_true") # for now, this just means read auditd-timestamps
+    source_args.add_argument('--auditd_templates_file', dest="auditd_templates_file", help="CSV Mapping Auditd types to ids (if not specified Templates will be auto-generated)")
+
+    control_args = parser.add_argument_group('General Control Parameters')
     control_args.add_argument('-w', '--window_size', default=60, help='Window size to use (seconds)')
-    control_args.add_argument('-s', '--support', default=50, help='Logcluster support (# occurrences required for Template)')
+    control_args.add_argument('--template-support', default=50, help='# occurrences required to generate a Template')
+
+    fp_growth_args = parser.add_argument_group('FP-Growth Control Parameters')
+    fp_growth_args.add_argument('--min_support', default=0.03, help='?')
+    fp_growth_args.add_argument('--iterations', default=-1, help='Number of itemsets to produce (-1 == all)')
+    fp_growth_args.add_argument('--tfidf_threshold', default=0, help='?')
+
+    paris_args = parser.add_argument_group('PARIS Control Parameters')
+    paris_args.add_argument('--r_slack', default=0, help='cost function parameter')
+    paris_args.add_argument('--num_iterations', default=3, help='?')
+    paris_args.add_argument('--tau', default=1.0, help='cost function parameter')
 
     optional_args =  parser.add_argument_group('Debug Arguments')
     optional_args.add_argument('-v', '--verbose', dest='verbose', default=False, action="count",
