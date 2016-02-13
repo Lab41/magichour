@@ -1,7 +1,7 @@
 import functools
 import re
 import multiprocessing
-from collections import Counter
+from collections import Counter, defaultdict
 
 from magichour.api.local.util.log import get_logger
 from magichour.api.local.util.namedtuples import TimedTemplate, TimedEvent
@@ -152,87 +152,30 @@ def jaccard_dicts(d1, d2, key_weight=0.0):
 def calc_overlap(candidate_timed_template, orig_timed_template, logline_dict):
     candidate = logline_dict[candidate_timed_template.logline_id].replacements
     orig = logline_dict[orig_timed_template.logline_id].replacements
-    """
-    for k, v_list in orig.replacements.iteritems():
-        orig_v_set = set(v_list)
-        if k in candidate.replacements:
-            cand_v_set = set(candidate.replacements[k])
-            for cand_v in cand_v_set:
-                if cand_v in orig_v_set:
-                    overlap += len(cand_v) * weight_per_char
-    return (jaccard_keys * key_weight) + (jaccard_vals * (1-key_weight))
-    """
     return jaccard_dicts(candidate, orig) if candidate and orig else 0
 
 
-"""
-def search_window(idx, event, timed_templates, logline_dict, window_size):
-    timed_template = timed_templates[idx]
-    results = [timed_template]
-    left_idx = idx-1
-    right_idx = idx+1
-
-    m = timed_template.ts % window_size
-    start_time = timed_template.ts - m
-    end_time = start_time + window_size
-
-    search_set = set(event.template_ids)
-    search_set.remove(timed_template.template_id)
-
-    while search_set and (left_idx >= 0 or right_idx <= len(timed_templates)):
-        candidates = defaultdict(list)
-        if left_idx >= 0:
-            l_timed_template = timed_templates[left_idx]
-            if l_timed_template.ts >= start_time and l_timed_template.template_id in search_set:
-                candidates[l_timed_template.template_id].append(l_timed_template)
-                #results.append(l_timed_template)
-                #search_set.remove(l_timed_template.template_id)
-        if right_idx < len(timed_templates):
-            r_timed_template = timed_templates[right_idx]
-            if r_timed_template.ts <= end_time and r_timed_template.template_id in search_set:
-                candidates[r_timed_template.template_id].append(r_timed_template)
-                #results.append(r_timed_template)
-                #search_set.remove(r_timed_template.template_id)
-
-        for template_id, candidate_list in candidates.iteritems():
-            if len(candidate_list) != 1:
-                candidate_list = sorted(candidate_list, reverse=True, key=lambda candidate: calc_overlap(candidate, timed_template, logline_dict))
-            winner = candidate_list[0]
-            logger.info(": %s", calc_overlap(winner, timed_template, logline_dict))
-            results.append(winner)
-            search_set.remove(winner.template_id)
-
-        left_idx -= 1
-        right_idx += 1
-
-    if search_set:
-        return None
-
-    return results
-"""
-
 def find_left_idx(idx, timed_templates, start_time):
-    left_idx = 0
-    for tt in reversed(timed_templates[:idx+1]):
-        if tt.ts < start_time:
-            break
-        left_idx += 1
-    return left_idx
+    while idx > 0:
+        if timed_templates[idx].ts < start_time:
+            return idx
+        idx -= 1
+    return idx
 
 def find_right_idx(idx, timed_templates, end_time):
-    right_idx = 0
-    for tt in timed_templates[idx:]:
-        if tt.ts > end_time:
-            break
-        right_idx += 1
-    return right_idx
+
+    while idx < len(timed_templates):
+        if timed_templates[idx].ts > end_time:
+            return idx
+        idx += 1
+    return idx
 
 def create_window(idx, timed_templates, window_size):
     timed_template = timed_templates[idx]
-    start_time = timed_template.ts - (timed_template.ts % window_size)
-    end_time = start_time + window_size
-    left_idx = idx - find_left_idx(idx, timed_templates, start_time)
-    right_idx = idx + find_right_idx(idx, timed_templates, end_time)
+    start_time = timed_template.ts - window_size
+    end_time = timed_template.ts + window_size
+    left_idx = find_left_idx(idx, timed_templates, start_time)
+    right_idx = find_right_idx(idx, timed_templates, end_time)
     return (left_idx, right_idx)
 
 def search_window(idx, event, timed_templates, logline_dict, window_size):
@@ -255,15 +198,19 @@ def search_window(idx, event, timed_templates, logline_dict, window_size):
 def apply_events(events, timed_templates, loglines, window_size=60, mp=False):
     template_counts = count_templates(timed_templates)
     logline_dict = {logline.id : logline for logline in loglines}
+
+    # Create lookup table to speed up matching
+    timed_template_dict = defaultdict(list)
+    for idx, tt in enumerate(timed_templates):
+        timed_template_dict[tt.template_id].append(idx)
+
     timed_events = []
     for event in events:
         lct_id = get_least_common_template(template_counts, event.template_ids)
-        for idx in xrange(0, len(timed_templates)):
-            timed_template = timed_templates[idx]
-            if timed_template.template_id == lct_id:
-                results = search_window(idx, event, timed_templates, logline_dict, window_size)
-                if results:
-                    s = sorted(results, key=lambda result: result.ts)
-                    timed_event = TimedEvent(event.id, timed_templates=s)
-                    timed_events.append(timed_event)
+        for idx in timed_template_dict[lct_id]:
+            results = search_window(idx, event, timed_templates, logline_dict, window_size)
+            if results:
+                s = sorted(results, key=lambda result: result.ts)
+                timed_event = TimedEvent(event.id, timed_templates=s)
+                timed_events.append(timed_event)
     return timed_events
