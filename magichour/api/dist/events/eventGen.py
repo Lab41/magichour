@@ -4,7 +4,7 @@ import hdbscan
 from pyspark.mllib.feature import Word2Vec
 
 from magichour.api.local.util.namedtuples import Event
-from magichour.api.dist.window.window import windowRDD
+from magichour.api.dist.window.window import window_rdd
 from magichour.api.dist.FPGrowth.FPGrowth import FPGrowthRDD
 
 
@@ -40,7 +40,7 @@ def event_gen_fp_growth(sc, log_lines,
                         windowLen=120,
                         remove_junk_drawer=True):
     retval = list()
-    windowed = windowRDD(sc, log_lines, windowLen, False)
+    windowed = window_rdd(sc, log_lines, windowLen, False)
     temp = FPGrowthRDD(windowed, minSupport, numPartitions).collect()
 
     items = [frozenset(fi.items) for fi in temp]

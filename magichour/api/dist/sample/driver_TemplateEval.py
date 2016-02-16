@@ -1,6 +1,6 @@
 sc.addPyFile('magichour.zip')
 
-from magichour.api.dist.templates.templateEval import templateEvalRDD
+from magichour.api.dist.templates.templateEval import template_eval_rdd
 from magichour.api.dist.templates.templateGen import read_logs_from_uri
 
 # Read templates
@@ -17,5 +17,5 @@ preprocessed_log_rdd = read_logs_from_uri(sc,
 
 # Match log lines to templates
 matched_logline_URI= 'hdfs://namenode/magichour/tbird.500.templateEvalRDD'
-matched_logline_rdd = templateEvalRDD(sc, templates, preprocessed_log_rdd)
+matched_logline_rdd = template_eval_rdd(sc, templates, preprocessed_log_rdd)
 matched_logline_rdd.saveAsPickleFile(matched_logline_URI)

@@ -122,7 +122,7 @@ def logPreProcess(sc, logTrans, rrdLogLine):
     return rrdLogLine.map(lambda line: lineRegexReplacement(line, logTrans))
 
 
-def preProcessRDD(sc, logTrans, rrdLogLine):
+def preprocess_rdd(sc, logTrans, rrdLogLine):
     '''
     make a rdd of preprocessed loglines
 
