@@ -2,7 +2,7 @@ from collections import defaultdict
 from magichour.api.local.util.namedtuples import TimedEvent
 
 
-def eventWindow(line, windowLength):
+def event_window(line, windowLength):
     '''
     alias events to the same key based off time
 
@@ -18,7 +18,7 @@ def eventWindow(line, windowLength):
     return (key, value)
 
 
-def shipEvents(line, t2e):
+def ship_events(line, t2e):
     '''
     Change keys from template based to event based
     When a template comes in, emit one value
@@ -45,7 +45,7 @@ def shipEvents(line, t2e):
     return outList
 
 
-def makeEventsFromLines(line, e2t):
+def make_events_from_lines(line, e2t):
     '''
     Evaluate if an event has been seen in a window of templates
 
@@ -114,14 +114,14 @@ def makeEventsFromLines(line, e2t):
     return output_vals
 
 
-def makeLookupDicts(eventDefs):
+def make_lookup_dicts(event_defs):
     '''
     make the lookup dictionaries used for translating
     between templates and events which care about specific
     templates
 
     Args:
-        eventDefs(list(Event)): list of templates which go together
+        event_defs(list(Event)): list of templates which go together
 
     Returns:
         retval(tuple(defaultdict(set),defaultdict(set))):
@@ -129,7 +129,7 @@ def makeLookupDicts(eventDefs):
     '''
     template2event = defaultdict(set)
     event2template = defaultdict(set)
-    for eventDef in eventDefs:
+    for eventDef in event_defs:
         items = eventDef.template_ids
         for item in items:
             event2template[eventDef.id].add(int(item))
@@ -141,31 +141,31 @@ def makeLookupDicts(eventDefs):
     return(template2event, event2template)
 
 
-def eventEvalRDD(sc, rddlogLines, eventList,
-                 windowLength=120):
+def event_eval_rdd(sc, rdd_log_lines, event_list,
+                 window_length=120):
     '''
     Performs the event generation from incoming DistributedLogLine rdd
 
     Args:
         sc(sparkContext):
-        rddlogLines(DistributedLogLines): rdd of DistributedLogLines created
+        rdd_log_lines(DistributedLogLines): rdd of DistributedLogLines created
         by earlier processing
-        eventList(list(Event)): List of event definitions
-        windowLength(int): window length to evaluate events in (seconds)
+        event_list(list(Event)): List of event definitions
+        window_length(int): window length to evaluate events in (seconds)
 
     Returns:
         retval(rdd tuple(tuple(eventId,windowID),tuple(DistributedLogLines)))
 
     '''
 
-    t2e, e2t = makeLookupDicts(eventList)
-    t2e_B = sc.broadcast(t2e)
-    e2t_B = sc.broadcast(e2t)
+    template2event, event2template = make_lookup_dicts(event_list)
+    template2event_broadcast = sc.broadcast(template2event)
+    event2template_broadcast = sc.broadcast(event2template)
 
-    windowed = rddlogLines.map(lambda line: eventWindow(line, windowLength))
-    edist = windowed.flatMap(lambda line: shipEvents(line, t2e_B))
+    windowed = rdd_log_lines.map(lambda line: event_window(line, window_length))
+    edist = windowed.flatMap(lambda line: ship_events(line, template2event_broadcast))
     eventloglist = edist.groupByKey()
-    outEvents = eventloglist.flatMap(lambda line: makeEventsFromLines(line,
-                                                                      e2t_B))
+    outEvents = eventloglist.flatMap(lambda line: make_events_from_lines(line,
+                                                                      event2template_broadcast))
 
     return outEvents

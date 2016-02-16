@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from magichour.api.dist.templates.templateEval import readTemplates
+from magichour.api.dist.templates.templateEval import read_templates
 
 def parse_words(log_lines):
     """
@@ -125,5 +125,5 @@ def log_cluster(sc, log_lines, support):
 
     templates = [' '.join(cluster) for cluster in clusters]
 
-    transformed_templates = readTemplates(templates)
+    transformed_templates = read_templates(templates)
     return transformed_templates
