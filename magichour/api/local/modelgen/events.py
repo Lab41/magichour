@@ -14,7 +14,7 @@ logger = get_logger(__name__)
 # windows = list of Window named tuples
 # return list of Event named tuples
 
-def paris(windows, r_slack, num_iterations, tau):
+def paris(windows, r_slack, num_iterations, tau=1.0):
     ws = [set([template_id for template_id in w.template_ids]) for w in windows]
     A, R = paris_lib.PARIS(ws, r_slack, num_iterations=num_iterations, tau=tau)
 
