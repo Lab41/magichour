@@ -45,6 +45,7 @@ logcluster_kwargs = {"support": "50"}
 
 modelgen_windows_kwargs = {"window_size": 60, "tfidf_threshold": 0}
 
+glove_kwargs = {}
 paris_kwargs = {"r_slack": None}
 fp_growth_kwargs = {"min_support": 0.005, "iterations": 10000} #only return 10000 itemsets, iterations = -1 will return all
 
@@ -55,7 +56,7 @@ def main():
     loglines = preprocess_step(log_file, transforms_file, *read_lines_args, **read_lines_kwargs)
     write_pickle_file(loglines, transformed_lines_file)
     #loglines = read_pickle_file(transformed_lines_file)
-    
+
     gen_templates = template_step(loglines, "logcluster", **logcluster_kwargs)
     #gen_templates = template_step(loglines, "stringmatch") # WIP
     write_pickle_file(gen_templates, templates_file)
@@ -69,7 +70,8 @@ def main():
     write_pickle_file(modelgen_windows, modelgen_windows_file)
     #modelgen_windows = read_pickle_file(modelgen_windows_file)
 
-    gen_events = event_step(modelgen_windows, "fp_growth", **fp_growth_kwargs)
+    gen_events = event_step(modelgen_windows, "glove", **glove_kwargs)
+    #gen_events = event_step(modelgen_windows, "fp_growth", **fp_growth_kwargs)
     #gen_events = event_step(modelgen_windows, "paris", **paris_kwargs) # WIP
     write_pickle_file(gen_events, events_file)
     #gen_events = read_pickle_file(events_file)
