@@ -1,6 +1,7 @@
 from magichour.api.dist.preprocess.readLog import read_log_rdd
 from magichour.api.dist.preprocess.preProcess import preprocess_rdd
 from magichour.lib.LogCluster.LogCluster import log_cluster
+from magichour.api.local.util.log import log_time
 
 
 def read_logs_from_uri(sc, log_uri, preprocess_log=True, transforms_URI=None):
@@ -27,6 +28,7 @@ def read_logs_from_uri(sc, log_uri, preprocess_log=True, transforms_URI=None):
         return preprocess_rdd(sc, transforms_URI, raw_log_rdd)
 
 
+@log_time
 def gen_tamplate_from_logs(sc, logline_rdd, support):
     """
     Generate template definitions from log lines

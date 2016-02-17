@@ -6,6 +6,7 @@ from pyspark.mllib.feature import Word2Vec
 from magichour.api.local.util.namedtuples import Event
 from magichour.api.dist.window.window import window_rdd
 from magichour.api.dist.FPGrowth.FPGrowth import FPGrowthRDD
+from magichour.api.local.util.log import log_time
 
 
 def get_longest_sets_possible(input_sets):
@@ -34,6 +35,7 @@ def get_longest_sets_possible(input_sets):
     return output_sets
 
 
+@log_time
 def event_gen_fp_growth(sc, log_lines,
                         minSupport=0.2,
                         numPartitions=10,
@@ -63,6 +65,7 @@ def event_gen_fp_growth(sc, log_lines,
     return retval
 
 
+@log_time
 def event_gen_word2vec(sc, log_lines, window_size=60):
     D = log_lines.map(
         lambda logline: (
