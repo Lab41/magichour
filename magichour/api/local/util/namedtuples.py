@@ -61,7 +61,7 @@ DistributedTemplateLine = namedtuple('DistributedTemplateLine', ['id', 'template
 #ModelGenWindow = namedtuple('ModelGenWindow', ['id', 'template_ids'])
 
 
-ModelEvalWindow = namedtuple('ModelEvalWindow', ['start_time', 'end_time', 'timed_templates'])
+#ModelEvalWindow = namedtuple('ModelEvalWindow', ['start_time', 'end_time', 'timed_templates'])
 #ModelEvalWindow = namedtuple('ModelEvalWindow', ['id', 'timed_templates'])
 
 
