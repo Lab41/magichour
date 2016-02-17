@@ -1,5 +1,8 @@
+import math
+from collections import defaultdict
+
 from magichour.api.local.util.namedtuples import ModelGenWindow
-from magichour.api.local.util.window import window
+
 
 # timed_template = [(t, template_id), ...]
 def modelgen_window(timed_templates, window_size=60, remove_junk_drawer=False):
@@ -19,7 +22,27 @@ def modelgen_window(timed_templates, window_size=60, remove_junk_drawer=False):
     Returns:
         windows: list of sets containing TimedTemplate named tuples
     """
-    windows = window(timed_templates, window_size, remove_junk_drawer, template_ids_only=True)
-    modelgen_windows = [ModelGenWindow(template_ids=template_ids) for window_id, template_ids in windows.iteritems()]
-    return modelgen_windows
 
+    windows = window(timed_templates, window_size, remove_junk_drawer, template_ids_only=True)
+    #modelgen_windows = [ModelGenWindow(template_ids=template_ids) for window_id, template_ids in windows.iteritems()]
+    #return modelgen_windows
+    return [template_ids for window_id, template_ids in windows.iteritems()]
+
+
+def window(timed_templates, window_size=60, remove_junk_drawer=False, template_ids_only=False, sort_windows=True):
+    windows = defaultdict(list)
+
+    if sort_windows:
+        # TODO: This should probably be done on the output windows...
+        timed_templates = sorted(timed_templates, key=lambda x: x.ts)
+
+    for timed_template in timed_templates:
+        t, _, __ = timed_template
+        key = math.floor(int(float(t)) / int(window_size))
+        if not remove_junk_drawer or (remove_junk_drawer and timed_template.template_id != -1):
+            if template_ids_only:
+                windows[key].append(timed_template.template_id)
+            else:
+                windows[key].append(timed_template)
+
+    return windows

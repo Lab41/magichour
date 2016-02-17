@@ -1,4 +1,4 @@
-from magichour.api.local.util.window import window
+from magichour.api.local.modelgen.window import window
 from magichour.api.local.util.namedtuples import ModelEvalWindow
 from magichour.api.local.util.log import get_logger
 
