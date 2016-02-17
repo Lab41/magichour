@@ -196,7 +196,7 @@ def PARIS(D, r_slack, num_iterations=3, tau=1.0):
     A = []
 
     for iteration in range(num_iterations):
-        logger.info('==STARTING WITH %d ATOMS==='%len(A))
+        logger.debug('==STARTING WITH %d ATOMS==='%len(A))
         # Representation Stage
         R = [get_best_representation(D[ind], A, r_slack=r_slack) for ind in range(len(D))]
 
@@ -206,7 +206,7 @@ def PARIS(D, r_slack, num_iterations=3, tau=1.0):
             E = get_error2(D, A, R, a_index_to_ignore)
             new_a = design_atom(E, r_slack=r_slack, tau=tau)
             if new_a is not None and new_a != A[a_index_to_update]:
-                logger.info('Replacing Atom: Index [%d], Items in Common [%d], Items Different [%d]'%(a_index_to_update,
+                logger.debug('Replacing Atom: Index [%d], Items in Common [%d], Items Different [%d]'%(a_index_to_update,
                         len(A[a_index_to_update].symmetric_difference(new_a)),
                         len(new_a.intersection(A[a_index_to_update]))))
                 del A[a_index_to_update]
@@ -218,7 +218,7 @@ def PARIS(D, r_slack, num_iterations=3, tau=1.0):
         next_error = prev_error
         should_stop = False
         while len(A) > 0 and next_error <= prev_error and not should_stop:
-            logger.info('Starting Reduction Phase with %d Atoms'%len(A))
+            logger.debug('Starting Reduction Phase with %d Atoms'%len(A))
             prev_error = next_error
             atom_counts = Counter()
             atom_combo_counts = Counter()
@@ -233,7 +233,7 @@ def PARIS(D, r_slack, num_iterations=3, tau=1.0):
             # Check to see if there are any
             for i in range(len(A)-1, -1, -1): # Increment backwards so indexes don't change
                 if atom_counts[i] == 0:
-                    logger.info( "Removing Atom: %s %s"%(i, A[i] ))
+                    logger.debug( "Removing Atom: %s %s"%(i, A[i] ))
                     del A[i]
                     should_stop = False
 
@@ -251,7 +251,7 @@ def PARIS(D, r_slack, num_iterations=3, tau=1.0):
                         #edited_atoms.update(range(len(A))) # Only allow edit/iteration
 
             if len(atoms_to_join) > 0:
-                logger.info('Atoms that should be joined: %s'%atoms_to_join)
+                logger.debug('Atoms that should be joined: %s'%atoms_to_join)
 
             # Check for atoms that have a mostly overlapping set of items
             if len(atoms_to_join) == 0:
@@ -263,7 +263,7 @@ def PARIS(D, r_slack, num_iterations=3, tau=1.0):
                         #edited_atoms.update(range(len(A)))  # Only allow edit/iteration
 
                 if len(atoms_to_join) > 0:
-                    logger.info('Overlapping atoms that should be joined: %s'%atoms_to_join)
+                    logger.debug('Overlapping atoms that should be joined: %s'%atoms_to_join)
 
             if len(atoms_to_join)>0:
                 deleted_atoms = set()
@@ -292,7 +292,7 @@ def PARIS(D, r_slack, num_iterations=3, tau=1.0):
 
             R = [get_best_representation(D[ind], A, verbose=False, r_slack=r_slack) for ind in range(len(D))]
             next_error = PCF(D, A, R, r_slack=r_slack, tau=tau)
-            logger.info('ERRORS: next(%s) original(%s) Should Stop: %s'%(next_error, prev_error, should_stop))
+            logger.debug('ERRORS: next(%s) original(%s) Should Stop: %s'%(next_error, prev_error, should_stop))
 
         # Create new atoms
         new_atom = -1
@@ -312,15 +312,15 @@ def PARIS(D, r_slack, num_iterations=3, tau=1.0):
                 if new_error < prev_error:
                     A = A_next
                     R = R_next
-                    logger.info('Adding Atom: %s\t%s\t%s'%(new_error, prev_error, new_atom))
+                    logger.debug('Adding Atom: %s\t%s\t%s'%(new_error, prev_error, new_atom))
                     prev_error = new_error
                     new_error = None
                 else:
                     A = A[:-1]
-                    logger.info('Not Adding atom: %s\t%s\t%s'%(new_error, prev_error, new_atom))
-        logger.info('End of iteration cost: %s, %s, %s'%(new_error, prev_error, new_atom))
+                    logger.debug('Not Adding atom: %s\t%s\t%s'%(new_error, prev_error, new_atom))
+        logger.debug('End of iteration cost: %s, %s, %s'%(new_error, prev_error, new_atom))
 
-    logger.info('Num ATOMS: %s '%len(A))
+    logger.debug('Num ATOMS: %s '%len(A))
     return A, R
 
 def run_paris_on_document(log_file, window_size=20.0, line_count_limit=None, groups_to_skip=set([-1])):
