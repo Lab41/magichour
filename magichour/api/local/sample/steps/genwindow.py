@@ -16,7 +16,7 @@ def genwindow_step(timed_templates, *args, **kwargs):
     gen_windows = modelgen.remove_junk_drawer(gen_windows)
 
     logger.info("Removing duplicate entries from each window's template_ids.")
-    gen_windows = modelgen.uniqify_windows(gen_windows)
+    #gen_windows = modelgen.uniqify_windows(gen_windows)
 
     threshold = kwargs.pop("tfidf_threshold", None)
     if threshold is not None:
