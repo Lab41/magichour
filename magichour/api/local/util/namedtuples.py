@@ -48,7 +48,7 @@ raw_str - str: The raw string used to generate the tempalte/skip_words
 
 DistributedTemplateLine = namedtuple('DistributedTemplateLine', ['id', 'template', 'skip_words', 'raw_str'])
 
-Transform = namedtuple('Transform', ['id', 'type', 'name', 'transform', 'compiled'])
+#Transform = namedtuple('Transform', ['id', 'type', 'name', 'transform', 'compiled'])
 
 
 Template = namedtuple('Template', ['id', 'match', 'str'])

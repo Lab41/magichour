@@ -12,7 +12,7 @@ import json
 import uuid
 
 from magichour.api.local.util.log import get_logger
-from magichour.api.local.util.namedtuples import Transform, DistributedLogLine, DistributedTransformLine
+from magichour.api.local.util.namedtuples import DistributedLogLine, DistributedTransformLine
 
 logger = get_logger(__name__)
 
