@@ -54,7 +54,7 @@ DistributedTemplateLine = namedtuple('DistributedTemplateLine', ['id', 'template
 #Template = namedtuple('Template', ['id', 'match', 'str'])
 
 
-TimedTemplate = namedtuple('TimedTemplate', ['ts', 'template_id', 'logline_id'])
+#TimedTemplate = namedtuple('TimedTemplate', ['ts', 'template_id', 'logline_id'])
 
 
 #ModelGenWindow = namedtuple('ModelGenWindow', ['template_ids'])

@@ -5,7 +5,7 @@ import json
 from collections import defaultdict
 
 from magichour.api.local.util.log import get_logger
-from magichour.api.local.util.namedtuples import TimedTemplate, TimedEvent, DistributedLogLine
+from magichour.api.local.util.namedtuples import TimedEvent, DistributedLogLine
 
 logger = get_logger(__name__)
 
