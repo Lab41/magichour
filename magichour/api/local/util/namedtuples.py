@@ -57,7 +57,7 @@ Template = namedtuple('Template', ['id', 'match', 'str'])
 TimedTemplate = namedtuple('TimedTemplate', ['ts', 'template_id', 'logline_id'])
 
 
-ModelGenWindow = namedtuple('ModelGenWindow', ['template_ids'])
+#ModelGenWindow = namedtuple('ModelGenWindow', ['template_ids'])
 #ModelGenWindow = namedtuple('ModelGenWindow', ['id', 'template_ids'])
 
 

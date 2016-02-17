@@ -1,8 +1,6 @@
 import math
 from collections import defaultdict
 
-from magichour.api.local.util.namedtuples import ModelGenWindow
-
 
 # timed_template = [(t, template_id), ...]
 def modelgen_window(timed_templates, window_size=60, remove_junk_drawer=False):
@@ -24,8 +22,6 @@ def modelgen_window(timed_templates, window_size=60, remove_junk_drawer=False):
     """
 
     windows = window(timed_templates, window_size, remove_junk_drawer, template_ids_only=True)
-    #modelgen_windows = [ModelGenWindow(template_ids=template_ids) for window_id, template_ids in windows.iteritems()]
-    #return modelgen_windows
     return [template_ids for window_id, template_ids in windows.iteritems()]
 
 
