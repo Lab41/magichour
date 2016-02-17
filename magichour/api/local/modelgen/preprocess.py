@@ -8,10 +8,11 @@ TODO: Add the ability to write custom preprocessing functions other than just tr
 
 import gzip
 import re
+import json
 import uuid
 
 from magichour.api.local.util.log import get_logger
-from magichour.api.local.util.namedtuples import LogLine, Transform, DistributedLogLine
+from magichour.api.local.util.namedtuples import LogLine, Transform, DistributedLogLine, DistributedTransformLine
 
 logger = get_logger(__name__)
 
@@ -63,7 +64,7 @@ def read_log_file(file_path, ts_start_index, ts_end_index, ts_format=None, skip_
             ts=ts,
             text=text,
             processed=text,
-            proc_dict={},
+            proc_dict=None,
             template=None,
             templateId=None,
             template_dict=None,
@@ -79,7 +80,7 @@ def read_auditd_file(file_path, **kwargs):
             ts=ts,
             text=line.rstrip(),
             processed=line.rstrip(),
-            proc_dict={},
+            proc_dict=None,
             template=None,
             templateId=None,
             template_dict=None,
@@ -112,7 +113,8 @@ def get_transforms(transforms_file):
             if len(line)==0 or line[0]=='#':
                 continue
             t_id, t_type, t_name, t_transform = line.split(',', 3)
-            transform = Transform(t_id, t_type, t_name, r''+t_transform, re.compile(r''+t_transform))
+            #transform = Transform(t_id, t_type, t_name, r''+t_transform, re.compile(r''+t_transform))
+            transform = DistributedTransformLine(t_id, t_type, t_name, r''+t_transform, re.compile(r''+t_transform))
             transforms.append(transform)
     return transforms
 
@@ -192,7 +194,7 @@ def cardinality_transformed_lines(lines, verbose=False):
 
     uniqLines = defaultdict(int)
     for logline in lines:
-        uniqLines[logline.text] += 1
+        uniqLines[logline.processed] += 1
     countLines = len(lines)
     countUniqueLines = len(uniqLines)
     percentUniqueLines = 100.0 * countUniqueLines / countLines
