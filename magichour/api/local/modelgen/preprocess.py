@@ -138,7 +138,7 @@ def transform_lines(lines, transforms):
                 # catch misspelled transform types
                 raise NotImplementedError('%s Transform not implemented'%transform.type)
 
-        yield LogLine(str(uuid.uuid4()), logline.ts, transformed, None, replaceDict, None)
+        yield LogLine(str(uuid.uuid4()), logline.ts, transformed, logline.text, replaceDict, None)
 
 
 def cardinality_transformed_lines(lines, verbose=False):
