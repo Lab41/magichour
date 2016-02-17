@@ -1,20 +1,46 @@
 import functools
 import re
 import multiprocessing
+import json
 from collections import defaultdict
 
 from magichour.api.local.util.log import get_logger
-from magichour.api.local.util.namedtuples import TimedTemplate, TimedEvent
+from magichour.api.local.util.namedtuples import TimedEvent, DistributedLogLine
 
 logger = get_logger(__name__)
 
 
 def process_line(templates, logline):
     for template in templates:
-        if template.match.match(logline.text):
-            return TimedTemplate(logline.ts, template.id, logline.id)
-    # -1 = did not match any template
-    return TimedTemplate(logline.ts, -1, logline.id)
+        skip_found = template.template.search(logline.processed)
+
+        # TODO double check that the defaultdict is working as expected
+        if skip_found:
+            template_dict = defaultdict(list)
+
+            for i in range(len(template.skip_words)):
+                template_dict[
+                    template.skip_words[i]].append(
+                    skip_found.groups()[i])
+
+            template_dict_str = json.dumps(template_dict) if template_dict else None
+
+            return DistributedLogLine(ts=logline.ts,
+                                      text=logline.text,
+                                      processed=logline.processed,
+                                      proc_dict=logline.proc_dict,
+                                      template=template.template.pattern,
+                                      templateId=template.id,
+                                      template_dict=template_dict_str)
+
+    # could not find a template match
+    return DistributedLogLine(ts=logline.ts,
+                              text=logline.text,
+                              processed=logline.processed,
+                              proc_dict=logline.proc_dict,
+                              template=None,
+                              templateId=-1,
+                              template_dict=None)
 
 
 re_type = re.compile(r'type=(\S+)')
@@ -27,7 +53,17 @@ def process_auditd_line(templates, logline):
     if audit_msg_type not in templates:
         raise KeyError("type=%s not in dictionary"%audit_msg_type)
 
-    return TimedTemplate(logline.ts, templates[audit_msg_type], logline.id)
+    #return TimedTemplate(logline.ts, templates[audit_msg_type], logline.id)
+
+    return DistributedLogLine(
+        ts=logline.ts,
+        text=logline.text,
+        processed=logline.processed,
+        proc_dict=logline.proc_dict,
+        template=None,
+        templateId=templates[audit_msg_type],
+        template_dict=None,
+    )
 
 
 def apply_templates(templates, loglines, mp=True, type_template_auditd=False, **kwargs):
@@ -62,13 +98,13 @@ def apply_templates(templates, loglines, mp=True, type_template_auditd=False, **
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         f = functools.partial(process_function, templates)
 
-        timed_templates = pool.map(func=f, iterable=loglines)
+        processed_loglines = pool.map(func=f, iterable=loglines)
     else:
         # Do this the naive way with one CPU
-        timed_templates = []
+        processed_loglines = []
         for logline in loglines:
-            timed_templates.append(process_function(templates, logline))
-    return timed_templates
+            processed_loglines.append(process_function(templates, logline))
+    return processed_loglines
 
 
 #####

@@ -18,7 +18,6 @@ def read_lines_substep(log_file, *args, **kwargs):
         preprocess_read_log_function = preprocess.read_auditd_file
     else:
         preprocess_read_log_function = preprocess.read_log_file
-    print log_file, args, kwargs
     lines = preprocess_read_log_function(log_file, *args, **kwargs)
     return lines
 
@@ -35,7 +34,6 @@ def _transformed_lines_to_list_substep(transformed_lines):
 
 @log_time
 def preprocess_step(log_file, transforms_file=None, _transforms_cache={}, *args, **kwargs):
-    print 'Sad:', args
     lines = read_lines_substep(log_file, *args, **kwargs)
     if transforms_file:
         if transforms_file in _transforms_cache:

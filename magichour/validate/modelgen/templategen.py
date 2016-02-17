@@ -12,7 +12,7 @@ def one_to_others_iter(values):
         mask = [1]*len(values)
         mask[idx] = 0
         cur_value = values[idx]
-        others = list(itertools.compress(values, mask))
+        others = itertools.compress(values, mask) #list(itertools.compress(values, mask))
         yield (cur_value, others)
 
 def silhouette_coefficient(val, same_cluster_vals, closest_cluster_vals):
@@ -55,7 +55,7 @@ def cluster_silhouette_coefficient(cluster, data_dict, closest_cluster_map):
 def multicluster_silhouette_coefficient(data_dict, closest_cluster_map):
     coefficients = []
     for key, values in data_dict.iteritems():
-        coefficients.extend(cluster_silhouette_coefficient(values, data_dict, closest_cluster_map)
+        coefficients.extend(cluster_silhouette_coefficient(values, data_dict, closest_cluster_map))
     return coefficients
 
 def validate_templates(data_dict, closest_cluster_map, junk_drawer):

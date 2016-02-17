@@ -1,8 +1,8 @@
 import uuid
 from collections import defaultdict
 from magichour.api.local.util.log import get_logger, log_time
-from magichour.api.local.util.namedtuples import ModelGenWindow, Event
-from magichour.api.local.util.tfidf import tfidf_filter_namedtuple
+from magichour.api.local.util.namedtuples import Event
+from magichour.api.local.util.tfidf import tf_idf_filter, tfidf_filter_event_defs
 
 logger = get_logger(__name__)
 
@@ -10,16 +10,15 @@ logger = get_logger(__name__)
 
 @log_time
 def remove_junk_drawer(windows):
-    modelgen_windows = []
+    nojunk_windows = []
     for window in windows:
-        template_ids = [template_id for template_id in window.template_ids if template_id != -1]
-        modelgen_window = ModelGenWindow(template_ids)
-        modelgen_windows.append(modelgen_window)
-    return modelgen_windows
+        template_ids = [template_id for template_id in window if template_id != -1]
+        nojunk_windows.append(template_ids)
+    return nojunk_windows
 
 @log_time
-def uniqify_windows(windows): # This function only works on ModelGenWindow
-    return [ModelGenWindow(set(modelgen_window.template_ids)) for modelgen_window in windows]
+def uniqify_windows(windows):
+    return [list(set(window)) for window in windows]
 
 ######
 
@@ -27,11 +26,19 @@ def uniqify_windows(windows): # This function only works on ModelGenWindow
 
 @log_time
 def tf_idf_filter_window(windows, threshold):
-    return tfidf_filter_namedtuple(windows, threshold, ModelGenWindow)
+    to_filter = tf_idf_filter(windows, threshold)
+    filtered = []
+    for window in windows:
+        filtered_elems = []
+        for elem in window:
+            if elem not in to_filter:
+                filtered_elems.append(elem)
+        filtered.append(filtered_elems)
+    return filtered
 
 @log_time
 def tfidf_filter_events(events, threshold, deduplicate=True):
-    filtered_events = tfidf_filter_namedtuple(events, threshold, Event)
+    filtered_events = tfidf_filter_event_defs(events, threshold) #tfidf_filter_namedtuple(events, threshold, Event)
     if not deduplicate or not filtered_events:
         return filtered_events
     else:

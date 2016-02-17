@@ -5,41 +5,46 @@ Add additional template processors to this file.
 
 Functions in this module should accept an iterable of LogLines.
 Functions should return an iterable of Templates.
-(see named tuple definition in magichour.api.local.named_tuples)
+(see named tuple definition in magichour.api.local.util.namedtuples)
 """
 
 import re
 import tempfile
+import uuid
 
 from magichour.api.local.modelgen.LogCluster import LogCluster
 from magichour.api.local.util.log import get_logger, log_exc
-from magichour.api.local.util.namedtuples import Template
+from magichour.api.local.util.namedtuples import DistributedTemplateLine
 from magichour.lib.StringMatch import StringMatch
 
 logger = get_logger(__name__)
 
 def logcluster(lines, *args, **kwargs):
     """
-    This function uses the logcluster algorithm (available at http://ristov.github.io/logcluster/) to cluster log files and mine line patterns.
-    See http://ristov.github.io/publications/cnsm15-logcluster-web.pdf for additional details on the algorithm.
-    The current implementation writes loglines to a temporary file then feeds it to the logcluster command line tool (perl).
+    This function uses the logcluster algorithm (available at http://ristov.github.io/logcluster/) to cluster
+    log files and mine line patterns. See http://ristov.github.io/publications/cnsm15-logcluster-web.pdf for
+    additional details on the algorithm. The current implementation writes loglines to a temporary file then
+    feeds it to the logcluster command line tool (written in perl).
+
     Eventually, the goal is to fully translate logcluster.pl into python to eliminate this step.
 
-    Behavior of this function differs depending on combinations of lines and file_path:
+    Behavior of this function differs depending on how of lines and file_path are set:
     lines AND file_path set: write lines to file at file_path
     lines BUT NOT file_path set: write lines to temporary file
     file_path BUT NOT lines: pass file_path directly into logcluster
     NEITHER lines NOR file_path: throw exception
 
     Args:
-        lines (iterable LogLine): an iterable of LogLine named tuples
+        lines: an iterable of LogLine named tuples
+        *args:
+        **kwargs:
 
     Kwargs:
         file_path (string): target path to pass to logcluster.pl (only used if lines is None, otherwise ignored).
         All other kwargs are passed on the command line to logcluster.pl. See above for details.
 
     Returns:
-        templates (list Template): a list of Template named tuples
+        templates: a list of Template named tuples
     """
     file_path = kwargs.pop("file_path", None)
     fp = None
@@ -101,7 +106,12 @@ def stringmatch(lines, *args, **kwargs):
     for cluster in clusters:
         template_str = cluster.get_template_line()
         template_regex = re.compile("%s$" % re.escape(template_str))
-        template = Template(template_id, template_regex, template_str)
+        template = DistributedTemplateLine(
+            id=str(uuid.uuid4()),
+            template=template_regex,
+            skip_words=None,
+            raw_str=template_str,
+        )
         templates.append(template)
         template_id += 1
     return templates
@@ -110,6 +120,8 @@ def baler(lines):
     """
     This function uses the Baler tool, created by Sandia National Labs.
     The tool is expected to be released in Q1 2016, so this code will be updated when that happens.
+
+    TODO: Complete this section.
 
     Args:
         lines (iterable LogLine): an iterable of LogLine named tuples

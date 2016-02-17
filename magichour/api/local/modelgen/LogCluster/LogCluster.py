@@ -1,9 +1,9 @@
 import os
 import re
 import subprocess
+import uuid
 
 from magichour.api.local.util.log import get_logger
-from magichour.api.local.util.namedtuples import Template
 
 logger = get_logger(__name__)
 
@@ -15,7 +15,7 @@ LOGCLUSTER = os.path.join(lib_dir, "LogCluster", "logcluster-0.03", "logcluster.
 def write_file(lines, file_path):
     with open(file_path, 'wb') as fp:
         for line in lines:
-            fp.write("%s\n" % line.text)
+            fp.write("%s\n" % line.processed)
 
 def run_on_file(file_path, support, *args, **kwargs):
     command = ["perl", LOGCLUSTER,]
@@ -54,10 +54,24 @@ def parse_output(output):
     matches = list()
     template_id = 1
     for o in range(0, len(output), 3): # every 3rd line is a template
+        matches.append(output[o].strip())
+
+    """
+    for o in range(0, len(output), 3): # every 3rd line is a template
         m = output[o].strip()
-        fixedLine = re.escape(m)
-        replacement = _findReplacement(fixedLine).strip()
-        template = Template(template_id, replacement, m)
+        #fixedLine = re.escape(m)
+        #replacement = _findReplacement(fixedLine).strip()
+
+        stripped = r'' + m.strip()
+        escaped = re.escape(stripped)
+        replaced = unescape_skips(escaped)
+        template = DistributedTemplateLine(
+            id=str(uuid.uuid4()),
+            template=replaced,
+            skip_words=get_word_skip_names(re.compile(replaced)),
+            raw_str=m,
+        )
+        #template = Template(template_id, replacement, m)
         matches.append(template)
         template_id += 1
 
@@ -77,10 +91,14 @@ def parse_output(output):
         Repeat the steps above to see if it's possible to eliminate r
 
     '''
-    simple_cmp = lambda x, y: len(y.match) - len(x.match)
+    simple_cmp = lambda x, y: len(y.template) - len(x.template)
     matches = sorted(matches, cmp=simple_cmp)
-    matches = [Template(m.id, re.compile(m.match+'$'), m.str) for m in matches]
+    matches = [DistributedTemplateLine(m.id, re.compile(m.template+'$'), m.skip_words, m.raw_str) for m in matches]
     return matches
+    """
+
+    from magichour.api.dist.templates.templateEval import read_templates
+    return read_templates(matches)
 
 def _findReplacement(s):
     # pattern = r'\*\{(\d*).(\d*)\}'
@@ -97,4 +115,4 @@ def _findReplacement(s):
                                                    int(m.groups()[1]))
             b = re.sub(newFound, newString, b)
         return b
-    return s            
+    return s
