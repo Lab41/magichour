@@ -24,13 +24,16 @@ def event_step(gen_windows, event_algorithm="fp_growth", *args, **kwargs):
     event_fn = CHOICES.get(event_algorithm, None)
     if not event_fn:
         log_exc(logger, "event_algorithm must be one of: %s" % CHOICES)
+    threshold = kwargs.pop("tfidf_threshold", None)
     gen_events = event_fn(gen_windows, *args, **kwargs)
 
     logger.info("==========Custom post processing for sample data==========")
-    # Note that calling this will reassign random event IDs.
-    threshold = kwargs.pop("tfidf_threshold", 0)
-    logger.info("Applying a tfidf filter to each event's template_ids. (threshold = %s)", threshold)
-    gen_events = tfidf_filter_events(gen_events, threshold)
+    if threshold is not None:
+        # Note that calling this will reassign random event IDs.
+        logger.info("Applying a tfidf filter to each event's template_ids. (threshold = %s)", threshold)
+        gen_events = tfidf_filter_events(gen_events, threshold)
+    else:
+        logger.info("Skipping tfidf filter")
     logger.info("==========End custom post processing==========")
 
     return gen_events

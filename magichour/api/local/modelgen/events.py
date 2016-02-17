@@ -14,9 +14,9 @@ logger = get_logger(__name__)
 # windows = list of Window named tuples
 # return list of Event named tuples
 
-def paris(windows, r_slack, num_iterations):
+def paris(windows, r_slack, num_iterations, tau=1.0):
     ws = [set([template_id for template_id in w.template_ids]) for w in windows]
-    A, R = paris_lib.PARIS(ws, r_slack, num_iterations=num_iterations)
+    A, R = paris_lib.PARIS(ws, r_slack, num_iterations=num_iterations, tau=tau)
 
     itemsets = [frozenset(a) for a in A]
     ret = [Event(id=str(uuid.uuid4()), template_ids=template_ids) for template_ids in itemsets]
@@ -42,7 +42,7 @@ def fp_growth(windows, min_support, iterations=0):
             itemsets.append(template_ids)
 
     logger.info("Removing subsets from fp_growth output...")
-    itemsets = get_nonsubsets(itemsets)
+    if len(itemsets): itemsets = get_nonsubsets(itemsets)
 
     ret = [Event(id=str(uuid.uuid4()), template_ids=template_ids) for template_ids in itemsets]
     return ret

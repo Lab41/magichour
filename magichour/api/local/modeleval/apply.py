@@ -1,7 +1,7 @@
 import functools
 import re
 import multiprocessing
-from collections import Counter
+from collections import defaultdict
 
 from magichour.api.local.util.log import get_logger
 from magichour.api.local.util.namedtuples import TimedTemplate, TimedEvent
@@ -73,47 +73,6 @@ def apply_templates(templates, loglines, mp=True, type_template_auditd=False, **
 
 #####
 
-
-def count_templates(window):
-    c = Counter()
-    for timed_template in window.timed_templates:
-        c[timed_template.template_id] += 1
-    return c
-
-
-def counter_issubset(counter1, counter2):
-    return not counter1 - counter2
-
-
-def apply_events_old(events, windows, mp=False):
-    event_counters = {event.id : Counter(event.template_ids) for event in events}
-    timed_events = []
-    for window in windows:
-        template_counts = count_templates(window)
-        for event in events:
-            num_occurrences = 0
-            is_subset = True
-            cur_counts = None
-            while is_subset:
-                if cur_counts:
-                    is_subset = counter_issubset(event_counters[event.id], cur_counts)
-                    cur_counts = cur_counts - event_counters[event.id]
-                else:
-                    is_subset = counter_issubset(event_counters[event.id], template_counts)
-                    cur_counts = template_counts - event_counters[event.id]
-                if is_subset:
-                    num_occurrences += 1
-            for occurrence in xrange(0, num_occurrences):
-                timed_event = TimedEvent(window.start_time, window.end_time, event.id)
-                timed_events.append(timed_event)
-    return timed_events
-
-
-#####
-
-from collections import defaultdict
-
-
 def count_templates(timed_templates):
     counts = defaultdict(int)
     for timed_template in timed_templates:
@@ -121,6 +80,7 @@ def count_templates(timed_templates):
     return counts
 
 
+### TODO: can delete get_least_common_template() if we switch to apply_events2()
 def get_least_common_template(template_counts, template_ids):
     least_common_template = None
     for template_id in template_ids:
@@ -149,90 +109,64 @@ def jaccard_dicts(d1, d2, key_weight=0.0):
     return (jaccard_keys * key_weight) + (jaccard_vals * (1-key_weight))
 
 
-def calc_overlap(candidate_timed_template, orig_timed_template, logline_dict):
+def calc_similarity(candidate_timed_template, orig_timed_template, logline_dict):
+    """
+    Similarity between candidate and original: weighted Jaccard similarity between replacement keys and values
+        1.0 = identical (best/greatest similarity)
+        0.0 = nothing in common
+    
+    Returns: 0 <= similarity <= 1
+    """
     candidate = logline_dict[candidate_timed_template.logline_id].replacements
     orig = logline_dict[orig_timed_template.logline_id].replacements
+    return jaccard_dicts(candidate, orig) if candidate and orig else 0
+
+
+def calc_proximity(candidate_timed_template, orig_timed_template):
     """
-    for k, v_list in orig.replacements.iteritems():
-        orig_v_set = set(v_list)
-        if k in candidate.replacements:
-            cand_v_set = set(candidate.replacements[k])
-            for cand_v in cand_v_set:
-                if cand_v in orig_v_set:
-                    overlap += len(cand_v) * weight_per_char
-    return (jaccard_keys * key_weight) + (jaccard_vals * (1-key_weight))
+    Proximity between candidate and original: -abs(time difference) in seconds.
+        0.0 = coincident (best/greatest proximity)
+    
+    Returns: proximity <= 0
     """
-    return jaccard_dicts(candidate, orig)
+    return -abs(candidate_timed_template.ts - orig_timed_template.ts)
 
 
-"""
-def search_window(idx, event, timed_templates, logline_dict, window_size):
-    timed_template = timed_templates[idx]
-    results = [timed_template]
-    left_idx = idx-1
-    right_idx = idx+1
+def calc_score(candidate_timed_template, orig_timed_template, logline_dict):
+    """
+    Compute score based on similarity and proximity.  
+    Similarity is ranked first; equal similarities are then ranked by proximity.
+    
+    Returns: tuple(similarity, proximity)
+    """
+    return (calc_similarity(candidate_timed_template, orig_timed_template, logline_dict),
+            calc_proximity(candidate_timed_template, orig_timed_template))
 
-    m = timed_template.ts % window_size
-    start_time = timed_template.ts - m
-    end_time = start_time + window_size
-
-    search_set = set(event.template_ids)
-    search_set.remove(timed_template.template_id)
-
-    while search_set and (left_idx >= 0 or right_idx <= len(timed_templates)):
-        candidates = defaultdict(list)
-        if left_idx >= 0:
-            l_timed_template = timed_templates[left_idx]
-            if l_timed_template.ts >= start_time and l_timed_template.template_id in search_set:
-                candidates[l_timed_template.template_id].append(l_timed_template)
-                #results.append(l_timed_template)
-                #search_set.remove(l_timed_template.template_id)
-        if right_idx < len(timed_templates):
-            r_timed_template = timed_templates[right_idx]
-            if r_timed_template.ts <= end_time and r_timed_template.template_id in search_set:
-                candidates[r_timed_template.template_id].append(r_timed_template)
-                #results.append(r_timed_template)
-                #search_set.remove(r_timed_template.template_id)
-
-        for template_id, candidate_list in candidates.iteritems():
-            if len(candidate_list) != 1:
-                candidate_list = sorted(candidate_list, reverse=True, key=lambda candidate: calc_overlap(candidate, timed_template, logline_dict))
-            winner = candidate_list[0]
-            logger.info(": %s", calc_overlap(winner, timed_template, logline_dict))
-            results.append(winner)
-            search_set.remove(winner.template_id)
-
-        left_idx -= 1
-        right_idx += 1
-
-    if search_set:
-        return None
-
-    return results
-"""
 
 def find_left_idx(idx, timed_templates, start_time):
-    left_idx = 0
-    for tt in reversed(timed_templates[:idx+1]):
-        if tt.ts < start_time:
-            break
-        left_idx += 1
-    return left_idx
+    """
+    Return earliest index within window: [min(idx)].ts >= start_time
+    """
+    assert timed_templates[idx].ts >= start_time, 'starting index must be within window'
+    while idx > 0 and timed_templates[idx-1].ts >= start_time:
+        idx -= 1
+    return idx
 
 def find_right_idx(idx, timed_templates, end_time):
-    right_idx = 0
-    for tt in timed_templates[idx:]:
-        if tt.ts > end_time:
-            break
-        right_idx += 1
-    return right_idx
+    """
+    Return 1 + latest index within window: [max(idx-1)].ts <= end_time
+    """
+    assert timed_templates[idx].ts <= end_time, 'starting index must be within window'
+    while idx < len(timed_templates) and timed_templates[idx].ts <= end_time:
+        idx += 1
+    return idx
 
 def create_window(idx, timed_templates, window_size):
     timed_template = timed_templates[idx]
-    start_time = timed_template.ts - (timed_template.ts % window_size)
-    end_time = start_time + window_size
-    left_idx = idx - find_left_idx(idx, timed_templates, start_time)
-    right_idx = idx + find_right_idx(idx, timed_templates, end_time)
+    start_time = timed_template.ts - window_size
+    end_time = timed_template.ts + window_size
+    left_idx = find_left_idx(idx, timed_templates, start_time)
+    right_idx = find_right_idx(idx, timed_templates, end_time)
     return (left_idx, right_idx)
 
 def search_window(idx, event, timed_templates, logline_dict, window_size):
@@ -246,7 +180,7 @@ def search_window(idx, event, timed_templates, logline_dict, window_size):
             if not relevant:
                 # We are missing one of the required template ID in this window
                 return []
-            relevant = sorted(relevant, reverse=True, key=lambda tt: calc_overlap(tt, timed_template, logline_dict))
+            relevant = sorted(relevant, reverse=True, key=lambda tt: calc_similarity(tt, timed_template, logline_dict))
             results[template_id] = relevant[0]
     return results.values()
 
@@ -255,15 +189,65 @@ def search_window(idx, event, timed_templates, logline_dict, window_size):
 def apply_events(events, timed_templates, loglines, window_size=60, mp=False):
     template_counts = count_templates(timed_templates)
     logline_dict = {logline.id : logline for logline in loglines}
+
+    # Create lookup table to speed up matching
+    timed_template_dict = defaultdict(list)
+    for idx, tt in enumerate(timed_templates):
+        timed_template_dict[tt.template_id].append(idx)
+
     timed_events = []
     for event in events:
         lct_id = get_least_common_template(template_counts, event.template_ids)
-        for idx in xrange(0, len(timed_templates)):
-            timed_template = timed_templates[idx]
-            if timed_template.template_id == lct_id:
-                results = search_window(idx, event, timed_templates, logline_dict, window_size)
-                if results:
-                    s = sorted(results, key=lambda result: result.ts)
-                    timed_event = TimedEvent(event.id, timed_templates=s)
-                    timed_events.append(timed_event)
+        for idx in timed_template_dict[lct_id]:
+            results = search_window(idx, event, timed_templates, logline_dict, window_size)
+            if results:
+                s = sorted(results, key=lambda result: result.ts)
+                timed_event = TimedEvent(event.id, timed_templates=s)
+                timed_events.append(timed_event)
+    return timed_events
+
+
+def search_window2(idx, ordered_event_template_ids, timed_templates, timed_template_dict, logline_dict, window_size):
+    least_common_template = timed_templates[idx]
+    left_idx, right_idx = create_window(idx, timed_templates, window_size)
+    window = set(range(left_idx, right_idx))
+    results = {least_common_template.template_id : least_common_template}
+    # skip search for first/least_common_template_id since we know it is at idx
+    for template_id in ordered_event_template_ids[1:]:
+        # find all template_id within the window
+        results[template_id] = [timed_templates[i] for i in window.intersection(timed_template_dict[template_id])]
+        if not results[template_id]:
+            # We are missing one of the required template ID in this window
+            return []
+
+    # Found all event templates
+    # For each template that occurs multiple times, pick the one that scores best compared to the least_common_template
+    for template_id in ordered_event_template_ids[1:]:
+        relevant = sorted(results[template_id], reverse=True, key=lambda tt: calc_score(tt, least_common_template, logline_dict)) if len(results[template_id]) > 1 else results[template_id]
+        results[template_id] = relevant[0]
+    return results.values()
+
+
+# assume timed_templates are ordered
+def apply_events2(events, timed_templates, loglines, window_size=60, mp=False):
+    template_counts = count_templates(timed_templates)
+    logline_dict = {logline.id : logline for logline in loglines}
+
+    # Create lookup table to speed up matching: set of all timed_template idx containing that template
+    timed_template_dict = defaultdict(set)
+    for idx, tt in enumerate(timed_templates):
+        timed_template_dict[tt.template_id].add(idx)
+
+    timed_events = []
+    for event in events:
+        # look for event template_ids in least-common to most-common order
+        #   by looking in a window of timed_templates centered on each occurrence of the least-common template
+        #     and stop processing the window as soon as we encounter a missing event template
+        ordered_event_template_ids = sorted(event.template_ids, key=lambda template_id: template_counts[template_id])
+        for idx in timed_template_dict[ordered_event_template_ids[0]]:
+            results = search_window2(idx, ordered_event_template_ids, timed_templates, timed_template_dict, logline_dict, window_size)
+            if results:
+                s = sorted(results, key=lambda result: result.ts)
+                timed_event = TimedEvent(event.id, timed_templates=s)
+                timed_events.append(timed_event)
     return timed_events

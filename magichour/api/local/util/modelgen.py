@@ -32,7 +32,7 @@ def tf_idf_filter_window(windows, threshold):
 @log_time
 def tfidf_filter_events(events, threshold, deduplicate=True):
     filtered_events = tfidf_filter_namedtuple(events, threshold, Event)
-    if not deduplicate:
+    if not deduplicate or not filtered_events:
         return filtered_events
     else:
         # Note that calling this will reassign random event IDs.

@@ -1,13 +1,12 @@
-from magichour.api.dist.preprocess.readLog import readLogRDD
-from magichour.api.dist.preprocess.preProcess import preProcessRDD
 from magichour.api.local.util.namedtuples import DistributedLogLine
 from magichour.api.local.util.namedtuples import DistributedTemplateLine
 
 from collections import defaultdict
 import re
+import json
 
 
-def badWay(r1, r2):
+def bad_way(r1, r2):
     '''
     correct way:
 
@@ -25,7 +24,7 @@ def badWay(r1, r2):
     return(len(r2) - len(r1))
 
 
-def rankMatches(m):
+def rank_matches(m):
     '''
     sort maches according to custom sort
 
@@ -35,11 +34,11 @@ def rankMatches(m):
     Returns:
         retval(list(string)): sorted array
     '''
-    retval = sorted(m, cmp=badWay)
+    retval = sorted(m, cmp=bad_way)
     return retval
 
 
-def getWordSkipNames(s):
+def get_word_skip_names(s):
     '''
     find the skip word patterns
 
@@ -65,45 +64,42 @@ def getWordSkipNames(s):
     return retVal
 
 
-def readTemplates(sc, templateFile):
+def read_templates(template_list):
     '''
     returns a list of regex for replacement processing
 
     Args:
-        sc(sparkContext): spark context
-        templateFile(string): uri to the transform file in HDFS
+        template_list(list(string)): List of templates to transform into distributed log lines
 
     Returns:
-        retval(list(TemplateLine)) list of template lines
+        retval(list(DistributedTemplateLine)) list of template lines
     '''
 
-    # map the templateFile
-    templates = sc.textFile(templateFile)
 
-    templateRDD = templates.collect()
-
+    match_to_raw_str = dict()
     matches = list()
-
-    for t in templateRDD:
+    for t in template_list:
         stripped = r'' + t.strip().rstrip()
         escaped = re.escape(stripped)
-        replaced = unescapeSkips(escaped)
+        replaced = unescape_skips(escaped)
         matches.append(replaced)
+        match_to_raw_str[replaced] = t.strip()
 
-    matches = rankMatches(matches)
+    matches = rank_matches(matches)
 
-    templateLines = list()
+    template_lines = list()
     for index, m in enumerate(matches):
         # match end of line too
-        t = DistributedTemplateLine(index,
-                                    re.compile(m + '$'),
-                                    getWordSkipNames(re.compile(m)))
-        templateLines.append(t)
+        t = DistributedTemplateLine(id=index,
+                                    template=re.compile(m + '$'),
+                                    skip_words=get_word_skip_names(re.compile(m)),
+                                    raw_str=match_to_raw_str[m])
+        template_lines.append(t)
 
-    return templateLines
+    return template_lines
 
 
-def unescapeSkips(s):
+def unescape_skips(s):
     '''
     find an escaped version of skip{m,n} words
     replace with unescaped version
@@ -117,11 +113,11 @@ def unescapeSkips(s):
 
     pattern = r'\\\(\\\:\\\?\\\ S\\\+\\\)\\\{(\d)\\\,(\d)\\\}'
 
-    matchObj = re.finditer(pattern, s, re.M | re.I)
+    match = re.finditer(pattern, s, re.M | re.I)
     b = s
 
-    if matchObj:
-        for m in matchObj:
+    if match:
+        for m in match:
 
             newString = r'((?:\ {0,1}\S+){%i,%i})' % (int(m.groups()[0]),
                                                       int(m.groups()[1]))
@@ -135,7 +131,7 @@ def unescapeSkips(s):
     return s
 
 
-def matchLine(line, templates):
+def match_line(line, templates):
     '''
     assign a log line to a templateId or -1 if no match
     keep track of any skip word replacements, return additional
@@ -143,51 +139,51 @@ def matchLine(line, templates):
 
     Args:
         line(LogLine): logline being classified
-        templates(list(TemplateLine)): templates to attempt to match to
+        templates(list(DistributedTemplateLine)): templates to attempt to match to
                                        broadcast variable
     Returns:
         retval(LogLine): LogLine  with the final 3 fields filled in
                          template - actual template used for match
                          templateId - number of the template
-                         templateDict- dictionary of skip word replacements
+                         template_dict- dictionary of skip word replacements
     '''
 
-    for templateLine in templates.value:
-        skipFound = templateLine.template.search(line.processed)
-        templateDict = defaultdict(list)
+    for template_line in templates.value:
+        skipFound = template_line.template.search(line.processed)
+        template_dict = defaultdict(list)
 
         # TODO double check that the defaultdict is working as expected
         if skipFound:
-            for i in range(len(templateLine.skipWords)):
-                templateDict[
-                    templateLine.skipWords[i]].append(
+            for i in range(len(template_line.skip_words)):
+                template_dict[
+                    template_line.skip_words[i]].append(
                     skipFound.groups()[i])
 
             return DistributedLogLine(line.ts,
                                       line.text,
                                       line.processed,
-                                      line.pDict,
-                                      templateLine.template.pattern,
-                                      templateLine.id,
-                                      templateDict)
+                                      json.dumps(line.proc_dict),
+                                      template_line.template.pattern,
+                                      template_line.id,
+                                      json.dumps(template_dict))
 
     # could not find a template match
     return DistributedLogLine(line.ts,
                               line.text,
                               line.processed,
-                              line.pDict,
+                              json.dumps(line.proc_dict),
                               None,
                               -1,
-                              templateDict)
+                              json.dumps(template_dict))
 
 
-def matchTemplates(sc, templateFile, rddLogLine):
+def match_templates(sc, templates, rdd_log_lines):
     '''
     assign a line to a template, keeping track of replacements as it goes
 
     Args:
         sc(sparkContext):
-        templateFile(string): URI to the template file (text file with one template per line)
+        templates(list(DistributedTemplateLine)): List of DistributedTemplateLine objects
         rddLogLine(RDD(LogLine)): RDD of LogLines to assign
     Returns:
         retval(RDD(LogLine)): additional fields of the LogLine named tuple
@@ -195,12 +191,9 @@ def matchTemplates(sc, templateFile, rddLogLine):
                               template,templateId,templateDict
     '''
 
-    templates = readTemplates(sc, templateFile)
-    templateBroadcast = sc.broadcast(templates)
-    return rddLogLine.map(lambda line: matchLine(line, templateBroadcast))
+    template_broadcast = sc.broadcast(templates)
+    return rdd_log_lines.map(lambda line: match_line(line, template_broadcast))
 
 
-def templateEvalRDD(sc, logInURI, transformURI, templateURI):
-    rddLogs = readLogRDD(sc, logInURI)
-    pre_processedLogs = preProcessRDD(sc, transformURI, rddLogs)
-    return matchTemplates(sc, templateURI, pre_processedLogs)
+def template_eval_rdd(sc, templates, rdd_log_lines):
+    return match_templates(sc, templates, rdd_log_lines)

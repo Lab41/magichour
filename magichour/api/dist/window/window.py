@@ -17,13 +17,14 @@ def collide(line, windowLen):
     return (win, line.templateId)
 
 
-def windowRDD(sc, logLineRDD, windowLen, withCounts=False):
+def window_rdd(sc, rdd_log_lines, window_length, withCounts=False):
     '''
     read a log/directory into DistributedLogLine RDD format
     NOTE: only ts, and msg are populated
     Args:
         sc(sparkContext)
-        windowLen(int): length of the window in seconds
+        rdd_log_lines(rdd[LogLine]): Rdd of log line objects to window
+        window_length(int): length of the window in seconds
         withCounts(boolean): return counts with the items seen within the window
 
     Returns:
@@ -33,10 +34,10 @@ def windowRDD(sc, logLineRDD, windowLen, withCounts=False):
     '''
 
     if withCounts:
-        win = logLineRDD.map(lambda line: collide(line, windowLen))
+        win = rdd_log_lines.map(lambda line: collide(line, window_length))
         return win.groupByKey()\
                   .map(lambda x_y: list(Counter(x_y[1]).iteritems()))
     else:
-        win = logLineRDD.map(lambda line: collide(line, windowLen))
+        win = rdd_log_lines.map(lambda line: collide(line, window_length))
         return win.groupByKey()\
                   .map(lambda x_y1: list(set(x_y1[1])))
