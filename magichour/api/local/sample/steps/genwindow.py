@@ -5,11 +5,11 @@ from magichour.api.local.util.log import get_logger, log_time
 logger = get_logger(__name__)
 
 @log_time
-def genwindow_step(timed_templates, *args, **kwargs):
+def genwindow_step(eval_loglines, *args, **kwargs):
     window_size = kwargs.pop("window_size", 60)
     remove_junk_drawer = kwargs.pop("remove_junk_drawer", True)
     logger.info("Creating model gen windows from timed_templates...")
-    gen_windows = window.modelgen_window(timed_templates, window_size=window_size, remove_junk_drawer=remove_junk_drawer)
+    gen_windows = window.modelgen_window(eval_loglines, window_size=window_size, remove_junk_drawer=remove_junk_drawer)
 
     logger.info("==========Custom post processing for sample data==========")
     logger.info("Removing junk drawer entries from each window's template_ids. (template_id = -1)")
