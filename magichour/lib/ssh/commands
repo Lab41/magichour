@@ -1,0 +1,12 @@
+ls -la /
+ls -la /var
+ls -la ~
+touch /tmp/lkasjdf
+echo "lksjdf" > /tmp/lkasjdf
+rm /tmp/lkasjdf
+sudo ls -la /
+sudo ls -la /var
+sudo ls -la ~
+sudo touch /tmp/lkasjdf
+sudo echo "lksjdf" > /tmp/lkasjdf
+sudo rm /tmp/lkasjdf
