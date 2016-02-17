@@ -142,7 +142,7 @@ def make_lookup_dicts(event_defs):
 
 
 def event_eval_rdd(sc, rdd_log_lines, event_list,
-                 window_length=120):
+                   window_length=120):
     '''
     Performs the event generation from incoming DistributedLogLine rdd
 
@@ -162,10 +162,15 @@ def event_eval_rdd(sc, rdd_log_lines, event_list,
     template2event_broadcast = sc.broadcast(template2event)
     event2template_broadcast = sc.broadcast(event2template)
 
-    windowed = rdd_log_lines.map(lambda line: event_window(line, window_length))
-    edist = windowed.flatMap(lambda line: ship_events(line, template2event_broadcast))
+    windowed = rdd_log_lines.map(
+        lambda line: event_window(
+            line, window_length))
+    edist = windowed.flatMap(
+        lambda line: ship_events(
+            line, template2event_broadcast))
     eventloglist = edist.groupByKey()
-    outEvents = eventloglist.flatMap(lambda line: make_events_from_lines(line,
-                                                                      event2template_broadcast))
+    outEvents = eventloglist.flatMap(
+        lambda line: make_events_from_lines(
+            line, event2template_broadcast))
 
     return outEvents

@@ -2,6 +2,7 @@ from magichour.api.dist.preprocess.readLog import read_log_rdd
 from magichour.api.dist.preprocess.preProcess import preprocess_rdd
 from magichour.lib.LogCluster.LogCluster import log_cluster
 
+
 def read_logs_from_uri(sc, log_uri, preprocess_log=True, transforms_URI=None):
     """
     Read raw log lines from a text file and optionally preprocess them
@@ -16,7 +17,8 @@ def read_logs_from_uri(sc, log_uri, preprocess_log=True, transforms_URI=None):
         log_lines(rdd(DistributedLogLine)): RDD containing log lines (optionally preprocessed)
     """
     if preprocess_log and transforms_URI is None:
-        raise ValueError('Preprocessing requires transform URI to be specified')
+        raise ValueError(
+            'Preprocessing requires transform URI to be specified')
 
     raw_log_rdd = read_log_rdd(sc, log_uri)
     if not preprocess_log:

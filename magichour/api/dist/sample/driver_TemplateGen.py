@@ -9,11 +9,13 @@ template_output_URI = 'hdfs://namenode/magichour/templates'
 support = 1000
 
 # Read in log file RDD
-# Note: You may want to set persistence to MEMORY_ONLY or MEMORY_AND_DISK_SER depending on data size
-preprocessed_log_rdd = read_logs_from_uri(sc,
-                                          raw_log_URI,
-                                          preprocess_log=True,
-                                          transforms_URI=transforms_URI).cache()
+# Note: You may want to set persistence to MEMORY_ONLY or
+# MEMORY_AND_DISK_SER depending on data size
+preprocessed_log_rdd = read_logs_from_uri(
+    sc,
+    raw_log_URI,
+    preprocess_log=True,
+    transforms_URI=transforms_URI).cache()
 
 # Generate Tempaltes
 templates = gen_tamplate_from_logs(sc, preprocessed_log_rdd, support)

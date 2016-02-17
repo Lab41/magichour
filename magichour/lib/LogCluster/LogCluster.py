@@ -2,6 +2,7 @@ from collections import namedtuple
 
 from magichour.api.dist.templates.templateEval import read_templates
 
+
 def parse_words(log_lines):
     """
     Take single LogLine and split words for input to a word count
@@ -15,6 +16,7 @@ def parse_words(log_lines):
     words = set(log_lines.processed.split())
     return [(word, 1) for word in words]
 
+
 def extract_patterns(line, frequent_words):
     """
     Take single LogLine and output a tuple of frequent words and frequent words with skips
@@ -25,13 +27,15 @@ def extract_patterns(line, frequent_words):
     Returns:
         (tuple([str]), list[str]) : tuple of (frequent words in order, freq words with skip counts between frequent words)
     """
-    skip = 0 # Count of non-frequent words since the last frequent word
-    freq_word_pattern = [] # Pattern of frequent words (ignoring non-frequent words)
-    pattern = [] # Pattern with frequent words and skip counts
+    skip = 0  # Count of non-frequent words since the last frequent word
+    # Pattern of frequent words (ignoring non-frequent words)
+    freq_word_pattern = []
+    pattern = []  # Pattern with frequent words and skip counts
     for word in line.processed.split():
         # If this is a frequent word
         if word in frequent_words.value:
-            # If we've skipped some words since the last frequent word, add to "pattern"
+            # If we've skipped some words since the last frequent word, add to
+            # "pattern"
             if skip != 0:
                 pattern.append(skip)
                 skip = 0
@@ -59,7 +63,8 @@ def collapse_patterns(input_pattern_tuple):
     freq_word_pattern, patterns = input_pattern_tuple
 
     # Get unique patterns
-    patterns = set([tuple(pattern) for pattern in patterns]) # tuple = hashable
+    patterns = set([tuple(pattern)
+                    for pattern in patterns])  # tuple = hashable
 
     # Turn original patters from [w1, w2, w3] => [set(), w1, set(), w2, set(), w3, set()]
     # Sets will be used to keep track of an skip words
@@ -87,17 +92,19 @@ def collapse_patterns(input_pattern_tuple):
                     output_loc += 1
                 prev_val = 0
 
-    # Create final pattern strings where sets are collapsed into skip from regex
+    # Create final pattern strings where sets are collapsed into skip from
+    # regex
     final_pattern = []
     for word in aggregate_pattern:
         if isinstance(word, set):
             if len(word) >= 2:
-                final_pattern.append('(:? S+){%d,%d}'%(min(word), max(word)))
-            elif len(word) == 1 and 0 not in word: # Always skip the same number of values
-                final_pattern.append('(:? S+){%d,%d}'%(min(word), max(word)))
+                final_pattern.append('*{%d,%d}' % (min(word), max(word)))
+            elif len(word) == 1 and 0 not in word:  # Always skip the same number of values
+                final_pattern.append('*{%d,%d}' % (min(word), max(word)))
         else:
             final_pattern.append(word)
     return final_pattern
+
 
 def log_cluster(sc, log_lines, support):
     """
@@ -111,17 +118,17 @@ def log_cluster(sc, log_lines, support):
         list[DistributedTemplateLine]: Returns a list of DistributedTemplateLine objects defining the templates
     """
     frequent_word_dict = log_lines.flatMap(parse_words)\
-                                 .reduceByKey(lambda x,y: x+y)\
-                                 .filter(lambda (key,count): count > support)\
-                                 .collectAsMap()
+        .reduceByKey(lambda x, y: x + y)\
+        .filter(lambda key_count: key_count[1] > support)\
+        .collectAsMap()
 
     frequent_words = sc.broadcast(set(frequent_word_dict.keys()))
 
-    clusters = log_lines.map(lambda x: extract_patterns(x, frequent_words))\
-                  .groupByKey()\
-                  .filter(lambda (freq_word_pattern, pattern): len(pattern) > support)\
-                  .map(collapse_patterns)\
-                  .collect()
+    clusters = log_lines.map(
+        lambda x: extract_patterns(
+            x, frequent_words)) .groupByKey() .filter(
+        lambda freq_word_pattern_pattern: len(
+            freq_word_pattern_pattern[1]) > support) .map(collapse_patterns) .collect()
 
     templates = [' '.join(cluster) for cluster in clusters]
 

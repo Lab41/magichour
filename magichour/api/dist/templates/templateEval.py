@@ -75,7 +75,6 @@ def read_templates(template_list):
         retval(list(DistributedTemplateLine)) list of template lines
     '''
 
-
     match_to_raw_str = dict()
     matches = list()
     for t in template_list:
@@ -90,10 +89,13 @@ def read_templates(template_list):
     template_lines = list()
     for index, m in enumerate(matches):
         # match end of line too
-        t = DistributedTemplateLine(id=index,
-                                    template=re.compile(m + '$'),
-                                    skip_words=get_word_skip_names(re.compile(m)),
-                                    raw_str=match_to_raw_str[m])
+        t = DistributedTemplateLine(
+            id=index,
+            template=re.compile(
+                m + '$'),
+            skip_words=get_word_skip_names(
+                re.compile(m)),
+            raw_str=match_to_raw_str[m])
         template_lines.append(t)
 
     return template_lines
@@ -111,19 +113,20 @@ def unescape_skips(s):
         retval(string): string with replacement
     '''
 
-    pattern = r'\\\(\\\:\\\?\\\ S\\\+\\\)\\\{(\d)\\\,(\d)\\\}'
+    pattern = r'\\\*\\\{(\d)\\\,(\d)\\\}'
 
     match = re.finditer(pattern, s, re.M | re.I)
     b = s
 
     if match:
+        print 'MATCH'
         for m in match:
 
             newString = r'((?:\ {0,1}\S+){%i,%i})' % (int(m.groups()[0]),
                                                       int(m.groups()[1]))
 
             # the r is very important
-            newFound = r'\\\(\\:\\\?\\ S\\\+\\\)\\\{%i\\,%i\\\}' % (
+            newFound = r'\\\*\\\{%i\\,%i\\\}' % (
                 int(m.groups()[0]), int(m.groups()[1]))
             b = re.sub(newFound, newString, b)
 
