@@ -33,7 +33,7 @@ def tf_idf_filter(elemss, threshold):
 
     templates_to_filter = set()
     for template_id in global_counts_idf:
-        if idf_simple(global_counts_idf[template_id], len(elemss)) < threshold:
+        if idf_simple(global_counts_idf[template_id], len(elemss)) >= threshold:
             templates_to_filter.add(template_id)
     return templates_to_filter
 
