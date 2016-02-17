@@ -23,13 +23,15 @@ def process_line(templates, logline):
                     template.skip_words[i]].append(
                     skip_found.groups()[i])
 
+            template_dict_str = json.dumps(template_dict) if template_dict else None
+
             return DistributedLogLine(ts=logline.ts,
                                       text=logline.text,
                                       processed=logline.processed,
                                       proc_dict=logline.proc_dict,
                                       template=template.template.pattern,
                                       templateId=template.id,
-                                      template_dict=json.dumps(template_dict))
+                                      template_dict=template_dict_str)
 
     # could not find a template match
     return DistributedLogLine(ts=logline.ts,
@@ -96,7 +98,7 @@ def apply_templates(templates, loglines, mp=True, type_template_auditd=False, **
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         f = functools.partial(process_function, templates)
 
-        timed_templates = pool.map(func=f, iterable=loglines)
+        processed_loglines = pool.map(func=f, iterable=loglines)
     else:
         # Do this the naive way with one CPU
         processed_loglines = []
