@@ -1,7 +1,6 @@
 import os
 
 from magichour.api.local.sample.steps.evalapply import evalapply_step
-from magichour.api.local.sample.steps.evalwindow import evalwindow_step
 from magichour.api.local.sample.steps.event import event_step
 from magichour.api.local.sample.steps.genapply import genapply_step
 from magichour.api.local.sample.steps.genwindow import genwindow_step
@@ -89,11 +88,6 @@ def main():
     from pprint import pformat
     logger.info("Discovered events:")
     logger.info("\n"+pformat(e))
-    """
-    """
-    modeleval_windows = evalwindow_step(timed_templates, window_size)
-    write_pickle_file(modeleval_windows, modeleval_windows_file)
-    #modeleval_windows = read_pickle_file(modeleval_windows_file)
     """
 
     timed_events = evalapply_step(gen_events, timed_templates, loglines)
