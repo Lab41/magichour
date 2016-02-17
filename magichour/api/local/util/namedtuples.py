@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-LogLine = namedtuple('LogLine', ['id', 'ts', 'text', 'processed', 'replacements', 'supportId'])
+#LogLine = namedtuple('LogLine', ['id', 'ts', 'text', 'processed', 'replacements', 'supportId'])
 
 
 '''
