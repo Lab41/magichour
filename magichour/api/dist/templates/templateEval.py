@@ -1,5 +1,6 @@
 from magichour.api.local.util.namedtuples import DistributedLogLine
 from magichour.api.local.util.namedtuples import DistributedTemplateLine
+from magichour.api.local.util.log import log_time
 
 from collections import defaultdict
 import re
@@ -119,7 +120,6 @@ def unescape_skips(s):
     b = s
 
     if match:
-        print 'MATCH'
         for m in match:
 
             newString = r'((?:\ {0,1}\S+){%i,%i})' % (int(m.groups()[0]),
@@ -198,5 +198,6 @@ def match_templates(sc, templates, rdd_log_lines):
     return rdd_log_lines.map(lambda line: match_line(line, template_broadcast))
 
 
+@log_time
 def template_eval_rdd(sc, templates, rdd_log_lines):
     return match_templates(sc, templates, rdd_log_lines)

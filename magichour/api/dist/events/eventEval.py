@@ -1,5 +1,6 @@
 from collections import defaultdict
 from magichour.api.local.util.namedtuples import TimedEvent
+from magichour.api.local.util.log import log_time
 
 
 def event_window(line, windowLength):
@@ -141,6 +142,7 @@ def make_lookup_dicts(event_defs):
     return(template2event, event2template)
 
 
+@log_time
 def event_eval_rdd(sc, rdd_log_lines, event_list,
                    window_length=120):
     '''

@@ -2,6 +2,7 @@ import re
 
 from magichour.api.local.util.namedtuples import DistributedLogLine
 from magichour.api.local.util.namedtuples import DistributedTransformLine
+from magichour.api.local.util.log import log_time
 
 
 def transformLine(line):
@@ -122,6 +123,7 @@ def logPreProcess(sc, logTrans, rrdLogLine):
     return rrdLogLine.map(lambda line: lineRegexReplacement(line, logTrans))
 
 
+@log_time
 def preprocess_rdd(sc, logTrans, rrdLogLine):
     '''
     make a rdd of preprocessed loglines
