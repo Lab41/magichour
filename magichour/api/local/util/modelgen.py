@@ -2,7 +2,7 @@ import uuid
 from collections import defaultdict
 from magichour.api.local.util.log import get_logger, log_time
 from magichour.api.local.util.namedtuples import Event
-from magichour.api.local.util.tfidf import tfidf_filter_namedtuple, tf_idf_filter
+from magichour.api.local.util.tfidf import tf_idf_filter, tfidf_filter_event_defs
 
 logger = get_logger(__name__)
 
@@ -26,11 +26,19 @@ def uniqify_windows(windows):
 
 @log_time
 def tf_idf_filter_window(windows, threshold):
-    return tf_idf_filter(windows, threshold)
+    to_filter = tf_idf_filter(windows, threshold)
+    filtered = []
+    for window in windows:
+        filtered_elems = []
+        for elem in window:
+            if elem not in to_filter:
+                filtered_elems.append(elem)
+        filtered.append(filtered_elems)
+    return filtered
 
 @log_time
 def tfidf_filter_events(events, threshold, deduplicate=True):
-    filtered_events = tfidf_filter_namedtuple(events, threshold, Event)
+    filtered_events = tfidf_filter_event_defs(events, threshold) #tfidf_filter_namedtuple(events, threshold, Event)
     if not deduplicate or not filtered_events:
         return filtered_events
     else:

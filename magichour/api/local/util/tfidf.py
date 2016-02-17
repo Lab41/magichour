@@ -2,6 +2,7 @@ import math
 
 from collections import Counter
 from magichour.api.local.util.log import log_time, get_logger
+from magichour.api.local.util.namedtuples import Event
 
 logger = get_logger(__name__)
 
@@ -31,11 +32,12 @@ def tf_idf_filter(elemss, threshold):
             global_counts_idf[item] += 1
         #global_counts_tf.update(items.keys())
 
-    templates_to_filter = set()
-    for template_id in global_counts_idf:
-        if idf_simple(global_counts_idf[template_id], len(elemss)) >= threshold:
-            templates_to_filter.add(template_id)
-    return templates_to_filter
+    to_filter = set()
+    for elem in global_counts_idf:
+        score = idf_simple(global_counts_idf[elem], len(elemss))
+        if score <= threshold:
+            to_filter.add(elem)
+    return to_filter
 
     # new_elemss = []
     # for elems in elemss:
@@ -48,10 +50,11 @@ def tf_idf_filter(elemss, threshold):
     #     new_elemss.append(new_elems)
     # return new_elemss
 
-
+"""
 @log_time
-def tfidf_filter_namedtuple(ntuples, threshold, ntuple_type):
-    template_ids = [Counter([template_id for template_id in ntuple.template_ids]) for ntuple in ntuples]
+def tfidf_filter_namedtuple(ntuples, threshold):
+    #template_ids = [Counter([template_id for template_id in ntuple.template_ids]) for ntuple in ntuples]
+    template_ids = [[template_id for template_id in event.template_ids] for event in ntuples]
     templates_to_filter = tf_idf_filter(template_ids, threshold)
     try:
         ret = []
@@ -66,3 +69,18 @@ def tfidf_filter_namedtuple(ntuples, threshold, ntuple_type):
                             template_id not in templates_to_filter]) for ntuple in ntuples]
         #ret = [ntuple_type(filtered_ids) for filtered_ids in filtered if filtered_ids]
     return ret
+"""
+
+@log_time
+def tfidf_filter_event_defs(events, threshold):
+    template_ids = [[template_id for template_id in event.template_ids] for event in events]
+    to_filter = tf_idf_filter(template_ids, threshold)
+    filtered_events = []
+    for event in events:
+        template_ids = []
+        for template_id in event.template_ids:
+            if template_id not in to_filter:
+                template_ids.append(template_id)
+        e = Event(id=event.id, template_ids=template_ids)
+        filtered_events.append(e)
+    return filtered_events
