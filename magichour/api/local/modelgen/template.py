@@ -10,10 +10,11 @@ Functions should return an iterable of Templates.
 
 import re
 import tempfile
+import uuid
 
 from magichour.api.local.modelgen.LogCluster import LogCluster
 from magichour.api.local.util.log import get_logger, log_exc
-from magichour.api.local.util.namedtuples import Template
+from magichour.api.local.util.namedtuples import DistributedTemplateLine
 from magichour.lib.StringMatch import StringMatch
 
 logger = get_logger(__name__)
@@ -105,7 +106,12 @@ def stringmatch(lines, *args, **kwargs):
     for cluster in clusters:
         template_str = cluster.get_template_line()
         template_regex = re.compile("%s$" % re.escape(template_str))
-        template = Template(template_id, template_regex, template_str)
+        template = DistributedTemplateLine(
+            id=str(uuid.uuid4()),
+            template=template_regex,
+            skip_words=None,
+            raw_str=template_str,
+        )
         templates.append(template)
         template_id += 1
     return templates

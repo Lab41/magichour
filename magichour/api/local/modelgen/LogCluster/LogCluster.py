@@ -4,7 +4,6 @@ import subprocess
 import uuid
 
 from magichour.api.local.util.log import get_logger
-from magichour.api.local.util.namedtuples import Template, DistributedTemplateLine
 
 logger = get_logger(__name__)
 

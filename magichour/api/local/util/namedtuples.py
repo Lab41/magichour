@@ -51,7 +51,7 @@ DistributedTemplateLine = namedtuple('DistributedTemplateLine', ['id', 'template
 #Transform = namedtuple('Transform', ['id', 'type', 'name', 'transform', 'compiled'])
 
 
-Template = namedtuple('Template', ['id', 'match', 'str'])
+#Template = namedtuple('Template', ['id', 'match', 'str'])
 
 
 TimedTemplate = namedtuple('TimedTemplate', ['ts', 'template_id', 'logline_id'])
