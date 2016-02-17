@@ -1,7 +1,9 @@
 import math
 
 from collections import Counter
-from magichour.api.local.util.log import log_time
+from magichour.api.local.util.log import log_time, get_logger
+
+logger = get_logger(__name__)
 
 
 def tf(elem, elems):
@@ -21,13 +23,17 @@ def tf_idf(elem, elems, elemss):
 
 
 def tf_idf_filter(elemss, threshold):
-    global_counts = Counter()
+    global_counts_tf = Counter()
+    global_counts_idf = Counter()
     for items in elemss:
-        global_counts.update(items.keys())
+        global_counts_tf.update(items)
+        for item in set(items):
+            global_counts_idf[item] += 1
+        #global_counts_tf.update(items.keys())
 
     templates_to_filter = set()
-    for template_id in global_counts:
-        if idf_simple(global_counts[template_id], len(elemss)) < threshold:
+    for template_id in global_counts_idf:
+        if idf_simple(global_counts_idf[template_id], len(elemss)) < threshold:
             templates_to_filter.add(template_id)
     return templates_to_filter
 
@@ -35,7 +41,7 @@ def tf_idf_filter(elemss, threshold):
     # for elems in elemss:
     #     new_elems = []
     #     for elem in elems:
-    #         score = idf_simple(elem, global_counts, len(elemss)) # tf_idf(elem, elems, elemss)
+    #         score = idf_simple(elem, global_counts_tf, len(elemss)) # tf_idf(elem, elems, elemss)
     #         if score >= threshold:
     #             for i in range(elems[elem]):
     #                 new_elems.append(elem)
