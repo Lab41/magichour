@@ -3,7 +3,6 @@ from collections import namedtuple
 LogLine = namedtuple('LogLine', ['id', 'ts', 'text', 'processed', 'replacements', 'supportId'])
 
 
-
 '''
 DistributedLine - moves information between various stages of algorithms
 
@@ -39,7 +38,7 @@ DistributedTransformLine = namedtuple('DistributedTransformLine',
                                    'transform', 'compiled'])
 
 '''
-DistributedTemplateLine - helps determind which templates match a logline
+DistributedTemplateLine - helps determine which templates match a logline
 
 id - int: id of the template
 template - compiled regex: compiled regex to match a template
