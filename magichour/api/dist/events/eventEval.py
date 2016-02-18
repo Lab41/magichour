@@ -1,6 +1,7 @@
 from collections import defaultdict
-from magichour.api.local.util.namedtuples import TimedEvent
+from magichour.api.local.util.namedtuples import Event,TimedEvent
 from magichour.api.local.util.log import log_time
+from magichour.api.local.modeleval.apply import apply_queue
 
 
 def event_window(line, windowLength):
@@ -46,75 +47,6 @@ def ship_events(line, t2e):
     return outList
 
 
-def make_events_from_lines(line, e2t):
-    '''
-    Evaluate if an event has been seen in a window of templates
-
-    many ways of immediately doing this.
-  no    0. keep a FSM for each event and output  when they fsm reaches
-           the accptance state [not doing this]
-  no    1. just keep set of seen templates within the window and see
-           if an event is a subset of the window. [not doing this
-           as events may belong to different sources, although it is fast,
-           perhaps would be a good test to see if further processing needed.]
- yes->  2. keep a running set evaluation for templates in a set
- yes->          1. choose to only keep the most recent version of a toemplate
-                [has the effect of lessening the timespread of the
-                 templates chosen.]
-                OR
-  no  x         2. choose to keep the first version of  a templateo
-                [not doint this
-                has the effect of spreading out the templates chosen]
-
-    Args:
-        line(DistributedLogLine):
-        e2t(Broadcast(defaultDict(set))): mapping between events and templates
-
-    Returns:
-        retval(list(tuple(tuple(eventID,windowID),tuple(DistributedLogLines))))
-    '''
-
-    key, iterable = line
-    event, timeBin = key
-
-    # what set are we looking to satisfy
-    lookingFor = e2t.value[event]
-
-    tList = list()
-    for i in iterable:
-        tList.append(i)
-
-    # make sure list is in timeseries order
-    # TODO does this really need to occur?
-    tList.sort()
-
-    # where the output goes
-    outSet = set()
-
-    tempDict = dict()
-    tempSet = set()
-
-    for outer in range(len(tList)):
-        tempDict.clear()
-        tempSet.clear()
-        for inner in range(outer, len(tList)):
-            tempDict[tList[inner].templateId] = tList[inner]
-            tempSet.add(tList[inner].templateId)
-            if lookingFor == tempSet:
-                temp = tuple(tempDict.itervalues())
-                output = (key, temp)
-                outSet.add(output)
-                break
-
-    output_vals = []
-    for key, event_tuple in outSet:
-        output_val = TimedEvent(
-            event_id=key[0],
-            timed_templates=list(event_tuple))
-        output_vals.append(output_val)
-    return output_vals
-
-
 def make_lookup_dicts(event_defs):
     '''
     make the lookup dictionaries used for translating
@@ -142,9 +74,29 @@ def make_lookup_dicts(event_defs):
     return(template2event, event2template)
 
 
+def apply_single_distributed_tuple(input_tuple, event2template_broadcast, window_time=None):
+    """
+    Helper function that takes a tuple as input and breaks out inputs to pass
+    to apply_queue
+    Args:
+        input_tuple(tuple(tuple(event_id, window_num), iterable(DistributedLogLines))):
+                    A tuple of inputs to be split and passed
+        event2template_broadcast (broadcast variable): Dictionary mapping event_ids to templates contained
+
+    Returns:
+        timed_events (list(TimedEvent)): A list of found events with their component log lines
+    """
+    event_description, log_msgs = input_tuple
+    event_id, window_num = event_description
+
+    event = Event(id=event_id, template_ids=list(event2template_broadcast.value[event_id]))
+    log_msgs = list(log_msgs) # Comes in as iterable, follow on functions expect list
+
+    return apply_queue(event, log_msgs, window_time=window_time)
+
 @log_time
 def event_eval_rdd(sc, rdd_log_lines, event_list,
-                   window_length=120):
+                   window_length=120, window_length_distributed=6000):
     '''
     Performs the event generation from incoming DistributedLogLine rdd
 
@@ -153,7 +105,10 @@ def event_eval_rdd(sc, rdd_log_lines, event_list,
         rdd_log_lines(DistributedLogLines): rdd of DistributedLogLines created
         by earlier processing
         event_list(list(Event)): List of event definitions
-        window_length(int): window length to evaluate events in (seconds)
+        window_length(int): window length to evaluate localy events in (seconds)
+        window_length_distributed(int): In parallelizing event evaluation this parameter controls how large of
+                    a window should go to each reducer. Events spanning this boundry will not be found. This
+                    should be much larger than window_length or performance will suffer
 
     Returns:
         retval(rdd tuple(tuple(eventId,windowID),tuple(DistributedLogLines)))
@@ -164,15 +119,14 @@ def event_eval_rdd(sc, rdd_log_lines, event_list,
     template2event_broadcast = sc.broadcast(template2event)
     event2template_broadcast = sc.broadcast(event2template)
 
-    windowed = rdd_log_lines.map(
-        lambda line: event_window(
-            line, window_length))
-    edist = windowed.flatMap(
-        lambda line: ship_events(
-            line, template2event_broadcast))
-    eventloglist = edist.groupByKey()
-    outEvents = eventloglist.flatMap(
-        lambda line: make_events_from_lines(
-            line, event2template_broadcast))
+    windowed = rdd_log_lines.map(lambda line: event_window(line,
+                                                           window_length_distributed))
+    edist = windowed.flatMap(lambda line: ship_events(line,
+                                                      template2event_broadcast))
+    event_log_list = edist.groupByKey()
+    timed_templates = event_log_list.flatMap(lambda input_tuple:
+                                     apply_single_distributed_tuple(input_tuple,
+                                                                    event2template_broadcast,
+                                                                    window_time=window_length))
 
-    return outEvents
+    return timed_templates
