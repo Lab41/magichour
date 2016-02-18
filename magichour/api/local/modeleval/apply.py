@@ -2,7 +2,10 @@ import functools
 import re
 import multiprocessing
 import json
-from collections import defaultdict
+from operator import attrgetter
+from collections import defaultdict, Counter
+from functools import partial
+from multiprocessing import Pool
 
 from magichour.api.local.util.log import get_logger
 from magichour.api.local.util.namedtuples import TimedEvent, DistributedLogLine
@@ -116,13 +119,23 @@ def count_templates(timed_templates):
     return counts
 
 
-### TODO: can delete get_least_common_template() if we switch to apply_events2()
-def get_least_common_template(template_counts, template_ids):
-    least_common_template = None
-    for template_id in template_ids:
-        if not least_common_template or template_counts[template_id] < template_counts[least_common_template]:
-            least_common_template = template_id
-    return least_common_template
+def make_t2e(events):
+    t2e = defaultdict(set)
+    for event in events:
+        for template_id in sorted(event.template_ids):
+            t2e[template_id].add(event.id)
+    return t2e
+
+
+def create_queues(events, log_lines):
+    template2event = make_t2e(events)
+
+    event_template_streams = defaultdict(list)
+    for log_line in log_lines:
+        for event_id in template2event[log_line.templateId]:
+            event_template_streams[event_id].append(log_line)
+
+    return event_template_streams
 
 
 def jaccard(s1, s2):
@@ -130,10 +143,11 @@ def jaccard(s1, s2):
 
 
 def get_inner_list_vals(d):
-    d_vals = []
+    d_vals = set()#[]
     for d_val_list in d.itervalues():
-        for d_val in d_val_list:
-            d_vals.append(d_val)
+        d_vals.update(d_val_list)
+        #for d_val in d_val_list:
+        #    d_vals.append(d_val)
     return d_vals
 
 
@@ -141,149 +155,138 @@ def jaccard_dicts(d1, d2, key_weight=0.0):
     jaccard_keys = jaccard(d1.viewkeys(), d2.viewkeys())
     d1_vals = get_inner_list_vals(d1)
     d2_vals = get_inner_list_vals(d2)
-    jaccard_vals = jaccard(frozenset(d1_vals), frozenset(d2_vals))
+    jaccard_vals = jaccard(d1_vals, d2_vals)
     return (jaccard_keys * key_weight) + (jaccard_vals * (1-key_weight))
 
 
-def calc_similarity(candidate_timed_template, orig_timed_template, logline_dict):
+def calc_similarity(msg1, msg2):
     """
     Similarity between candidate and original: weighted Jaccard similarity between replacement keys and values
         1.0 = identical (best/greatest similarity)
         0.0 = nothing in common
-    
+
     Returns: 0 <= similarity <= 1
     """
-    candidate = logline_dict[candidate_timed_template.logline_id].replacements
-    orig = logline_dict[orig_timed_template.logline_id].replacements
-    return jaccard_dicts(candidate, orig) if candidate and orig else 0
+    candidate = msg1.proc_dict
+    orig = msg2.proc_dict
+    return jaccard_dicts(candidate, orig) if candidate and orig and len(candidate) > 0 and len(orig) > 0 else 0
 
 
-def calc_proximity(candidate_timed_template, orig_timed_template):
-    """
-    Proximity between candidate and original: -abs(time difference) in seconds.
-        0.0 = coincident (best/greatest proximity)
-    
-    Returns: proximity <= 0
-    """
-    return -abs(candidate_timed_template.ts - orig_timed_template.ts)
-
-
-def calc_score(candidate_timed_template, orig_timed_template, logline_dict):
-    """
-    Compute score based on similarity and proximity.  
-    Similarity is ranked first; equal similarities are then ranked by proximity.
-    
-    Returns: tuple(similarity, proximity)
-    """
-    return (calc_similarity(candidate_timed_template, orig_timed_template, logline_dict),
-            calc_proximity(candidate_timed_template, orig_timed_template))
-
-
-def find_left_idx(idx, timed_templates, start_time):
-    """
-    Return earliest index within window: [min(idx)].ts >= start_time
-    """
-    assert timed_templates[idx].ts >= start_time, 'starting index must be within window'
-    while idx > 0 and timed_templates[idx-1].ts >= start_time:
+def get_start_index(idx, log_msgs, start_time):
+    while log_msgs[idx].ts > start_time and idx != 0:
         idx -= 1
     return idx
 
-def find_right_idx(idx, timed_templates, end_time):
-    """
-    Return 1 + latest index within window: [max(idx-1)].ts <= end_time
-    """
-    assert timed_templates[idx].ts <= end_time, 'starting index must be within window'
-    while idx < len(timed_templates) and timed_templates[idx].ts <= end_time:
+
+def get_end_index(idx, log_msgs, end_time):
+    while log_msgs[idx].ts < end_time and idx < len(log_msgs)-1:
         idx += 1
     return idx
 
-def create_window(idx, timed_templates, window_size):
-    timed_template = timed_templates[idx]
-    start_time = timed_template.ts - window_size
-    end_time = timed_template.ts + window_size
-    left_idx = find_left_idx(idx, timed_templates, start_time)
-    right_idx = find_right_idx(idx, timed_templates, end_time)
-    return (left_idx, right_idx)
 
-def search_window(idx, event, timed_templates, logline_dict, window_size):
-    timed_template = timed_templates[idx]
-    left_idx, right_idx = create_window(idx, timed_templates, window_size)
-    window = timed_templates[left_idx:right_idx]
-    results = {timed_template.template_id : timed_template}
-    for template_id in event.template_ids:
-        if template_id != timed_template.template_id:
-            relevant = [tt for tt in window if tt.template_id == template_id]
-            if not relevant:
-                # We are missing one of the required template ID in this window
-                return []
-            relevant = sorted(relevant, reverse=True, key=lambda tt: calc_similarity(tt, timed_template, logline_dict))
-            results[template_id] = relevant[0]
-    return results.values()
+def create_window_around_id(idx, log_msgs, window_time):
+    id_time = log_msgs[idx].ts
+    start_time = id_time - window_time
+    start_idx = get_start_index(idx, log_msgs, start_time)
+
+    end_time = id_time + window_time
+    end_idx = get_end_index(idx, log_msgs, end_time)
+    return (start_idx, end_idx)
 
 
-# assume timed_templates are ordered
-def apply_events(events, timed_templates, loglines, window_size=60, mp=False):
-    template_counts = count_templates(timed_templates)
-    logline_dict = {logline.id : logline for logline in loglines}
+def get_similarity(idx1, idx2, log_msgs):
+    msg1 = log_msgs[idx1]
+    msg2 = log_msgs[idx2]
+    return calc_similarity(msg1, msg2)
 
-    # Create lookup table to speed up matching
-    timed_template_dict = defaultdict(list)
-    for idx, tt in enumerate(timed_templates):
-        timed_template_dict[tt.template_id].append(idx)
+
+def apply_queue(event, log_msgs, window_time=60):
+    '''
+    WARNING: Assumes that log_msgs only contains template_ids in event
+    WARNING: Assumes that msgs are sorted
+    '''
+    id_counts = Counter([log_msg.templateId for log_msg in log_msgs]).most_common()
+    id_counts = [template_id for (template_id, count) in reversed(id_counts)]
+
+    least_common_template_id = id_counts[0] #id_counts.most_common()[-1][0] # Just keep id, drop count
 
     timed_events = []
-    for event in events:
-        lct_id = get_least_common_template(template_counts, event.template_ids)
-        for idx in timed_template_dict[lct_id]:
-            results = search_window(idx, event, timed_templates, logline_dict, window_size)
-            if results:
-                s = sorted(results, key=lambda result: result.ts)
-                timed_event = TimedEvent(event.id, timed_templates=s)
-                timed_events.append(timed_event)
+    idx_used = set()
+    for idx, log_msg in enumerate(log_msgs):
+        if log_msg.templateId == least_common_template_id:
+            # Get window around anchor msg
+            (start_idx, end_idx) = create_window_around_id(idx, log_msgs, window_time)
+
+            # Figure out what template IDs/in what counts are present
+            template_id_to_idx = defaultdict(list)
+            for i in range(start_idx, end_idx+1):
+                if i not in idx_used:
+                    template_id_to_idx[log_msgs[i].templateId].append(i)
+
+            # If we have everything we need to make a match
+            if len(template_id_to_idx) != len(event.template_ids):
+                logger.debug('Not all templates present. Found %d of %d'%
+                             (len(template_id_to_idx), len(event.template_ids )))
+            else:
+                # Add current id
+                idx_in_event = set([idx])
+
+                # iterate through component template_ids adding the best one to each event
+                for template_id in id_counts[1:]:
+                    # If there's only one of that template ID in this window then that's what goes in our event
+                    if len(template_id_to_idx[template_id]) == 1:
+                        idx_in_event.add(template_id_to_idx[template_id][0])
+                    elif len(template_id_to_idx[template_id]) > 1:
+                        id_sim = []
+                        for candidate_index in template_id_to_idx[template_id]:
+                            sim = get_similarity(idx, candidate_index, log_msgs)
+                            delta_t = abs(log_msgs[idx].ts - log_msgs[candidate_index].ts)
+                            id_sim.append((-abs(sim), delta_t, candidate_index))
+
+                        id_sim = sorted(id_sim)
+                        idx_in_event.add(id_sim[0][2]) # Pulll 3rd field from 1st item
+                    else:
+                        # Should be unreachable
+                        raise ValueError('Not sure how we got here...')
+                if len(idx_in_event) ==  len(event.template_ids):
+                    te = TimedEvent(event_id=event.id,
+                                timed_templates=[log_msgs[selected_idx] for selected_idx in idx_in_event])
+                    timed_events.append(te)
+                    idx_used.update(idx_in_event)
+                else:
+                    logger.warn('Should never have reached this point')
+
     return timed_events
 
 
-def search_window2(idx, ordered_event_template_ids, timed_templates, timed_template_dict, logline_dict, window_size):
-    least_common_template = timed_templates[idx]
-    left_idx, right_idx = create_window(idx, timed_templates, window_size)
-    window = set(range(left_idx, right_idx))
-    results = {least_common_template.template_id : least_common_template}
-    # skip search for first/least_common_template_id since we know it is at idx
-    for template_id in ordered_event_template_ids[1:]:
-        # find all template_id within the window
-        results[template_id] = [timed_templates[i] for i in window.intersection(timed_template_dict[template_id])]
-        if not results[template_id]:
-            # We are missing one of the required template ID in this window
-            return []
-
-    # Found all event templates
-    # For each template that occurs multiple times, pick the one that scores best compared to the least_common_template
-    for template_id in ordered_event_template_ids[1:]:
-        relevant = sorted(results[template_id], reverse=True, key=lambda tt: calc_score(tt, least_common_template, logline_dict)) if len(results[template_id]) > 1 else results[template_id]
-        results[template_id] = relevant[0]
-    return results.values()
+def apply_single_tuple(input_tuple, window_time=None):
+    event, queues = input_tuple
+    queues = sorted(queues, key=attrgetter('ts'))
+    return apply_queue(event, queues, window_time=window_time)
 
 
 # assume timed_templates are ordered
-def apply_events2(events, timed_templates, loglines, window_size=60, mp=False):
-    template_counts = count_templates(timed_templates)
-    logline_dict = {logline.id : logline for logline in loglines}
+def apply_events(events, timed_templates, window_time=60, mp=False):
+    queues = create_queues(events, timed_templates)
 
-    # Create lookup table to speed up matching: set of all timed_template idx containing that template
-    timed_template_dict = defaultdict(set)
-    for idx, tt in enumerate(timed_templates):
-        timed_template_dict[tt.template_id].add(idx)
+    if mp:
+        logger.info('Using multiprocessing to apply events')
 
-    timed_events = []
-    for event in events:
-        # look for event template_ids in least-common to most-common order
-        #   by looking in a window of timed_templates centered on each occurrence of the least-common template
-        #     and stop processing the window as soon as we encounter a missing event template
-        ordered_event_template_ids = sorted(event.template_ids, key=lambda template_id: template_counts[template_id])
-        for idx in timed_template_dict[ordered_event_template_ids[0]]:
-            results = search_window2(idx, ordered_event_template_ids, timed_templates, timed_template_dict, logline_dict, window_size)
-            if results:
-                s = sorted(results, key=lambda result: result.ts)
-                timed_event = TimedEvent(event.id, timed_templates=s)
-                timed_events.append(timed_event)
+        apply_w_defaults = partial(apply_single_tuple, window_time=window_time) #lambda x: apply_single_tuple(x, window_time=window_time)
+
+        p = Pool() # Note: must define pool after functions
+        timed_events = p.map(apply_w_defaults, [(events[idx], queues[idx]) for idx in sorted(queues.keys())])
+
+    else:
+        logger.info('Using single-thread to apply events')
+        timed_events = []
+        for idx in sorted(queues.keys()):
+            try:
+                if len(queues[idx]) > 0:
+                    logger.info('Processing event %d of %d'%(idx, len(events)))
+                    idx_timed_events = apply_queue(events[idx], sorted(queues[idx], key=attrgetter('ts')), window_time)
+                    timed_events.extend(idx_timed_events)
+            except:
+                logger.error('Failure on idx: %d'%idx)
+                raise
     return timed_events

@@ -27,7 +27,7 @@ def glove(windows, num_components=16, glove_window=10, epochs=20):
     import hdbscan
     import multiprocessing
 
-    ws = [[template_id for template_id in w.template_ids] for w in windows]
+    ws = [[template_id for template_id in w] for w in windows]
     corpus = glove.Corpus()
     corpus.fit(ws, window=glove_window)
     # TODO: Explore reasonable glove defaults

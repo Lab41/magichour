@@ -43,10 +43,11 @@ logcluster_kwargs = {"support": "50"}
 
 gen_windows_kwargs = {"window_size": 60, "tfidf_threshold": 0}
 
-glove_kwargs = {}
+glove_kwargs = {'num_components':16, 'glove_window':10, 'epochs':20}
 paris_kwargs = {"r_slack": 0.0, "num_iterations": 3}
 fp_growth_kwargs = {"min_support": 0.005, "iterations": 10000, "tfidf_threshold": 1.0} #only return 10000 itemsets, iterations = -1 will return all
 
+eval_apply_kwargs = {'window_time':60, 'mp':True}
 ###
 
 @log_time
@@ -68,9 +69,9 @@ def main():
     write_pickle_file(gen_windows, gen_windows_file)
     #gen_windows = read_pickle_file(modelgen_windows_file)
 
-    gen_events = event_step(gen_windows, "fp_growth", **fp_growth_kwargs)
+    #gen_events = event_step(gen_windows, "fp-growth", **fp_growth_kwargs)
     #gen_events = event_step(gen_windows, "paris", **paris_kwargs)
-    #gen_events = event_step(gen_windows, "glove", **glove_kwargs)
+    gen_events = event_step(gen_windows, "glove", **glove_kwargs)
     write_pickle_file(gen_events, gen_events_file)
     #gen_events = read_pickle_file(gen_events_file)
 
@@ -89,8 +90,8 @@ def main():
     logger.info("\n"+pformat(e))
     """
 
-    #timed_events = evalapply_step(gen_events, eval_loglines, loglines)
-    #write_pickle_file(timed_events, timed_events_file)
+    timed_events = evalapply_step(gen_events, eval_loglines, **eval_apply_kwargs)
+    write_pickle_file(timed_events, timed_events_file)
     #timed_events = read_pickle_file(timed_events_file)
 
     logger.info("Done!")
