@@ -35,7 +35,7 @@ transforms_file = os.path.join(data_dir, "sample.transforms")
 ###
 
 # Parameters for pipeline
-
+write_to_pickle_file = False
 read_lines_args = [{}, 0, 10]
 read_lines_kwargs = {"skip_num_chars": 22}
 
@@ -54,26 +54,31 @@ eval_apply_kwargs = {'window_time':60, 'mp':True}
 @log_time
 def main():
     loglines = preprocess_step(log_file, transforms_file, *read_lines_args, **read_lines_kwargs)
-    write_pickle_file(loglines, loglines_file)
+    if write_to_pickle_file:
+        write_pickle_file(loglines, loglines_file)
     #loglines = read_pickle_file(loglines_file)
 
     gen_templates = template_step(loglines, "logcluster", **logcluster_kwargs)
     #gen_templates = template_step(loglines, "stringmatch") # WIP
-    write_pickle_file(gen_templates, gen_templates_file)
+    if write_to_pickle_file:
+        write_pickle_file(gen_templates, gen_templates_file)
     #gen_templates = read_pickle_file(gen_templates_file)
     
     eval_loglines = genapply_step(loglines, gen_templates, **genapply_kwargs)
-    write_pickle_file(eval_loglines, eval_loglines_file)
+    if write_to_pickle_file:
+        write_pickle_file(eval_loglines, eval_loglines_file)
     #eval_loglines = read_pickle_file(eval_loglines_file)
     
     gen_windows = genwindow_step(eval_loglines, **gen_windows_kwargs)
-    write_pickle_file(gen_windows, gen_windows_file)
+    if write_to_pickle_file:
+        write_pickle_file(gen_windows, gen_windows_file)
     #gen_windows = read_pickle_file(modelgen_windows_file)
 
     #gen_events = event_step(gen_windows, "fp-growth", **fp_growth_kwargs)
     #gen_events = event_step(gen_windows, "paris", **paris_kwargs)
     gen_events = event_step(gen_windows, "glove", **glove_kwargs)
-    write_pickle_file(gen_events, gen_events_file)
+    if write_to_pickle_file:
+        write_pickle_file(gen_events, gen_events_file)
     #gen_events = read_pickle_file(gen_events_file)
 
     """
