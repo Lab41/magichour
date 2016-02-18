@@ -4,7 +4,6 @@ from magichour.api.local.util.log import log_time
 
 from collections import defaultdict
 import re
-import json
 
 
 def bad_way(r1, r2):
@@ -165,19 +164,19 @@ def match_line(line, templates):
             return DistributedLogLine(line.ts,
                                       line.text,
                                       line.processed,
-                                      json.dumps(line.proc_dict),
+                                      line.proc_dict,
                                       template_line.template.pattern,
                                       template_line.id,
-                                      json.dumps(template_dict))
+                                      template_dict)
 
     # could not find a template match
     return DistributedLogLine(line.ts,
                               line.text,
                               line.processed,
-                              json.dumps(line.proc_dict),
+                              line.proc_dict,
                               None,
                               -1,
-                              json.dumps(template_dict))
+                              template_dict)
 
 
 def match_templates(sc, templates, rdd_log_lines):

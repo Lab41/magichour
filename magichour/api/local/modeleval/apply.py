@@ -143,11 +143,9 @@ def jaccard(s1, s2):
 
 
 def get_inner_list_vals(d):
-    d_vals = set()#[]
+    d_vals = set()
     for d_val_list in d.itervalues():
         d_vals.update(d_val_list)
-        #for d_val in d_val_list:
-        #    d_vals.append(d_val)
     return d_vals
 
 
@@ -167,24 +165,56 @@ def calc_similarity(msg1, msg2):
 
     Returns: 0 <= similarity <= 1
     """
+    # TODO: Look at handling case when dict is a json dict
+    # TODO: Look at adding tempalte_dict to proc_dict
     candidate = msg1.proc_dict
     orig = msg2.proc_dict
     return jaccard_dicts(candidate, orig) if candidate and orig and len(candidate) > 0 and len(orig) > 0 else 0
 
 
 def get_start_index(idx, log_msgs, start_time):
+    """
+    Function that searches for the index of the log message that is just before the start_time (starting from idx)
+    Args:
+        idx (int): Index to start from
+        log_msgs (list(DistributedLogLines)): List of messages to process
+        start_time (float): The start time to search for
+
+    Returns:
+        idx (int): The index that is just before the start_time (or the start)
+    """
     while log_msgs[idx].ts > start_time and idx != 0:
         idx -= 1
     return idx
 
 
 def get_end_index(idx, log_msgs, end_time):
+    """
+    Function that searches for the index of the log message that is just after the end_time (starting from idx)
+    Args:
+        idx (int): Index to start from
+        log_msgs (list(DistributedLogLines)): List of messages to process
+        end_time (float): The end time to search for
+
+    Returns:
+        idx (int): The index that is just after the end_time (or the end)
+    """
     while log_msgs[idx].ts < end_time and idx < len(log_msgs)-1:
         idx += 1
     return idx
 
 
 def create_window_around_id(idx, log_msgs, window_time):
+    """
+    Find the start/stop index around a specific log message that defines a window of +/- window_time
+    Args:
+        idx (int): Index of the message to use as the center
+        log_msgs (list(DistributedLogLines)): List of messages to process
+        window_time (int): The amount of time +/- to search
+
+    Returns:
+        tuple(start_idx, end_idx): The start and end indexes that define the window
+    """
     id_time = log_msgs[idx].ts
     start_time = id_time - window_time
     start_idx = get_start_index(idx, log_msgs, start_time)
@@ -195,16 +225,39 @@ def create_window_around_id(idx, log_msgs, window_time):
 
 
 def get_similarity(idx1, idx2, log_msgs):
+    """
+    Helper function in getting similarity between two log messages by comparing their dictionary content.
+    This function extracts the two relevant messages and passes them to calc_similarity
+    Args:
+        idx1 (int): Index of 1st message to compare
+        idx2 (int): Index of 2nd message to compare
+
+    Returns:
+        similarity (float): The jaccard similarity of the contents of the two dictionaries
+    """
     msg1 = log_msgs[idx1]
     msg2 = log_msgs[idx2]
     return calc_similarity(msg1, msg2)
 
 
 def apply_queue(event, log_msgs, window_time=60):
-    '''
-    WARNING: Assumes that log_msgs only contains template_ids in event
-    WARNING: Assumes that msgs are sorted
-    '''
+    """
+    The main function responsible for taking a single event and a list of messages and finding the
+    occurrences of that event in the data
+
+    Note: Assumes that log_msgs only contains template_ids in event
+
+    Args:
+        event (Event): The event definition to look for
+        log_msgs (list(DistributedLogLine)): A list of messages to look for the event in
+        window_time (int): All templates in an event must occur within this time. Note: actually specified as the
+                            distance from the least likely template [not a strict limit on event length]
+    Returns:
+        timed_events (list(TimedEvent)): A list of found events with their component log lines
+    """
+    # The rest of the processing assumes that log messages are in time order
+    log_msgs = sorted(log_msgs, key=attrgetter('ts'))
+
     id_counts = Counter([log_msg.templateId for log_msg in log_msgs]).most_common()
     id_counts = [template_id for (template_id, count) in reversed(id_counts)]
 
@@ -260,33 +313,64 @@ def apply_queue(event, log_msgs, window_time=60):
 
 
 def apply_single_tuple(input_tuple, window_time=None):
-    event, queues = input_tuple
-    queues = sorted(queues, key=attrgetter('ts'))
-    return apply_queue(event, queues, window_time=window_time)
+    """
+    Helper function that takes a tuple as input and breaks out inputs to pass
+    to apply_queue
+    Args:
+        input_tuple(tuple(Event, list(DistributedLogLines))): A tuple of inputs to be split and passed
+    Returns:
+        timed_events (list(TimedEvent)): A list of found events with their component log lines
+    """
+    event, log_msgs = input_tuple
+    return apply_queue(event, log_msgs, window_time=window_time)
 
 
-# assume timed_templates are ordered
-def apply_events(events, timed_templates, window_time=60, mp=False):
-    queues = create_queues(events, timed_templates)
+def apply_events(events, log_msgs, window_time=60, mp=False):
+    """
+    Main entry point for local processing to apply events. The processing takes a list of timed templates
+    as input and reorganizes the list into a dictionary of lists where each list contains all the templates
+    relevant to a given event (done in create_queues). That input then allows us to parallelize looking
+    for a given event in some subset of the events.
+
+    Distributed processing bypasses this function and call aply_single_tuple directly
+
+    Args:
+        events (list(Event)): The list of events to search for in the log messages
+        log_msgs (list(DistributedLogLine)): A list of distributed log lines to look for events in
+        window_time (int): All templates in an event must occur within this time. Note: actually specified as the
+                            distance from the least likely template [not a strict limit on event length]
+        mp (Bool): Whether to use a multiprocessing pool to parallelize processing
+    Returns:
+        timed_events (list(TimedEvent)): A list of found events with their component log lines
+    """
+    queues = create_queues(events, log_msgs)
+
+    def apply_single_tuple_generator(events, queues):
+        """
+        Generator to allow us to not materialize entire list of tuples at once
+        """
+        for idx in sorted(queues.keys()):
+            yield (events[idx], queues[idx])
+
+    # Helper function to allow only one arg to apply_single_tuple
+    apply_w_defaults = partial(apply_single_tuple, window_time=window_time)
 
     if mp:
+        # Use multiprocessing pool to process in parallel
         logger.info('Using multiprocessing to apply events')
-
-        apply_w_defaults = partial(apply_single_tuple, window_time=window_time) #lambda x: apply_single_tuple(x, window_time=window_time)
-
         p = Pool() # Note: must define pool after functions
-        timed_events = p.map(apply_w_defaults, [(events[idx], queues[idx]) for idx in sorted(queues.keys())])
-
+        timed_events = p.map(apply_w_defaults, apply_single_tuple_generator(events, queues))
     else:
+        # Single threaded processing
         logger.info('Using single-thread to apply events')
         timed_events = []
-        for idx in sorted(queues.keys()):
+        for idx, input_tuple in enumerate(apply_single_tuple_generator(events, queues)):
             try:
-                if len(queues[idx]) > 0:
+                if idx%10 == 0:
                     logger.info('Processing event %d of %d'%(idx, len(events)))
-                    idx_timed_events = apply_queue(events[idx], sorted(queues[idx], key=attrgetter('ts')), window_time)
-                    timed_events.extend(idx_timed_events)
+                idx_timed_events = apply_w_defaults(input_tuple)
+                timed_events.extend(idx_timed_events)
             except:
-                logger.error('Failure on idx: %d'%idx)
+                logger.error('Failure on event: %s'%str(input_tuple[0]))
                 raise
     return timed_events
