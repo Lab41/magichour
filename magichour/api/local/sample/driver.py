@@ -41,6 +41,7 @@ read_lines_kwargs = {"skip_num_chars": 22}
 
 logcluster_kwargs = {"support": "50"}
 
+genapply_kwargs = {'mp':True}
 gen_windows_kwargs = {"window_size": 60, "tfidf_threshold": 0}
 
 glove_kwargs = {'num_components':16, 'glove_window':10, 'epochs':20}
@@ -61,7 +62,7 @@ def main():
     write_pickle_file(gen_templates, gen_templates_file)
     #gen_templates = read_pickle_file(gen_templates_file)
     
-    eval_loglines = genapply_step(loglines, gen_templates)
+    eval_loglines = genapply_step(loglines, gen_templates, **genapply_kwargs)
     write_pickle_file(eval_loglines, eval_loglines_file)
     #eval_loglines = read_pickle_file(eval_loglines_file)
     
