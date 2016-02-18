@@ -1,8 +1,5 @@
 from collections import namedtuple
 
-LogLine = namedtuple('LogLine', ['id', 'ts', 'text', 'processed', 'replacements', 'supportId'])
-
-
 
 '''
 DistributedLine - moves information between various stages of algorithms
@@ -39,7 +36,7 @@ DistributedTransformLine = namedtuple('DistributedTransformLine',
                                    'transform', 'compiled'])
 
 '''
-DistributedTemplateLine - helps determind which templates match a logline
+DistributedTemplateLine - helps determine which templates match a logline
 
 id - int: id of the template
 template - compiled regex: compiled regex to match a template
@@ -48,22 +45,6 @@ raw_str - str: The raw string used to generate the tempalte/skip_words
 '''
 
 DistributedTemplateLine = namedtuple('DistributedTemplateLine', ['id', 'template', 'skip_words', 'raw_str'])
-
-Transform = namedtuple('Transform', ['id', 'type', 'name', 'transform', 'compiled'])
-
-
-Template = namedtuple('Template', ['id', 'match', 'str'])
-
-
-TimedTemplate = namedtuple('TimedTemplate', ['ts', 'template_id', 'logline_id'])
-
-
-ModelGenWindow = namedtuple('ModelGenWindow', ['template_ids'])
-#ModelGenWindow = namedtuple('ModelGenWindow', ['id', 'template_ids'])
-
-
-ModelEvalWindow = namedtuple('ModelEvalWindow', ['start_time', 'end_time', 'timed_templates'])
-#ModelEvalWindow = namedtuple('ModelEvalWindow', ['id', 'timed_templates'])
 
 
 Event = namedtuple('Event', ['id', 'template_ids'])

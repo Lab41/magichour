@@ -14,7 +14,7 @@ logger = get_logger(__name__)
 # return list of Event named tuples
 
 def paris(windows, r_slack, num_iterations, tau=1.0):
-    ws = [set([template_id for template_id in w.template_ids]) for w in windows]
+    ws = [set([template_id for template_id in w]) for w in windows]
     A, R = paris_lib.PARIS(ws, r_slack, num_iterations=num_iterations, tau=tau)
 
     itemsets = [frozenset(a) for a in A]
@@ -27,12 +27,12 @@ def glove(windows, num_components=16, glove_window=10, epochs=20):
     import hdbscan
     import multiprocessing
 
-    ws = [[template_id for template_id in w.template_ids] for w in windows]
+    ws = [[template_id for template_id in w] for w in windows]
     corpus = glove.Corpus()
     corpus.fit(ws, window=glove_window)
     # TODO: Explore reasonable glove defaults
     glove_model = glove.Glove(no_components=num_components, learning_rate=0.05)
-    glove_model.fit(corpus.matrix, epochs=epochs, no_threads=multiprocessing.cpu_count(), verbose=True)
+    glove_model.fit(corpus.matrix, epochs=epochs, no_threads=multiprocessing.cpu_count(), verbose=False)
     glove_model.add_dictionary(corpus.dictionary)
 
     labels = []
@@ -67,8 +67,7 @@ def fp_growth(windows, min_support, iterations=0):
         logger.info("Min support %s%% of %s: %s", min_support*100, len(windows), new_support)
         min_support = new_support
 
-    ws = [[template_id for template_id in w.template_ids] for w in windows]
-    itemset_gen = find_frequent_itemsets(ws, min_support)
+    itemset_gen = find_frequent_itemsets(windows, min_support)
     if iterations > 1:
         for x in xrange(0, iterations):
             template_ids = frozenset(next(itemset_gen))

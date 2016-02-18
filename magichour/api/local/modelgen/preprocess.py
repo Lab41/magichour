@@ -8,10 +8,11 @@ TODO: Add the ability to write custom preprocessing functions other than just tr
 
 import gzip
 import re
+import json
 import uuid
 
 from magichour.api.local.util.log import get_logger
-from magichour.api.local.util.namedtuples import LogLine, Transform
+from magichour.api.local.util.namedtuples import DistributedLogLine, DistributedTransformLine
 
 logger = get_logger(__name__)
 
@@ -58,13 +59,33 @@ def read_log_file(file_path, ts_start_index, ts_end_index, ts_format=None, skip_
         else:
             ts = float(ts_str)
         text = line[:ts_start_index].join(line[ts_end_index:]).strip()
-        yield LogLine(str(uuid.uuid4()), ts, text, None, None , None)
+        yield DistributedLogLine(
+            #id=str(uuid.uuid4()),
+            ts=ts,
+            text=text,
+            processed=text,
+            proc_dict=None,
+            template=None,
+            templateId=None,
+            template_dict=None,
+        )
+        # yield LogLine(str(uuid.uuid4()), ts, text, None, None, None)
 
 
 def read_auditd_file(file_path, **kwargs):
     for line in _read_lines(file_path):
         ts = float(re.search(r'audit\(([0-9]+\.[0-9]+)', line).group(1))
-        yield LogLine(str(uuid.uuid4()), ts, line.rstrip(), None, None, None)
+        yield DistributedLogLine(
+            #id=str(uuid.uuid4()),
+            ts=ts,
+            text=line.rstrip(),
+            processed=line.rstrip(),
+            proc_dict=None,
+            template=None,
+            templateId=None,
+            template_dict=None,
+        )
+        #LogLine(str(uuid.uuid4()), ts, line.rstrip(), None, None, None)
 
 
 #####
@@ -92,7 +113,8 @@ def get_transforms(transforms_file):
             if len(line)==0 or line[0]=='#':
                 continue
             t_id, t_type, t_name, t_transform = line.split(',', 3)
-            transform = Transform(t_id, t_type, t_name, r''+t_transform, re.compile(r''+t_transform))
+            #transform = Transform(t_id, t_type, t_name, r''+t_transform, re.compile(r''+t_transform))
+            transform = DistributedTransformLine(t_id, t_type, t_name, r''+t_transform, re.compile(r''+t_transform))
             transforms.append(transform)
     return transforms
 
@@ -138,7 +160,17 @@ def transform_lines(lines, transforms):
                 # catch misspelled transform types
                 raise NotImplementedError('%s Transform not implemented'%transform.type)
 
-        yield LogLine(str(uuid.uuid4()), logline.ts, transformed, None, replaceDict, None)
+        yield DistributedLogLine(
+            #id=logline.id,
+            ts=logline.ts,
+            text=logline.text,
+            processed=transformed,
+            proc_dict=replaceDict,
+            template=None,
+            templateId=None,
+            template_dict=None,
+        )
+        #yield LogLine(str(uuid.uuid4()), logline.ts, transformed, None, replaceDict, None)
 
 
 def cardinality_transformed_lines(lines, verbose=False):
@@ -162,7 +194,7 @@ def cardinality_transformed_lines(lines, verbose=False):
 
     uniqLines = defaultdict(int)
     for logline in lines:
-        uniqLines[logline.text] += 1
+        uniqLines[logline.processed] += 1
     countLines = len(lines)
     countUniqueLines = len(uniqLines)
     percentUniqueLines = 100.0 * countUniqueLines / countLines

@@ -4,7 +4,6 @@ import glob
 from magichour.api.local.modelgen.preprocess import cardinality_transformed_lines
 
 from magichour.api.local.sample.steps.evalapply import evalapply_step
-from magichour.api.local.sample.steps.evalwindow import evalwindow_step
 from magichour.api.local.sample.steps.event import event_step
 from magichour.api.local.sample.steps.genapply import genapply_step
 from magichour.api.local.sample.steps.genwindow import genwindow_step
@@ -112,13 +111,6 @@ def run_auditd_pipeline(options):
             e.append(ts)
         from pprint import pformat
         logger.info("\n"+pformat(e))
-
-    """
-    modeleval_windows = evalwindow_step(timed_templates, options.window_size)
-    if options.save_intermediate:
-        modeleval_windows_file = os.path.join(options.pickle_cache_dir, "modeleval_windows.pickle")
-        write_pickle_file(modeleval_windows, modeleval_windows_file)
-    """
 
     timed_events = evalapply_step(gen_events, timed_templates, loglines)
     if options.save_intermediate:
