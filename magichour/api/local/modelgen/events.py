@@ -32,7 +32,7 @@ def glove(windows, num_components=16, glove_window=10, epochs=20):
     corpus.fit(ws, window=glove_window)
     # TODO: Explore reasonable glove defaults
     glove_model = glove.Glove(no_components=num_components, learning_rate=0.05)
-    glove_model.fit(corpus.matrix, epochs=epochs, no_threads=multiprocessing.cpu_count(), verbose=True)
+    glove_model.fit(corpus.matrix, epochs=epochs, no_threads=multiprocessing.cpu_count(), verbose=False)
     glove_model.add_dictionary(corpus.dictionary)
 
     labels = []
