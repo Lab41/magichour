@@ -49,7 +49,7 @@ def get_word_skip_names(s):
         retval(list(string)): list of the skip patterns found in s
     '''
 
-    pattern = r'\(\(\?\:\\\ \{0,1\}\\S\+\)\{(\d)\,(\d)\}\)'
+    pattern = r'\(\(\?\:\\\ \{0,1\}\\S\+\)\{(\d+)\,(\d+)\}\)'
     matchObj = re.finditer(pattern, s.pattern, re.M | re.I)
 
     retVal = list()
@@ -113,7 +113,7 @@ def unescape_skips(s):
         retval(string): string with replacement
     '''
 
-    pattern = r'\\\*\\\{(\d)\\\,(\d)\\\}'
+    pattern = r'\\\*\\\{(\d+)\\\,(\d+)\\\}'
 
     match = re.finditer(pattern, s, re.M | re.I)
     b = s
