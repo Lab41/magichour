@@ -64,6 +64,34 @@ def get_word_skip_names(s):
     return retVal
 
 
+def templates_2_freqwords(templates):
+    '''
+    Creates a frequent word list from templates
+    Args:
+        templates (list(DistributedTemplateLine)): List of input templates
+
+    Returns:
+        freq_words (set(str)): Set of frequent words
+    '''
+    skip = re.compile(r'\*\{\d+,\d+\}')
+    freq_words = set()
+    for template in templates:
+        for word in template.raw_str.split():
+            if word.startswith('*') and skip.match(word):
+                pass
+            else:
+                freq_words.add(word)
+    return freq_words
+
+
+def template_2_template_dict(templates, freq_words):
+    template_dict = {}
+    for template in templates:
+        pattern = tuple([word for word in template.raw_str.split() if word in freq_words])
+        template_dict[pattern] = template
+    return template_dict
+
+
 def read_templates(template_list):
     '''
     returns a list of regex for replacement processing

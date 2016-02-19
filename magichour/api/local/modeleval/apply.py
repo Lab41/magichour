@@ -9,45 +9,53 @@ from multiprocessing import Pool
 
 from magichour.api.local.util.log import get_logger
 from magichour.api.local.util.namedtuples import TimedEvent, DistributedLogLine
-
+from magichour.api.dist.templates.templateEval import templates_2_freqwords, template_2_template_dict
 logger = get_logger(__name__)
 
 
-def process_line(templates, logline):
-    for template in templates:
-        skip_found = template.template.search(logline.processed)
+def process_line_fast(logline, template_dict_maybe_bcast=None, freq_words_maybe_bcast=None):
+    # If distributed version then unwrap broadcast variable
+    if isinstance(template_dict_maybe_bcast, dict) or isinstance(template_dict_maybe_bcast, set):
+        template_dict = template_dict_maybe_bcast
+        freq_words = freq_words_maybe_bcast
+    else:
+        template_dict = template_dict_maybe_bcast.value
+        freq_words = freq_words_maybe_bcast.value
 
-        # TODO double check that the defaultdict is working as expected
-        if skip_found:
-            template_dict = defaultdict(list)
+    # Extract frequent words in order and make tuple so it is hashable
+    logline_pattern = tuple([word for word in logline.processed.split() if word in freq_words])
 
+    if logline_pattern in template_dict:
+        template = template_dict[logline_pattern]
+
+        template_replacement_dict = defaultdict(list)
+
+        if len(template.skip_words) > 0:
+            skip_found = template.template.search(logline.processed)
             for i in range(len(template.skip_words)):
-                template_dict[
-                    template.skip_words[i]].append(
-                    skip_found.groups()[i])
+                template_replacement_dict[template.skip_words[i]]\
+                        .append(skip_found.groups()[i])
 
-            template_dict_str = json.dumps(template_dict) if template_dict else None
-
-            return DistributedLogLine(ts=logline.ts,
-                                      text=logline.text,
-                                      processed=logline.processed,
-                                      proc_dict=logline.proc_dict,
-                                      template=template.template.pattern,
-                                      templateId=template.id,
-                                      template_dict=template_dict_str)
-
-    # could not find a template match
-    return DistributedLogLine(ts=logline.ts,
-                              text=logline.text,
-                              processed=logline.processed,
-                              proc_dict=logline.proc_dict,
-                              template=None,
-                              templateId=-1,
-                              template_dict=None)
+        return DistributedLogLine(ts=logline.ts,
+                                  text=logline.text,
+                                  processed=logline.processed,
+                                  proc_dict=logline.proc_dict,
+                                  template=template.template.pattern,
+                                  templateId=template.id,
+                                  template_dict=template_replacement_dict)
+    else:
+        # could not find a template match
+        return DistributedLogLine(ts=logline.ts,
+                                  text=logline.text,
+                                  processed=logline.processed,
+                                  proc_dict=logline.proc_dict,
+                                  template=None,
+                                  templateId=-1,
+                                  template_dict=None)
 
 
 re_type = re.compile(r'type=(\S+)')
-def process_auditd_line(templates, logline):
+def process_auditd_line(logline, templates):
     audit_msg_type = re_type.search(logline.text)
     if not audit_msg_type:
         raise ValueError('Does not match expected auditd format; missing type=TYPE: %s'%logline.text)
@@ -90,23 +98,36 @@ def apply_templates(templates, loglines, mp=True, type_template_auditd=False, **
         timed_templates: a list of TimedTemplate named tuples that represent which templates occurred at which times in the log file.
 
     """
+
     # Change processing mode for auditd data by Templating based on type=TYPE
     if type_template_auditd:
         process_function = process_auditd_line
     else:
-        process_function = process_line
+        freq_words = templates_2_freqwords(templates)
+        template_dict = template_2_template_dict(templates, freq_words)
+        if not freq_words:
+            raise ValueError('freq words should be set')
+        process_function = process_line_fast #(logline, template_dict_maybe_bcast, freq_words_maybe_bcast)#process_line
+
 
     if mp:
         # Use multiprocessing.Pool to use multiple CPUs
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        f = functools.partial(process_function, templates)
-
+        if freq_words:
+            f = functools.partial(process_function,
+                                  template_dict_maybe_bcast=template_dict,
+                                  freq_words_maybe_bcast=freq_words)
+        else:
+            f = functools.partial(process_function, templates)
         processed_loglines = pool.map(func=f, iterable=loglines)
     else:
         # Do this the naive way with one CPU
         processed_loglines = []
         for logline in loglines:
-            processed_loglines.append(process_function(templates, logline))
+            if freq_words:
+                processed_loglines.append(process_function(logline, template_dict, freq_words))
+            else:
+                processed_loglines.append(process_function(logline, templates))
     return processed_loglines
 
 
