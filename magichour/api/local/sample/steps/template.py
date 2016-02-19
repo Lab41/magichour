@@ -1,13 +1,14 @@
 from magichour.api.local.modelgen import template
 from magichour.api.local.util.log import get_logger, log_time, log_exc
-
+from magichour.lib.LogCluster.LogCluster import log_cluster_local
 logger = get_logger(__name__)
 
 @log_time
 # file_path=logcluster_file, support=str(LOGCLUSTER_SUPPORT)
 def logcluster_substep(lines, *args, **kwargs):
     logger.info("Running logcluster... (%s)", kwargs)
-    gen_templates = template.logcluster(lines, *args, **kwargs)
+    #gen_templates = template.logcluster(lines, *args, **kwargs)
+    gen_templates = log_cluster_local(lines, **kwargs)
     return gen_templates
 
 

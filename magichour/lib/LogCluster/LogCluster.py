@@ -1,4 +1,4 @@
-from collections import namedtuple
+from collections import Counter, namedtuple, defaultdict
 
 from magichour.api.dist.templates.templateEval import read_templates
 
@@ -104,6 +104,57 @@ def collapse_patterns(input_pattern_tuple):
         else:
             final_pattern.append(word)
     return final_pattern
+
+DummyTuple = namedtuple('DummyTuple', ['value'])
+
+def local_word_count(log_lines, threshold):
+    word_counts = Counter()
+    for log_line in log_lines:
+        word_counts.update(set(log_line.processed.split()))
+
+    output_words = set()
+    for word in word_counts:
+        if word_counts[word] > threshold:
+            output_words.add(word)
+
+    return output_words
+
+def log_cluster_local(log_lines, support):
+    """
+    Run log cluster
+
+    Args:gen_events = event_step(gen_windows, "glove", **glove_kwargs)
+         log_lines(rdd of LogLine): Input log messages as LogLine objects
+         support(int): Threshold # of occurrences before a pattern can be included
+
+    Returns:
+        list[DistributedTemplateLine]: Returns a list of DistributedTemplateLine objects defining the templates
+    """
+    if isinstance(support, str):
+        support = int(support)
+
+    frequent_words = local_word_count(log_lines, support)
+
+    pattern_dict = defaultdict(list)
+    for log_line in log_lines:
+        pattern_key, original_line = extract_patterns(log_line, DummyTuple(value=frequent_words))
+        pattern_dict[pattern_key].append(original_line)
+
+    items_to_delete = set()
+    for pattern_key in pattern_dict:
+        if len(pattern_dict[pattern_key]) < support:
+            items_to_delete.add(pattern_key)
+
+    # Delete infrequent patterns
+    for pattern_key in items_to_delete:
+        del pattern_dict[pattern_key]
+
+    clusters = map(collapse_patterns, pattern_dict.items())
+
+    templates = [' '.join(cluster) for cluster in clusters]
+
+    transformed_templates = read_templates(templates)
+    return transformed_templates
 
 
 def log_cluster(sc, log_lines, support):
