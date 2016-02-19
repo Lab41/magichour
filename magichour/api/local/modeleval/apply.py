@@ -9,8 +9,35 @@ from multiprocessing import Pool
 
 from magichour.api.local.util.log import get_logger
 from magichour.api.local.util.namedtuples import TimedEvent, DistributedLogLine
-from magichour.api.dist.templates.templateEval import templates_2_freqwords, template_2_template_dict
 logger = get_logger(__name__)
+
+
+def templates_2_freqwords(templates):
+    '''
+    Creates a frequent word list from templates
+    Args:
+        templates (list(DistributedTemplateLine)): List of input templates
+
+    Returns:
+        freq_words (set(str)): Set of frequent words
+    '''
+    skip = re.compile(r'\*\{\d+,\d+\}')
+    freq_words = set()
+    for template in templates:
+        for word in template.raw_str.split():
+            if word.startswith('*') and skip.match(word):
+                pass
+            else:
+                freq_words.add(word)
+    return freq_words
+
+
+def template_2_template_dict(templates, freq_words):
+    template_dict = {}
+    for template in templates:
+        pattern = tuple([word for word in template.raw_str.split() if word in freq_words])
+        template_dict[pattern] = template
+    return template_dict
 
 
 def process_line_fast(logline, template_dict_maybe_bcast=None, freq_words_maybe_bcast=None):
@@ -32,9 +59,10 @@ def process_line_fast(logline, template_dict_maybe_bcast=None, freq_words_maybe_
 
         if len(template.skip_words) > 0:
             skip_found = template.template.search(logline.processed)
-            for i in range(len(template.skip_words)):
-                template_replacement_dict[template.skip_words[i]]\
-                        .append(skip_found.groups()[i])
+            if skip_found:
+                for i in range(len(template.skip_words)):
+                    template_replacement_dict[template.skip_words[i]]\
+                            .append(skip_found.groups()[i])
 
         return DistributedLogLine(ts=logline.ts,
                                   text=logline.text,

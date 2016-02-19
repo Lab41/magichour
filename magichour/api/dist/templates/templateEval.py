@@ -1,5 +1,6 @@
 from magichour.api.local.util.namedtuples import DistributedLogLine
 from magichour.api.local.util.namedtuples import DistributedTemplateLine
+from magichour.api.local.modeleval.apply import process_line_fast, templates_2_freqwords, template_2_template_dict
 from magichour.api.local.util.log import log_time
 
 from collections import defaultdict
@@ -62,34 +63,6 @@ def get_word_skip_names(s):
             retVal.append(fpattern)
 
     return retVal
-
-
-def templates_2_freqwords(templates):
-    '''
-    Creates a frequent word list from templates
-    Args:
-        templates (list(DistributedTemplateLine)): List of input templates
-
-    Returns:
-        freq_words (set(str)): Set of frequent words
-    '''
-    skip = re.compile(r'\*\{\d+,\d+\}')
-    freq_words = set()
-    for template in templates:
-        for word in template.raw_str.split():
-            if word.startswith('*') and skip.match(word):
-                pass
-            else:
-                freq_words.add(word)
-    return freq_words
-
-
-def template_2_template_dict(templates, freq_words):
-    template_dict = {}
-    for template in templates:
-        pattern = tuple([word for word in template.raw_str.split() if word in freq_words])
-        template_dict[pattern] = template
-    return template_dict
 
 
 def read_templates(template_list):
@@ -221,8 +194,13 @@ def match_templates(sc, templates, rdd_log_lines):
                               template,templateId,templateDict
     '''
 
-    template_broadcast = sc.broadcast(templates)
-    return rdd_log_lines.map(lambda line: match_line(line, template_broadcast))
+    freq_words = templates_2_freqwords(templates)
+    template_dict = template_2_template_dict(templates, freq_words)
+
+    template_broadcast = sc.broadcast(template_dict)
+    freq_words_broadcast = sc.broadcast(freq_words)
+
+    return rdd_log_lines.map(lambda line: process_line_fast(line, template_broadcast, freq_words_broadcast))
 
 
 @log_time
