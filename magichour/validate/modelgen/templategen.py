@@ -3,7 +3,7 @@ import itertools
 import numpy as np
 import random
 
-from magichour.api.local.util.log import get_logger, log_exc
+from magichour.api.local.util.log import get_logger
 from collections import defaultdict
 
 logger = get_logger(__name__)
