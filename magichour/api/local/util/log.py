@@ -12,6 +12,7 @@ DISABLE_LOGGING_LEVEL = logging.DEBUG  # logging.CRITICAL
 HandlerInfo = namedtuple("HandlerInfo", ["handler", "level", "formatter"])
 loggers = {}
 
+
 def run_once(f):
     def wrapper(*args, **kwargs):
         if not f.has_run:
@@ -19,14 +20,16 @@ def run_once(f):
             return f(*args, **kwargs)
     f.has_run = False
     return wrapper
-    
+
+
 @run_once
 def disable_logging(level=None):
     if level:
         logging.disable(level)
 
+
 def get_logger(name, level=logging.INFO, handler_infos=None):
-    disable_logging(DISABLE_LOGGING_LEVEL) 
+    disable_logging(DISABLE_LOGGING_LEVEL)
 
     if name in loggers:
         return loggers[name]
@@ -49,22 +52,26 @@ def get_logger(name, level=logging.INFO, handler_infos=None):
     loggers[name] = logger
     return logger
 
+
 def log_exc(logger, msg, exc_type=Exception):
     logger.error(msg)
     raise exc_type(msg)
 
 logger = get_logger(__name__)
 
-# Stick this as a decorator on any function to print the # of time spent in that function.
+# Stick this as a decorator on any function to print the # of time spent
+# in that function.
+
+
 def log_time(f):
     def wrapper(*args, **kwargs):
         tstart = time.time()
         result = f(*args, **kwargs)
-        m, s = divmod(time.time()-tstart, 60)
+        m, s = divmod(time.time() - tstart, 60)
         msg = "Time in %s(): "
         if m == 0:
-            logger.debug(msg+"%s seconds", f.__name__, s)
+            logger.debug(msg + "%s seconds", f.__name__, s)
         else:
-            logger.debug(msg+"%s minutes, %s seconds", f.__name__, m, s)
+            logger.debug(msg + "%s minutes, %s seconds", f.__name__, m, s)
         return result
     return wrapper

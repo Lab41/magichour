@@ -4,6 +4,7 @@ from magichour.api.local.util.modelgen import tfidf_filter_events
 
 logger = get_logger(__name__)
 
+
 @log_time
 def paris_substep(gen_windows, *args, **kwargs):
     logger.info("Running PARIS algorithm... (%s)", kwargs)
@@ -17,6 +18,7 @@ def fp_growth_substep(gen_windows, *args, **kwargs):
     gen_events = events.fp_growth(gen_windows, *args, **kwargs)
     return gen_events
 
+
 @log_time
 def glove_substep(gen_windows, *args, **kwargs):
     logger.info("Running glove/cluster algorithm... (%s)", kwargs)
@@ -26,7 +28,10 @@ def glove_substep(gen_windows, *args, **kwargs):
 
 @log_time
 def event_step(gen_windows, event_algorithm="fp_growth", *args, **kwargs):
-    CHOICES = {"fp_growth": fp_growth_substep, "paris": paris_substep, "glove": glove_substep}
+    CHOICES = {
+        "fp_growth": fp_growth_substep,
+        "paris": paris_substep,
+        "glove": glove_substep}
     event_fn = CHOICES.get(event_algorithm, None)
     if not event_fn:
         log_exc(logger, "event_algorithm must be one of: %s" % CHOICES)
@@ -36,7 +41,9 @@ def event_step(gen_windows, event_algorithm="fp_growth", *args, **kwargs):
     logger.info("==========Custom post processing for sample data==========")
     if threshold is not None:
         # Note that calling this will reassign random event IDs.
-        logger.info("Applying a tfidf filter to each event's template_ids. (threshold = %s)", threshold)
+        logger.info(
+            "Applying a tfidf filter to each event's template_ids. (threshold = %s)",
+            threshold)
         gen_events = tfidf_filter_events(gen_events, threshold)
     else:
         logger.info("Skipping tfidf filter")

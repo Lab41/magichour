@@ -20,7 +20,6 @@ globalStop = False
 
 # GOOD
 def signal_handler(signal, frame):
-
     '''
          stop processing if CTRL-C pressed
          Args:
@@ -132,7 +131,7 @@ def argMaxPhiSimple(C, X, G, denominator):
         # currentScore should be Sum(p(r,C)^2)
 
         d = denominator.get(partition, 0.000000000001)
-        d = d*d
+        d = d * d
         currentScore = numerator / d
 
         # keep tabs of who is winning
@@ -336,7 +335,7 @@ def openFile(name, mode):
     '''
 
     if name.lower().endswith('.gz'):
-        return gzip.open(name, mode+'b')
+        return gzip.open(name, mode + 'b')
     else:
         return open(name, mode)
 

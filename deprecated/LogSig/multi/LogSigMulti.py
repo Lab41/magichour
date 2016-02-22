@@ -12,7 +12,6 @@ import signal
 import gzip
 
 
-
 # Signal handler updates GLOBAL to stop processing
 globalStop = False
 
@@ -22,11 +21,13 @@ DataRecord = namedtuple('DataRecord', ['line', 'md5hash', 'stats'])
 
 def openFile(name, mode):
     if name.lower().endswith('.gz'):
-        return gzip.open(name, mode+'b')
+        return gzip.open(name, mode + 'b')
     else:
         return open(name, mode)
 
 # GOOD
+
+
 def dataset_iterator(fIn, num_lines):
     '''
         Handle reading the data from file into a know form
@@ -111,7 +112,6 @@ def argMaxPhiSimple(C, X, G, denominator):
     retScore = 0.0
     retval = partition
 
-
     for partition in range(numGroups):
 
         currentScore = 0.0
@@ -123,7 +123,7 @@ def argMaxPhiSimple(C, X, G, denominator):
         currentScore += numerator * numerator
         # TODO make sure this is the correct way to calculate
         d = denominator.get(partition, 0.000000000001)
-        d = d*d
+        d = d * d
         currentScore = numerator / d
 
         # keep tabs of who is winning

@@ -1,10 +1,12 @@
 import sys
 
-def computeStays(left,right):
+
+def computeStays(left, right):
     retval = 0
     for r in right:
         retval += left and right
     return retval
+
 
 def computeExits(left, right, inner):
     retval = right(inner) - (left and right(inner))
@@ -18,10 +20,11 @@ def makeComparisons(left, right):
         for inner in catagories:
             work = 0
             if outer == inner:
-                work =computeStays(left[outer], right)
+                work = computeStays(left[outer], right)
             else:
-                work =computeExits(left[outer], right, inner)
+                work = computeExits(left[outer], right, inner)
             outLine.append(work)
+
 
 def main(argv):
     print 'main'

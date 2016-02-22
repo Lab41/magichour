@@ -13,10 +13,11 @@ from sklearn.utils import check_random_state
 
 logger = logging.getLogger(__name__)
 
+
 class KernelKMeans(BaseEstimator, ClusterMixin):
     """
     Kernel K-means
-    
+
     Reference
     ---------
     Kernel k-means, Spectral Clustering and Normalized Cuts.
@@ -38,15 +39,18 @@ class KernelKMeans(BaseEstimator, ClusterMixin):
         self.kernel_params = kernel_params
         self.verbose = verbose
         self.nystroem = nystroem
-        
+
     @property
     def _pairwise(self):
         return self.kernel == "precomputed"
 
     def _get_kernel_approx(self, X, Y=None):
-        n = Nystroem(kernel=self.kernel, n_components=self.nystroem, kernel_params=self.kernel_params).fit(X)
+        n = Nystroem(
+            kernel=self.kernel,
+            n_components=self.nystroem,
+            kernel_params=self.kernel_params).fit(X)
         z_transformed = n.transform(X)
-        return  np.dot(z_transformed, z_transformed.T)
+        return np.dot(z_transformed, z_transformed.T)
 
     def _get_kernel(self, X, Y=None):
         if callable(self.kernel):
@@ -60,17 +64,20 @@ class KernelKMeans(BaseEstimator, ClusterMixin):
 
     def fit(self, X, y=None, sample_weight=None):
         n_samples = X.shape[0]
-        
+
         if self.nystroem == -1:
-            logger.debug("Nystroem kernel approximation not enabled. Computing full kernel...")
+            logger.debug(
+                "Nystroem kernel approximation not enabled. Computing full kernel...")
             start_time = time.time()
             K = self._get_kernel(X)
-            logger.debug("Duration: %s" % time.time()-start_time)
+            logger.debug("Duration: %s" % time.time() - start_time)
         else:
-            logger.debug("Enabled Nystroem kernel approximation (num_components=%s)." % self.nystroem)
+            logger.debug(
+                "Enabled Nystroem kernel approximation (num_components=%s)." %
+                self.nystroem)
             start_time = time.time()
             K = self._get_kernel_approx(X)
-            logger.debug("Duration: %s" % time.time()-start_time)
+            logger.debug("Duration: %s" % time.time() - start_time)
 
         sw = sample_weight if sample_weight else np.ones(n_samples)
         self.sample_weight_ = sw
@@ -88,7 +95,7 @@ class KernelKMeans(BaseEstimator, ClusterMixin):
             labels_old = self.labels_
             self.labels_ = dist.argmin(axis=1)
 
-            # Compute the number of samples whose cluster did not change 
+            # Compute the number of samples whose cluster did not change
             # since last iteration.
             n_same = np.sum((self.labels_ - labels_old) == 0)
             if 1 - float(n_same) / n_samples < self.tol:
@@ -101,7 +108,7 @@ class KernelKMeans(BaseEstimator, ClusterMixin):
         return self
 
     def _compute_dist(self, K, dist, within_distances, update_within):
-        """Compute a n_samples x n_clusters distance matrix using the 
+        """Compute a n_samples x n_clusters distance matrix using the
         kernel trick."""
         sw = self.sample_weight_
 

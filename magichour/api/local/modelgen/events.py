@@ -13,12 +13,14 @@ logger = get_logger(__name__)
 # windows = list of Window named tuples
 # return list of Event named tuples
 
+
 def paris(windows, r_slack, num_iterations, tau=1.0):
     ws = [set([template_id for template_id in w]) for w in windows]
     A, R = paris_lib.PARIS(ws, r_slack, num_iterations=num_iterations, tau=tau)
 
     itemsets = [frozenset(a) for a in A]
-    ret = [Event(id=str(uuid.uuid4()), template_ids=template_ids) for template_ids in itemsets]
+    ret = [Event(id=str(uuid.uuid4()), template_ids=template_ids)
+           for template_ids in itemsets]
     return ret
 
 
@@ -32,16 +34,22 @@ def glove(windows, num_components=16, glove_window=10, epochs=20):
     corpus.fit(ws, window=glove_window)
     # TODO: Explore reasonable glove defaults
     glove_model = glove.Glove(no_components=num_components, learning_rate=0.05)
-    glove_model.fit(corpus.matrix, epochs=epochs, no_threads=multiprocessing.cpu_count(), verbose=False)
+    glove_model.fit(
+        corpus.matrix,
+        epochs=epochs,
+        no_threads=multiprocessing.cpu_count(),
+        verbose=False)
     glove_model.add_dictionary(corpus.dictionary)
 
     labels = []
-    vectors =[]
+    vectors = []
     # TODO: Explore how to pull data more nicely from glove
     for key in glove_model.__dict__['dictionary']:
         word_vector_index = glove_model.__dict__['dictionary'][key]
         labels.append(key)
-        vectors.append(list(glove_model.__dict__['word_vectors'][word_vector_index]))
+        vectors.append(
+            list(
+                glove_model.__dict__['word_vectors'][word_vector_index]))
 
     # Clustering
     output_events = defaultdict(list)
@@ -61,10 +69,14 @@ def glove(windows, num_components=16, glove_window=10, epochs=20):
 def fp_growth(windows, min_support, iterations=0):
     from fp_growth import find_frequent_itemsets
     itemsets = []
-    
+
     if 0 < min_support < 1:
         new_support = math.ceil(min_support * len(windows))
-        logger.info("Min support %s%% of %s: %s", min_support*100, len(windows), new_support)
+        logger.info(
+            "Min support %s%% of %s: %s",
+            min_support * 100,
+            len(windows),
+            new_support)
         min_support = new_support
 
     itemset_gen = find_frequent_itemsets(windows, min_support)
@@ -78,7 +90,9 @@ def fp_growth(windows, min_support, iterations=0):
             itemsets.append(template_ids)
 
     logger.info("Removing subsets from fp_growth output...")
-    if len(itemsets): itemsets = get_nonsubsets(itemsets)
+    if len(itemsets):
+        itemsets = get_nonsubsets(itemsets)
 
-    ret = [Event(id=str(uuid.uuid4()), template_ids=template_ids) for template_ids in itemsets]
+    ret = [Event(id=str(uuid.uuid4()), template_ids=template_ids)
+           for template_ids in itemsets]
     return ret

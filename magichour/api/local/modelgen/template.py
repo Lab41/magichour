@@ -19,6 +19,7 @@ from magichour.lib.StringMatch import StringMatch
 
 logger = get_logger(__name__)
 
+
 def logcluster(lines, *args, **kwargs):
     """
     This function uses the logcluster algorithm (available at http://ristov.github.io/logcluster/) to cluster
@@ -59,8 +60,10 @@ def logcluster(lines, *args, **kwargs):
         LogCluster.write_file(lines, file_path)
     elif not lines and file_path:
         logger.info("Using existing lines in file: %s", file_path)
-    else: #not lines and not passed_file_path
-        log_exc(logger, "Must pass either argument 'lines' or keyword argument 'file_path' (or both).")
+    else:  # not lines and not passed_file_path
+        log_exc(
+            logger,
+            "Must pass either argument 'lines' or keyword argument 'file_path' (or both).")
 
     support = kwargs.pop("support", None)
     if not support:
@@ -74,6 +77,7 @@ def logcluster(lines, *args, **kwargs):
 
     templates = LogCluster.parse_output(output)
     return templates
+
 
 def stringmatch(lines, *args, **kwargs):
     """
@@ -100,7 +104,8 @@ def stringmatch(lines, *args, **kwargs):
     threshold = kwargs.get("threshold", 0.75)
     min_samples = kwargs.get("min_samples", 25)
 
-    clusters = StringMatch.get_clusters(lines, batch_size, skip_count, threshold, min_samples)
+    clusters = StringMatch.get_clusters(
+        lines, batch_size, skip_count, threshold, min_samples)
     template_id = 1
     templates = []
     for cluster in clusters:
@@ -115,6 +120,7 @@ def stringmatch(lines, *args, **kwargs):
         templates.append(template)
         template_id += 1
     return templates
+
 
 def baler(lines):
     """

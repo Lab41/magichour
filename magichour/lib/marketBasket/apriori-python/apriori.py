@@ -1,12 +1,14 @@
 import sys
 import os.path
 import csv
-import math 
+import math
 import types
 from collections import defaultdict, Iterable
 import itertools
 
+
 class Apriori:
+
     def __init__(self, data, minSup, minConf):
         self.dataset = data
         self.transList = defaultdict(list)
@@ -26,9 +28,9 @@ class Apriori:
         count = {}
 
         self.F[1] = self.firstPass(self.freqList, 1)
-        k=2
-        while len(self.F[k-1]) != 0:
-            candidate[k] = self.candidateGen(self.F[k-1], k)
+        k = 2
+        while len(self.F[k - 1]) != 0:
+            candidate[k] = self.candidateGen(self.F[k - 1], k)
             for t in self.transList.iteritems():
                 for c in candidate[k]:
                     if set(c).issubset(t[1]):
@@ -36,7 +38,7 @@ class Apriori:
 
             self.F[k] = self.prune(candidate[k], k)
             if k > 2:
-                self.removeSkyline(k, k-1)
+                self.removeSkyline(k, k - 1)
             k += 1
 
         return self.F
@@ -47,7 +49,6 @@ class Apriori:
             for subset in subsets:
                 if subset in (self.F[kPrev]):
                     self.F[kPrev].remove(subset)
-                    
 
         subsets = self.genSubsets
 
@@ -67,20 +68,24 @@ class Apriori:
         candidate = []
 
         if k == 2:
-            candidate = [tuple(sorted([x, y])) for x in items for y in items if len((x, y)) == k and x != y]
+            candidate = [tuple(sorted([x, y])) for x in items for y in items if len(
+                (x, y)) == k and x != y]
         else:
-            candidate = [tuple(set(x).union(y)) for x in items for y in items if len(set(x).union(y)) == k and x != y]
-        
+            candidate = [
+                tuple(
+                    set(x).union(y)) for x in items for y in items if len(
+                    set(x).union(y)) == k and x != y]
+
         for c in candidate:
             subsets = self.genSubsets(c)
-            if any([ x not in items for x in subsets ]):
+            if any([x not in items for x in subsets]):
                 candidate.remove(c)
 
         return set(candidate)
 
     def genSubsets(self, item):
         subsets = []
-        for i in range(1,len(item)):
+        for i in range(1, len(item)):
             subsets.extend(itertools.combinations(item, i))
         return subsets
 
@@ -103,7 +108,8 @@ class Apriori:
                                 support = self.support(self.freqList[item])
                                 rhs = self.difference(item, subset)
                                 if len(rhs) == 1:
-                                    H.append((subset, rhs, support, confidence))
+                                    H.append(
+                                        (subset, rhs, support, confidence))
 
         return H
 
@@ -111,10 +117,10 @@ class Apriori:
         return tuple(x for x in item if x not in subset)
 
     def confidence(self, subCount, itemCount):
-        return float(itemCount)/subCount
+        return float(itemCount) / subCount
 
     def support(self, count):
-        return float(count)/self.numItems
+        return float(count) / self.numItems
 
     def firstPass(self, items, k):
         f = []
@@ -130,12 +136,13 @@ class Apriori:
     """
     Prepare the transaction data into a dictionary
     key: Receipt.id
-    val: set(Goods.Id) 
+    val: set(Goods.Id)
 
     Also generates the frequent itemlist for itemsets of size 1
     key: Goods.Id
     val: frequency of Goods.Id in self.transList
     """
+
     def prepData(self):
         key = 0
         for basket in self.dataset:
@@ -147,6 +154,7 @@ class Apriori:
                     self.itemset.add(item.strip())
                     self.freqList[(item.strip())] += 1
 
+
 def main():
     goods = defaultdict(list)
     num_args = len(sys.argv)
@@ -154,20 +162,20 @@ def main():
     noRules = False
 
     # Make sure the right number of input files are specified
-    if  num_args < 4 or num_args > 5:
+    if num_args < 4 or num_args > 5:
         print 'Expected input format: python apriori.py <dataset.csv> <minSup> <minConf>'
         return
     elif num_args == 5 and sys.argv[1] == "--no-rules":
         dataset = csv.reader(open(sys.argv[2], "r"))
         goodsData = csv.reader(open('goods.csv', "r"))
-        minSup  = float(sys.argv[3])
+        minSup = float(sys.argv[3])
         minConf = float(sys.argv[4])
         noRules = True
         print "Dataset: ", sys.argv[2], " MinSup: ", minSup, " MinConf: ", minConf
-    else: 
+    else:
         dataset = csv.reader(open(sys.argv[1], "r"))
         goodsData = csv.reader(open('goods.csv', "r"))
-        minSup  = float(sys.argv[2])
+        minSup = float(sys.argv[2])
         minConf = float(sys.argv[3])
         print "Dataset: ", sys.argv[1], " MinSup: ", minSup, " MinConf: ", minConf
 
@@ -185,21 +193,22 @@ def main():
         for i in item:
             if k >= 2:
                 count += 1
-                print count,":  ",readable(i, goods),"\tsupport=",a.support(a.freqList[i])
+                print count, ":  ", readable(i, goods), "\tsupport=", a.support(a.freqList[i])
 
     print "Skyline Itemsets: ", count
     if not noRules:
         rules = a.genRules(frequentItemsets)
         for i, rule in enumerate(rules):
-            print "Rule",i+1,":\t ",readable(rule[0], goods),"\t-->",readable(rule[1], goods),"\t [sup=",rule[2]," conf=",rule[3],"]"
+            print "Rule", i + 1, ":\t ", readable(rule[0], goods), "\t-->", readable(rule[1], goods), "\t [sup=", rule[2], " conf=", rule[3], "]"
 
     print "\n"
+
 
 def readable(item, goods):
     itemStr = ''
     for k, i in enumerate(item):
-        itemStr += goods[i][0] + " " + goods[i][1] +" (" + i + ")"
-        if len(item) != 0 and k != len(item)-1:
+        itemStr += goods[i][0] + " " + goods[i][1] + " (" + i + ")"
+        if len(item) != 0 and k != len(item) - 1:
             itemStr += ",\t"
 
     return itemStr.replace("'", "")

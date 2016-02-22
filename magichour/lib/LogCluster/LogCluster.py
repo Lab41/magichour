@@ -107,6 +107,7 @@ def collapse_patterns(input_pattern_tuple):
 
 DummyTuple = namedtuple('DummyTuple', ['value'])
 
+
 def local_word_count(log_lines, threshold):
     word_counts = Counter()
     for log_line in log_lines:
@@ -118,6 +119,7 @@ def local_word_count(log_lines, threshold):
             output_words.add(word)
 
     return output_words
+
 
 def log_cluster_local(log_lines, support):
     """
@@ -137,7 +139,8 @@ def log_cluster_local(log_lines, support):
 
     pattern_dict = defaultdict(list)
     for log_line in log_lines:
-        pattern_key, original_line = extract_patterns(log_line, DummyTuple(value=frequent_words))
+        pattern_key, original_line = extract_patterns(
+            log_line, DummyTuple(value=frequent_words))
         pattern_dict[pattern_key].append(original_line)
 
     items_to_delete = set()

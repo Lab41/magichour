@@ -9,18 +9,24 @@ logger = get_logger(__name__)
 
 cur_dir = os.path.dirname(__file__)
 lib_dir = os.path.abspath(os.path.join(cur_dir, "..", "..", "..", "..", "lib"))
-LOGCLUSTER = os.path.join(lib_dir, "LogCluster", "logcluster-0.03", "logcluster.pl")
+LOGCLUSTER = os.path.join(
+    lib_dir,
+    "LogCluster",
+    "logcluster-0.03",
+    "logcluster.pl")
 #LOGCLUSTER = os.path.abspath(os.path.join(cur_dir, "../../../../lib/LogCluster/logcluster-0.03/logcluster.pl"))
+
 
 def write_file(lines, file_path):
     with open(file_path, 'wb') as fp:
         for line in lines:
             fp.write("%s\n" % line.processed)
 
+
 def run_on_file(file_path, support, *args, **kwargs):
-    command = ["perl", LOGCLUSTER,]
+    command = ["perl", LOGCLUSTER, ]
     #logcluster_args = kwargs.get("logcluster_kwargs", {})
-    #for k, v in logcluster_args.items():
+    # for k, v in logcluster_args.items():
     # Consume command-line args from kwargs.
     for k, v in kwargs.items():
         command.append("--%s" % k)
@@ -31,13 +37,19 @@ def run_on_file(file_path, support, *args, **kwargs):
     command.append(support)
 
     logger.info("Calling subprocess: %s" % command)
-    
-    # Store stdout of subprocess into output. Note that stderr is still normally routed.
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
+
+    # Store stdout of subprocess into output. Note that stderr is still
+    # normally routed.
+    p = subprocess.Popen(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        close_fds=True)
     for err_line in p.stderr:
         logger.info(err_line.strip())
     output = p.stdout.read()
     return output
+
 
 def parse_output(output):
     """
@@ -53,7 +65,7 @@ def parse_output(output):
 
     matches = list()
     template_id = 1
-    for o in range(0, len(output), 3): # every 3rd line is a template
+    for o in range(0, len(output), 3):  # every 3rd line is a template
         matches.append(output[o].strip())
 
     """
@@ -99,6 +111,7 @@ def parse_output(output):
 
     from magichour.api.dist.templates.templateEval import read_templates
     return read_templates(matches)
+
 
 def _findReplacement(s):
     # pattern = r'\*\{(\d*).(\d*)\}'

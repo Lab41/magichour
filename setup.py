@@ -8,8 +8,11 @@ setup(
     author_email='kylez@lab41.org',
     url='https://github.com/Lab41/magichour',
     packages=find_packages(),
-    package_dir={'magichour.lib.LogCluster': 'magichour/lib/LogCluster'},
-    package_data={'magichour.lib.LogCluster': ['logcluster-0.03/*'],
-                  'magichour.api.local.sample.data': ['auditd_template_ids.csv',
-                                                      'sample.transforms']},
+    package_dir={
+        'magichour.lib.LogCluster': 'magichour/lib/LogCluster'},
+    package_data={
+        'magichour.lib.LogCluster': ['logcluster-0.03/*'],
+        'magichour.api.local.sample.data': [
+            'auditd_template_ids.csv',
+            'sample.transforms']},
 )

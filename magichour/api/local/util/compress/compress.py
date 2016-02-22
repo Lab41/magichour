@@ -5,7 +5,9 @@ import gzip
 
 LogLine = namedtuple('LogLine', ['ts', 'text', 'processed',
                                  'dictionary', 'supportId'])
-TransformLine = namedtuple('TransformLine', ['id', 'type', 'NAME', 'transform'])
+TransformLine = namedtuple(
+    'TransformLine', [
+        'id', 'type', 'NAME', 'transform'])
 LogSupport = namedtuple('LogSupport', ['supportId', 'pattern'])
 OutLine = namedtuple('OutLine', ['ts', 'supportId', 'dictionary'])
 
@@ -23,7 +25,7 @@ def openFile(name, mode):
         retval(file): filehandle
     '''
     if name.lower().endswith('.gz'):
-        return gzip.open(name, mode+'b')
+        return gzip.open(name, mode + 'b')
     else:
         return open(name, mode)
 
@@ -48,7 +50,7 @@ def makeTransformedLine(l, transforms):
             replaceList = re.findall(t.transform, text)
             if replaceList:
                 replaceDict[t.NAME] = replaceList
-            text = re.sub(t.transform, ' '+t.NAME+' ', text, 0, FLAGS)
+            text = re.sub(t.transform, ' ' + t.NAME + ' ', text, 0, FLAGS)
 
         if t.type == 'REPLACELIST':
             print 'REPLACELIST not implemented yet'
@@ -121,7 +123,7 @@ def procSupports(l):
         PATTERN = l[o].lstrip().rstrip()
         PATTERN = escapeCrap(PATTERN)
         PATTERN = makeReplacement(PATTERN)
-        retVal.append(LogSupport(o/3, re.compile(PATTERN)))
+        retVal.append(LogSupport(o / 3, re.compile(PATTERN)))
         # re.compile(PATTERN).pattern is the original text
     return retVal
 
@@ -144,7 +146,7 @@ def readTransforms(sFile):
             continue
         else:
             ID, TYPE, NAME, TRANSFORM = s.lstrip().rstrip().split(',', 3)
-            retVal.append(TransformLine(ID, TYPE, NAME, r''+TRANSFORM))
+            retVal.append(TransformLine(ID, TYPE, NAME, r'' + TRANSFORM))
     return retVal
 
 
