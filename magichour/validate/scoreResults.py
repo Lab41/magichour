@@ -63,13 +63,14 @@ def scoreResults(answerKey, algorithmResults, parameter):
       for correctAnswer in answerKey:
          totalDifference = len(correctAnswer.symmetric_difference(algorithmAnswer.template_ids)) 
          totalSimilarity = len(correctAnswer.intersection(algorithmAnswer.template_ids)) 
+         onesidedDifference = len(correctAnswer.difference(algorithmAnswer.template_ids))
          if totalDifference == 0:
             exactMatches += 1
             noMatch = False           
          elif totalSimilarity > totalDifference:
             strongMatches += 1
             noMatch = False
-         elif (totalSimilarity/(max([len(correctAnswer),len(algorithmAnswer)])))>0.25:
+         elif totalSimilarity > onesidedDifference:
             weakMatches += 1
             noMatch = False
       if noMatch: noMatches += 1
