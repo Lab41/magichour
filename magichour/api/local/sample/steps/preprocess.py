@@ -3,6 +3,7 @@ from magichour.api.local.util.log import get_logger, log_time
 
 logger = get_logger(__name__)
 
+
 def read_transforms_substep(transforms_file):
     # These transforms are tailored to this dataset.
     # You will likely need to write your own transforms for your own data.
@@ -33,18 +34,25 @@ def _transformed_lines_to_list_substep(transformed_lines):
 
 
 @log_time
-def preprocess_step(log_file, transforms_file=None, _transforms_cache={}, *args, **kwargs):
+def preprocess_step(
+        log_file,
+        transforms_file=None,
+        _transforms_cache={},
+        *args,
+        **kwargs):
     lines = read_lines_substep(log_file, *args, **kwargs)
     if transforms_file:
         if transforms_file in _transforms_cache:
             transforms = _transforms_cache[transforms_file]
         else:
-            transforms = _transforms_cache[transforms_file] = read_transforms_substep(transforms_file)
+            transforms = _transforms_cache[
+                transforms_file] = read_transforms_substep(transforms_file)
         transformed_lines = transform_lines_substep(lines, transforms)
     elif kwargs.get('type_template_auditd'):
         transformed_lines = lines
     else:
-        raise ValueError('transforms_file is required unless type_template_auditd==True')
+        raise ValueError(
+            'transforms_file is required unless type_template_auditd==True')
 
     # get_transformed_lines returns a generator. This converts it to a list.
     transformed_lines = _transformed_lines_to_list_substep(transformed_lines)

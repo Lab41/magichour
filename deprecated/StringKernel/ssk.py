@@ -4,10 +4,12 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
+
 def wss_gen(s, r):
     words = s.split()
     for result in ss_gen(words, r):
         yield result
+
 
 def ss_gen(s, r):
     """
@@ -36,10 +38,11 @@ def ss_gen(s, r):
         else:
             return
         indices[i] += 1
-        for j in range(i+1, r):
-            indices[j] = indices[j-1] + 1
+        for j in range(i + 1, r):
+            indices[j] = indices[j - 1] + 1
         d = indices[-1] - indices[0] + 1
         yield (tuple(pool[i] for i in indices), d)
+
 
 def ss_dict(s, decay, ss_length, scheme):
     distances = {}
@@ -53,6 +56,7 @@ def ss_dict(s, decay, ss_length, scheme):
         distances[ss] = d
     return distances
 
+
 def standardize_ss_dicts(ss_dicts):
     all_features = set()
     for ss_dict in ss_dicts:
@@ -60,8 +64,10 @@ def standardize_ss_dicts(ss_dicts):
     all_features = list(all_features)
     ret = []
     for ss_dict in ss_dicts:
-        ret.append(np.array([ss_dict.get(feature, 0) for feature in all_features]))
+        ret.append(np.array([ss_dict.get(feature, 0)
+                             for feature in all_features]))
     return ret
+
 
 def ssk(s1, s2, **kwargs):
     ss_len = kwargs.get("ss_len", 2)
@@ -73,25 +79,27 @@ def ssk(s1, s2, **kwargs):
         s1 = label_encoder.inverse_transform(s1.astype(int))[0]
         s2 = label_encoder.inverse_transform(s2.astype(int))[0]
 
-    ss_dicts = [ss_dict(line, decay_factor, ss_len, scheme) for line in [s1, s2]]
+    ss_dicts = [ss_dict(line, decay_factor, ss_len, scheme)
+                for line in [s1, s2]]
     ss_dicts = standardize_ss_dicts(ss_dicts)
 
     # Normalize arrays
     norm1 = np.dot(ss_dicts[0], ss_dicts[0])
     norm2 = np.dot(ss_dicts[1], ss_dicts[1])
-    norm = math.sqrt(norm1*norm2)
+    norm = math.sqrt(norm1 * norm2)
 
-    ret =  np.dot(ss_dicts[0], ss_dicts[1])/norm
+    ret = np.dot(ss_dicts[0], ss_dicts[1]) / norm
     return ret
+
 
 def transform(lines, decay_factor, ss_len, scheme):
     ss_dicts = []
     for x in xrange(0, len(lines)):
         if x % (len(lines) / 10) == 0:
-            logger.debug("%s percent processed..." % ((x*100)/len(lines)))
+            logger.debug("%s percent processed..." % ((x * 100) / len(lines)))
         line = lines[x]
         ss_dicts.append(ss_dict(line, decay_factor, ss_len, scheme))
     return standardize_ss_dicts(ss_dicts)
 
     #ss_dicts = [ss_dict(line, decay_factor, ss_len, scheme) for line in lines]
-    #return standardize_ss_dicts(ss_dicts)
+    # return standardize_ss_dicts(ss_dicts)

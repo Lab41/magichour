@@ -22,7 +22,7 @@ globalStop = False
 
 def openFile(name, mode):
     if name.lower().endswith('.gz'):
-        return gzip.open(name, mode+'b')
+        return gzip.open(name, mode + 'b')
     else:
         return open(name, mode)
 
@@ -35,7 +35,7 @@ def makeEdges(m, i):
     ranOnce = False
     d = 0
     c = 0
-    while c < m-1 - i:
+    while c < m - 1 - i:
         ranOnce = True
         d = c
         c = c + i
@@ -135,7 +135,7 @@ def argMaxPhiSimple(C, X, G, denominator):
         # currentScore should be Sum(p(r,C)^2)
 
         d = denominator.get(partition, 0.000000000001)
-        d = d*d
+        d = d * d
         currentScore = numerator / d
 
         # keep tabs of who is winning

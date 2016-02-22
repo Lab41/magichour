@@ -200,7 +200,11 @@ def match_templates(sc, templates, rdd_log_lines):
     template_broadcast = sc.broadcast(template_dict)
     freq_words_broadcast = sc.broadcast(freq_words)
 
-    return rdd_log_lines.map(lambda line: process_line_fast(line, template_broadcast, freq_words_broadcast))
+    return rdd_log_lines.map(
+        lambda line: process_line_fast(
+            line,
+            template_broadcast,
+            freq_words_broadcast))
 
 
 @log_time

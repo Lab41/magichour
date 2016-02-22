@@ -6,11 +6,13 @@ import gzip
 iDat = namedtuple('iDat', ['time', 'cluster', 'record'])
 oDat = namedtuple('oDat', ['transaction', 'cluster'])
 
+
 def openFile(name, mode):
     if name.lower().endswith('.gz'):
-        return gzip.open(name, mode+'b')
+        return gzip.open(name, mode + 'b')
     else:
         return open(name, mode)
+
 
 def outputSet(oFile, cSet, transaction):
     oFile.write('%s,%s\n' % (transaction, ','.join(str(s) for s in cSet)))
@@ -27,10 +29,10 @@ def main(argv):
 
     clustersSeen = set()
 
-    for l in iFile.xreadlines():
+    for l in iFile:
         x = l.strip().split(',', 2)
         data = iDat(*x)
-        currentTime = math.floor(int(float(data.time)) /  int(seconds))
+        currentTime = math.floor(int(float(data.time)) / int(seconds))
 
         # 1x setup
         if not setup:

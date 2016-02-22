@@ -12,7 +12,12 @@ from cluster import Cluster, LogLine
 from leaf import Leaf
 
 
-def get_clusters(dataset_iterator, batch_size, skip_count, threshold, MIN_SAMPLES_FOR_SPLIT):
+def get_clusters(
+        dataset_iterator,
+        batch_size,
+        skip_count,
+        threshold,
+        MIN_SAMPLES_FOR_SPLIT):
     line_count = 0
     clusters = []
     for line in dataset_iterator:
@@ -20,7 +25,8 @@ def get_clusters(dataset_iterator, batch_size, skip_count, threshold, MIN_SAMPLE
         if len(line_split) > skip_count:
             has_matched = False
             for i in range(len(clusters)):
-                if clusters[i].check_for_match(line_split, threshold, skip_count):
+                if clusters[i].check_for_match(
+                        line_split, threshold, skip_count):
                     clusters[i].add_to_leaf(line, threshold, skip_count)
                     has_matched = True
 
@@ -33,7 +39,11 @@ def get_clusters(dataset_iterator, batch_size, skip_count, threshold, MIN_SAMPLE
             # Split leafs that are too large
             for i in range(len(clusters)):
                 if clusters[i].get_num_lines() > MIN_SAMPLES_FOR_SPLIT:
-                    clusters[i].split_leaf(MIN_SAMPLES_FOR_SPLIT, skip_count, min_word_pos_entropy=.0001, min_percent=.1)
+                    clusters[i].split_leaf(
+                        MIN_SAMPLES_FOR_SPLIT,
+                        skip_count,
+                        min_word_pos_entropy=.0001,
+                        min_percent=.1)
 
             line_count = 0
     return clusters
@@ -45,12 +55,29 @@ def main():
                       help="Log file to read")
     parser.add_option("--skip_count", dest='skip_count', type=int, default=0,
                       help="Number of tokens to skip at start of the line")
-    parser.add_option("--threshold", dest='threshold', type=float, default=0.75,
-                      help="Threshold for cosine similarity")
-    parser.add_option("-l", '--num_lines', dest='num_lines', type=int, default=-1,
-                      help="Number of lines to read from log file (default:-1 Whole file)")
-    parser.add_option('--min_samples_for_split', dest='min_samples_for_split', type=int, default=25)
-    parser.add_option('--batch_size', dest='batch_size', type=int, default=5000)
+    parser.add_option(
+        "--threshold",
+        dest='threshold',
+        type=float,
+        default=0.75,
+        help="Threshold for cosine similarity")
+    parser.add_option(
+        "-l",
+        '--num_lines',
+        dest='num_lines',
+        type=int,
+        default=-1,
+        help="Number of lines to read from log file (default:-1 Whole file)")
+    parser.add_option(
+        '--min_samples_for_split',
+        dest='min_samples_for_split',
+        type=int,
+        default=25)
+    parser.add_option(
+        '--batch_size',
+        dest='batch_size',
+        type=int,
+        default=5000)
 
     (options, args) = parser.parse_args()
 
@@ -67,7 +94,7 @@ def main():
     def dataset_iterator(fIn, num_lines=options.num_lines):
         lines_read = 0
         success_full = 0
-        while num_lines== -1 or lines_read < num_lines:
+        while num_lines == -1 or lines_read < num_lines:
             lines_read += 1
             line = fIn.readline()
             if len(line) == 0:
@@ -75,14 +102,19 @@ def main():
             else:
                 try:
                     ls = line.split(' ', 1)
-                    ts = float(ls[0])#datetime.datetime.strptime(ls[0], '%b %d %H:%M:%S')
+                    ts = float(
+                        ls[0])  # datetime.datetime.strptime(ls[0], '%b %d %H:%M:%S')
                     yield LogLine(ts, ls[1].rstrip())
                     success_full += 1
                 except:
                     raise
 
-
-    clusters = get_clusters(dataset_iterator(fIn), num_msgs, skip_count, threshold, MIN_SAMPLES_FOR_SPLIT)
+    clusters = get_clusters(
+        dataset_iterator(fIn),
+        num_msgs,
+        skip_count,
+        threshold,
+        MIN_SAMPLES_FOR_SPLIT)
 
     index = 0
     for cluster in clusters:

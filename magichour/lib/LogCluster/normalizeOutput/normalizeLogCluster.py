@@ -62,10 +62,9 @@ def parseClusterLines(l):
     compiledMatches = list()
     for m in matches:
         # make sure to force match end of line
-        compiledMatches.append(re.compile(m+'$'))
+        compiledMatches.append(re.compile(m + '$'))
 
     return compiledMatches
-
 
 
 def main(argv):

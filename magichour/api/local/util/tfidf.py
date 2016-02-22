@@ -16,11 +16,13 @@ def idf(elem, elemss):
         return sum(1 for elems in elemss if elem in elems)
     return math.log(len(elemss) / num_containing())
 
+
 def idf_simple(num_windows_containing_element, total_windows):
     return math.log(total_windows / num_windows_containing_element)
 
+
 def tf_idf(elem, elems, elemss):
-    return tf(elem, elems)*idf(elem, elemss)
+    return tf(elem, elems) * idf(elem, elemss)
 
 
 def tf_idf_filter(elemss, threshold):
@@ -30,7 +32,7 @@ def tf_idf_filter(elemss, threshold):
         global_counts_tf.update(items)
         for item in set(items):
             global_counts_idf[item] += 1
-        #global_counts_tf.update(items.keys())
+        # global_counts_tf.update(items.keys())
 
     to_filter = set()
     for elem in global_counts_idf:
@@ -71,9 +73,11 @@ def tfidf_filter_namedtuple(ntuples, threshold):
     return ret
 """
 
+
 @log_time
 def tfidf_filter_event_defs(events, threshold):
-    template_ids = [[template_id for template_id in event.template_ids] for event in events]
+    template_ids = [[template_id for template_id in event.template_ids]
+                    for event in events]
     to_filter = tf_idf_filter(template_ids, threshold)
     filtered_events = []
     for event in events:
