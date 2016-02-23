@@ -60,7 +60,7 @@ def glove(windows, num_components=16, glove_window=10, epochs=20):
     # Create event objects
     events = []
     for item in output_events:
-        event = Event(id=item, template_ids=map(int, output_events[item]))
+        event = Event(id=str(uuid.uuid4()), template_ids=map(int, output_events[item]))
         if len(event.template_ids) > 0:
             events.append(event)
     return events

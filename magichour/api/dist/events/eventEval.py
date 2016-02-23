@@ -4,20 +4,35 @@ from magichour.api.local.util.log import log_time
 from magichour.api.local.modeleval.apply import apply_queue
 
 
-def event_window(line, windowLength):
+def event_window(line, window_length, window_overlap=None):
     '''
     alias events to the same key based off time
 
     Args:
-        line(DistributedLogLine):
-        windowLength(int): Length in seconds of the window to apply
+        line(DistributedLogLine): a log line that has been through template processing
+        window_length(int): length of the window in seconds
+        window_overlap (float): fraction of window where log msgs should go in both windows
 
     Retval:
         retval(tuple(window,DistributedLogLine))
     '''
-    key = (line.templateId, int(line.ts / windowLength))
-    value = line
-    return (key, value)
+    output = []
+    window = float(line.ts)/window_length
+
+    output.append((int(window), line))
+    if window_overlap:
+        delta = window - floor(window)
+        # Since we are truncating near the window boundary can can be close
+        # to zero or close to 1
+        if delta <= window_overlap or delta >= 1-window_overlap:
+            if delta > 0:
+                # Also output to previous window
+                output.append((int(window)-1, line))
+            elif delta < 0:
+                # Also output to next window
+                output.append((int(window)+1, line))
+    return output
+
 
 
 def ship_events(line, t2e):
@@ -125,9 +140,12 @@ def event_eval_rdd(sc, rdd_log_lines, event_list,
     template2event_broadcast = sc.broadcast(template2event)
     event2template_broadcast = sc.broadcast(event2template)
 
+    # fraction of window to push to adjacent windows
+    window_overlap = float(window_length)/window_length_distributed
+
     windowed = rdd_log_lines.map(
         lambda line: event_window(
-            line, window_length_distributed))
+            line, window_length_distributed, window_overlap=window_overlap))
     edist = windowed.flatMap(
         lambda line: ship_events(
             line, template2event_broadcast))
