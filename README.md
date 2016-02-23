@@ -37,6 +37,7 @@ Local Computing Components
 * git
 * python2.7
 * pip
+* conda
 
 Distributed Computing Components
 * Jupyter Notebook
@@ -50,13 +51,17 @@ Clone MagicHour repository from the command line
 git clone https://github.com/Lab41/magichour.git
 ```
 
-Navigate to the magichour folder and install MagicHour packages from the command line
+Navigate to the magichour folder and use conda/pip to install MagicHour packages from the command line
 ```
 cd magichour
+conda env create -f environment.yml
+source activate magichour
+```
+then
+```
 pip install .
 ```
 or
 ```
-cd magichour
 python setup.py install
 ```
