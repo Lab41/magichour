@@ -1,0 +1,21 @@
+package:
+  name: magichour
+  version: 0.0.1
+
+source:
+  path: ../.
+
+requirements:
+  build:
+  - python
+  - setuptools
+  - cython
+  - scipy
+  - numpy
+  - scikit-learn
+  run:
+  - python
+  - cython
+  - scipy
+  - numpy
+  - scikit-learn
