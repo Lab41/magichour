@@ -46,18 +46,32 @@ Distributed Computing Components
 
 #### Installation
 
-Clone MagicHour repository from the command line
+##### Cloning the repository
+
+Clone MagicHour repository from the command line, then cd into the directory
 ```
 git clone https://github.com/Lab41/magichour.git
+cd magichour
 ```
 
-Navigate to the magichour folder and use conda/pip to install MagicHour packages from the command line
+##### Using conda
+
+We recommend creating a conda environment instead of installing into your global distribution
 ```
-cd magichour
-conda env create -f environment.yml
+conda create --name magichour python
 source activate magichour
 ```
-then
+
+Navigate to the deploy folder and use conda to install MagicHour packages from the command line
+```
+cd deploy
+conda build .
+conda install --use-local magichour
+```
+
+##### Using pip
+We recommend using conda to install this package due to its dependencies on cython, scipy, numpy, and scikit-learn. However, if you are able to install them via another method, you can use pip to install the magichour package.
+
 ```
 pip install .
 ```
