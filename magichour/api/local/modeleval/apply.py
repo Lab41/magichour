@@ -271,7 +271,7 @@ def get_end_index(idx, log_msgs, end_time):
     Returns:
         idx (int): The index that is just after the end_time (or the end)
     """
-    while idx < len(log_msgs) and log_msgs[idx].ts <= end_time:
+    while idx < len(log_msgs) - 1 and log_msgs[idx].ts <= end_time:
         idx += 1
     return idx
 
@@ -428,6 +428,7 @@ def apply_events(events, log_msgs, window_time=60, mp=False):
         timed_events (list(TimedEvent)): A list of found events with their component log lines
     """
     queues = create_queues(events, log_msgs)
+    event_dict = {event.id:event for event in events}
 
     def apply_single_tuple_generator(events, queues):
         """
@@ -446,7 +447,7 @@ def apply_events(events, log_msgs, window_time=60, mp=False):
         timed_events = p.map(
             apply_w_defaults,
             apply_single_tuple_generator(
-                events,
+                event_dict,
                 queues))
     else:
         # Single threaded processing
@@ -454,12 +455,12 @@ def apply_events(events, log_msgs, window_time=60, mp=False):
         timed_events = []
         for idx, input_tuple in enumerate(
             apply_single_tuple_generator(
-                events, queues)):
+                event_dict, queues)):
             try:
                 if idx % 10 == 0:
                     logger.info(
                         'Processing event %d of %d' %
-                        (idx, len(events)))
+                        (idx, len(event_dict)))
                 idx_timed_events = apply_w_defaults(input_tuple)
                 timed_events.extend(idx_timed_events)
             except:
