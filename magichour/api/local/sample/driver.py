@@ -35,7 +35,7 @@ transforms_file = os.path.join(data_dir, "sample.transforms")
 ###
 
 # Parameters for pipeline
-write_to_pickle_file = False
+write_to_pickle_file = True
 read_lines_args = [{}, 0, 10]
 read_lines_kwargs = {"skip_num_chars": 22}
 

@@ -257,6 +257,8 @@ def get_start_index(idx, log_msgs, start_time):
     """
     while idx >0 and log_msgs[idx-1].ts >= start_time:
         idx -= 1
+
+    assert log_msgs[idx].ts >= start_time
     return idx
 
 
@@ -271,8 +273,10 @@ def get_end_index(idx, log_msgs, end_time):
     Returns:
         idx (int): The index that is just after the end_time (or the end)
     """
-    while idx < len(log_msgs) - 1 and log_msgs[idx].ts <= end_time:
+    while idx < len(log_msgs) - 1 and log_msgs[idx+1].ts <= end_time:
         idx += 1
+
+    assert log_msgs[idx].ts <= end_time
     return idx
 
 
