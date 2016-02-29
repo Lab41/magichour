@@ -1,5 +1,5 @@
 from magichour.api.local.modelgen import events
-from magichour.api.local.util.log import get_logger, log_time
+from magichour.api.local.util.log import get_logger, log_exc, log_time
 from magichour.api.local.util.modelgen import tfidf_filter_events
 
 logger = get_logger(__name__)

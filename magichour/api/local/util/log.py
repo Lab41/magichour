@@ -1,4 +1,5 @@
 from collections import namedtuple
+from functools import wraps
 import logging
 import time
 
@@ -14,6 +15,7 @@ loggers = {}
 
 
 def run_once(f):
+    @wraps(f)
     def wrapper(*args, **kwargs):
         if not f.has_run:
             f.has_run = True
@@ -64,6 +66,7 @@ logger = get_logger(__name__)
 
 
 def log_time(f):
+    @wraps(f)
     def wrapper(*args, **kwargs):
         tstart = time.time()
         result = f(*args, **kwargs)
