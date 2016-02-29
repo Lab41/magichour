@@ -54,7 +54,30 @@ git clone https://github.com/Lab41/magichour.git
 cd magichour
 ```
 
+##### Using Docker
+Dockerfiles are available in deploy/local/ or deploy/dist/. The primary difference is that the distributed Docker image is based on jupyter/pyspark-notebook, which allows you to take advantage of the pyspark code in the distributed version.
+
+The local version is based on continuumio/miniconda, which is sufficient if you are only going to use the local implementation of MagicHour.
+
+Navigate to the appropriate deploy directory
+```
+cd deploy/local/
+```
+or
+```
+cd deploy/dist/
+```
+then
+```
+docker build -t lab41/magichour .
+```
+This will build the MagicHour image and include the appropriate dependencies. This method will go out and pull the latest version of the source code from GitHub.
+
 ##### Using conda
+Install conda-build if it isn't already installed
+```
+conda install conda-build
+```
 
 We recommend creating a conda environment instead of installing into your global distribution
 ```
@@ -62,15 +85,22 @@ conda create --name magichour python
 source activate magichour
 ```
 
-Navigate to the deploy folder and use conda to install MagicHour packages from the command line
+Navigate to the appropriate deploy folder (deploy/local/ or deploy/dist/) and use conda-build to install MagicHour packages from the command line
 ```
-cd deploy
+cd deploy/local/
+```
+or
+```
+cd deploy/dist/
+```
+then
+```
 conda build .
 conda install --use-local magichour
 ```
 
 ##### Using pip
-We recommend using conda to install this package due to its dependencies on cython, scipy, numpy, and scikit-learn. However, if you are able to install them via another method, you can use pip to install the magichour package.
+We recommend using conda to install this package due to its dependencies on cython, scipy, numpy, and scikit-learn. However, if you are able to install these dependencies via another method, you can use pip to install the magichour package.
 
 ```
 pip install .
@@ -79,3 +109,5 @@ or
 ```
 python setup.py install
 ```
+
+
