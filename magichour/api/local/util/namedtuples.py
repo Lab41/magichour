@@ -57,8 +57,9 @@ TimedEvent = namedtuple('TimedEvent', ['event_id', 'timed_templates'])
 
 def strTimedEvent(timed_event):
     from datetime import datetime
+    from operator import attrgetter
 
-    tt = timed_event.timed_templates
+    tt = sorted(timed_event.timed_templates, key=attrgetter('ts'))
     L = len(tt)
     if L == 0:
         return ""
