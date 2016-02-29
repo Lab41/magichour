@@ -115,7 +115,7 @@ def local_word_count(log_lines, threshold):
 
     output_words = set()
     for word in word_counts:
-        if word_counts[word] > threshold:
+        if word_counts[word] >= threshold:
             output_words.add(word)
 
     return output_words
@@ -173,7 +173,7 @@ def log_cluster(sc, log_lines, support):
     """
     frequent_word_dict = log_lines.flatMap(parse_words)\
         .reduceByKey(lambda x, y: x + y)\
-        .filter(lambda key_count: key_count[1] > support)\
+        .filter(lambda key_count: key_count[1] >= support)\
         .collectAsMap()
 
     frequent_words = sc.broadcast(set(frequent_word_dict.keys()))
@@ -182,7 +182,7 @@ def log_cluster(sc, log_lines, support):
         lambda x: extract_patterns(
             x, frequent_words)) .groupByKey() .filter(
         lambda freq_word_pattern_pattern: len(
-            freq_word_pattern_pattern[1]) > support) .map(collapse_patterns) .collect()
+            freq_word_pattern_pattern[1]) >= support) .map(collapse_patterns) .collect()
 
     templates = [' '.join(cluster) for cluster in clusters]
 
