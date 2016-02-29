@@ -48,11 +48,8 @@ def preprocess_step(
             transforms = _transforms_cache[
                 transforms_file] = read_transforms_substep(transforms_file)
         transformed_lines = transform_lines_substep(lines, transforms)
-    elif kwargs.get('type_template_auditd'):
-        transformed_lines = lines
     else:
-        raise ValueError(
-            'transforms_file is required unless type_template_auditd==True')
+        transformed_lines = lines
 
     # get_transformed_lines returns a generator. This converts it to a list.
     transformed_lines = _transformed_lines_to_list_substep(transformed_lines)
