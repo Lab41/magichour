@@ -1,11 +1,12 @@
 # Purpose - Score and plot algorithm results against generated frequent itemset data 
 
-from magichour.api.local.modelgen import events
-from ItemsetData import *
-from collections import defaultdict,namedtuple
-import sys
 import copy
 import multiprocessing
+import sys
+from collections import namedtuple
+
+from magichour.api.local.modelgen import events
+from magichour.validate.datagen.ItemsetData import *
 
 algorithmScore = namedtuple('algorithmScore', ['totalScore', 'numEvents', 'proposedEvents', 'exactMatches', 'strongMatches', 'weakMatches', 'noMatches', 'parameter'])
 
