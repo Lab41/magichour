@@ -198,41 +198,50 @@ def transform_lines(lines, transforms):
         # yield LogLine(str(uuid.uuid4()), logline.ts, transformed, None,
         # replaceDict, None)
 
-
-def cardinality_transformed_lines(lines, verbose=False):
+def log_cardinality(input_iterable, get_item=None, item_key=None, item_title='Item', verbose=False):
     """
-    Diagnostic function to compute cardinality of transforms.  Computes number of unique lines after
-    applying transform_lines().
-
+    Diagnostic function to compute cardinality of items contained within input_iterable.  Computes number of unique items.
+    
     Args:
-        lines: iterable of LogLine objects output by transform_lines()
+        input_iterable: iterable containing items to count;
+                            for input in input_iterable:
+        get_item: accessor to get item from input; e.g. operator.attrgetter('attr') -> input.attr
+                      default = input
+        item_key: sort key to call on get_item; default = None (use get_item as key)
         verbose: True = print evaluated results (default=False)
-
+        
     Returns:
-        (countLines, countUniqueLines, percentUniqueLines, uniqLines)
-            countLines: count of lines
-            countUniqueLines: count of unique lines
-            percentUniqueLines: 100.0 * countUniqueLines / countLines
-            uniqLines: dictionary[uniq_line_text] = number of occurrences of uniq_line
+        (countInput, countUniqueInput, percentUniqueInput, uniqInput)
+            countInput: count of input_iterable
+            countUniqueInput: count of unique input_iterable
+            percentUniqueInput: 100.0 * countUniqueInput / countInput
+            uniqInput: dictionary[uniq_line_text] = number of occurrences of uniq_line
     """
     from collections import defaultdict
     from pprint import pformat
 
-    uniqLines = defaultdict(int)
-    for logline in lines:
-        uniqLines[logline.processed] += 1
-    countLines = len(lines)
-    countUniqueLines = len(uniqLines)
-    percentUniqueLines = 100.0 * countUniqueLines / countLines
-    logger.info(
-        "Transform cardinality: (%d / %d) = %f%%; (uniqueTransformedLines / totalLines) = %%uniqueTransformedLines" %
-        (countUniqueLines, countLines, percentUniqueLines))
+    if not get_item:
+        get_item = lambda x: x
+    if not item_key:
+        item_key = lambda x: x
+        
+    uniqInput = {}
+    countInput = 0
+
+    for element in input_iterable:
+        item = get_item(element)
+        item_str = str(item)
+        sort_key, count = uniqInput.get(item_str, (item_key(item), 0))
+        uniqInput[item_str] = (sort_key, count+1)
+        countInput += 1
+    countUniqueInput = len(uniqInput)
+    percentUniqueInput = 100.0 * countUniqueInput / countInput if countInput else 0
+    logger.info("%s cardinality: (%d / %d) = %f%%; (uniqueInput / totalInput) = %%uniqueInput" % (item_title, countUniqueInput, countInput, percentUniqueInput))
     if verbose:
-        sorted_uniqLines = [(uniqLines[text], text)
-                            for text in sorted(uniqLines.keys())]
+        sorted_uniqInput = ((v[1], k) for k, v in sorted(uniqInput.iteritems(), key=lambda (k, v): v))
         e = []
-        for occurrences, text in sorted_uniqLines:
+        for occurrences, text in sorted_uniqInput:
             e.append("%10d: %s" % (occurrences, text))
-        logger.info("Transformed Lines: %d" % countUniqueLines)
-        logger.info("\n" + pformat(e))
-    return (countLines, countUniqueLines, percentUniqueLines, uniqLines)
+        logger.info("%ss: %d" % (item_title, countUniqueInput))
+        logger.info("\n"+pformat(e))
+    return (countInput, countUniqueInput, percentUniqueInput, uniqInput)
