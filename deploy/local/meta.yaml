@@ -1,0 +1,23 @@
+package:
+  name: magichour
+  version: 0.0.1
+
+source:
+  git_url: https://github.com/Lab41/magichour.git
+  #path: ../.
+
+requirements:
+  build:
+  - python
+  - setuptools
+  - gcc
+  - cython
+  - scipy
+  - numpy
+  - scikit-learn
+  run:
+  - python
+  - cython
+  - scipy
+  - numpy
+  - scikit-learn

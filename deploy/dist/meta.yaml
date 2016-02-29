@@ -3,12 +3,12 @@ package:
   version: 0.0.1
 
 source:
-  path: ../.
+  git_url: https://github.com/Lab41/magichour.git
+  #path: ../.
 
 requirements:
   build:
   - python
-  - setuptools
   - cython
   - scipy
   - numpy
