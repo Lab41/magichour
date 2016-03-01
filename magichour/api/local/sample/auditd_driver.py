@@ -15,6 +15,8 @@ from magichour.api.local.util.log import get_logger, log_time
 from magichour.api.local.util.namedtuples import strTimedEvent
 from magichour.api.local.util.pickl import read_pickle_file, write_pickle_file
 
+from magichour.validate.eventgen import auditd
+
 logger = get_logger(__name__)
 
 
@@ -136,6 +138,9 @@ def run_pipeline(options):
             "glove", 
             verbose=options.verbose, 
             **glove_kwargs)
+    elif options.event_gen == 'auditd':
+        # ignore timed_templates and modelgen_window and pass templates to auditd-specific event generator
+        gen_events = auditd.event_gen(templates)
     else:
         raise NotImplementedError('%s Not implemented' % options.event_gen)
 
@@ -244,7 +249,8 @@ def main():
         choices=[
             'fp-growth',
             'paris',
-            'glove'],
+            'glove',
+            'auditd'],
         required=True)
 
     source_args = parser.add_argument_group('Source-specific Parameters')
