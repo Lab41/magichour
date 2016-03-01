@@ -16,9 +16,11 @@ def genwindow_step(eval_loglines, *args, **kwargs):
         remove_junk_drawer=remove_junk_drawer)
 
     logger.info("==========Custom post processing for sample data==========")
-    logger.info(
-        "Removing junk drawer entries from each window's template_ids. (template_id = -1)")
-    gen_windows = modelgen.remove_junk_drawer(gen_windows)
+    if not remove_junk_drawer:
+        # TODO: is this code still needed? since we remove junk_drawer above by default...
+        logger.info(
+            "Removing junk drawer entries from each window's template_ids. (template_id = -1)")
+        gen_windows = modelgen.remove_junk_drawer(gen_windows)
 
     logger.info("Removing duplicate entries from each window's template_ids.")
     gen_windows = modelgen.uniqify_windows(gen_windows)
