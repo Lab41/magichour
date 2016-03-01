@@ -145,7 +145,7 @@ def run_pipeline(options):
 
     logger.info("Discovered events: %d" % len(gen_events))
     if options.verbose:
-        # Print templates
+        # Print events and their templates
         if read_lines_kwargs.get('type_template_auditd'):
             template_list = [(templates[template], template) 
                              for template in templates]
@@ -157,7 +157,7 @@ def run_pipeline(options):
                 template_id,
                 template) in template_list}
         e = []
-        for event in gen_events:
+        for event in sorted(gen_events, key=lambda event:event.id):
             ts = ["event_id: %s" % event.id]
             for template_id in sorted(event.template_ids):
                 ts.append("%s: %s" % (template_id, template_d[template_id]))
@@ -182,6 +182,11 @@ def run_pipeline(options):
         write_pickle_file(timed_events, timed_events_file)
 
     logger.info("Timed events: %d" % len(timed_events))
+    log_cardinality(
+        timed_events, 
+        item_title='TimedEvent', 
+        get_item=operator.attrgetter('event_id'), 
+        verbose=options.verbose)
     if options.verbose > 1:
         # Print timed event summary for -vv
         
@@ -189,8 +194,13 @@ def run_pipeline(options):
         for te in timed_events:
             te.timed_templates.sort(key=lambda tt: tt.ts)
 
-        # sort timed events in ascending time order (of their first occurring timed_template)
-        timed_events.sort(key=lambda te: te.timed_templates[0].ts)
+        if options.sort_events_key=='time':
+            # sort timed events in ascending time order (of their first occurring timed_template)
+            timed_event_key = lambda te: te.timed_templates[0].ts
+        else:
+            # sort timed events by event id, then by time order
+            timed_event_key = lambda te: (te.event_id, te.timed_templates[0].ts)
+        timed_events.sort(key=timed_event_key)
 
         e = []
         for event in timed_events:
@@ -206,6 +216,7 @@ def main():
     import sys
 
     logger.info('args: %s', ' '.join(sys.argv[1:]))
+    # NOTE: parser.add_argument() default value: default=None
     parser = ArgumentParser()
     parser.add_argument(
         '-f',
@@ -269,9 +280,9 @@ def main():
         default=60, 
         help='Event model generate window size (seconds)')
     control_args.add_argument(
-        '--gtfidf_threshold', 
-        default=0, 
-        help='Event model generation tf_idf treshold')
+        '--gtfidf_threshold',
+        default=None, # default = don't apply tfidf to model generation
+        help='Event model generation tf_idf threshold')
     control_args.add_argument(
         '--awindow_time', 
         default=60, 
@@ -327,6 +338,13 @@ def main():
         default=False,
         action="count",
         help="Print definitions")
+    optional_args.add_argument(
+        '--sort-events-key',
+        choices=[
+            'time',
+            'event'],
+        default='time',
+        help="Sort events by time or event-id.")    
     optional_args.add_argument(
         "--save-intermediate",
         dest="save_intermediate",
