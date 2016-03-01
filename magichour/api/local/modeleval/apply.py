@@ -255,7 +255,7 @@ def get_start_index(idx, log_msgs, start_time):
     Returns:
         idx (int): The index that is just before the start_time (or the start)
     """
-    while idx >0 and log_msgs[idx-1].ts >= start_time:
+    while idx > 0 and log_msgs[idx - 1].ts >= start_time:
         idx -= 1
 
     assert log_msgs[idx].ts >= start_time
@@ -273,7 +273,7 @@ def get_end_index(idx, log_msgs, end_time):
     Returns:
         idx (int): The index that is just after the end_time (or the end)
     """
-    while idx < len(log_msgs) - 1 and log_msgs[idx+1].ts <= end_time:
+    while idx < len(log_msgs) - 1 and log_msgs[idx + 1].ts <= end_time:
         idx += 1
 
     assert log_msgs[idx].ts <= end_time
@@ -432,7 +432,7 @@ def apply_events(events, log_msgs, window_time=60, mp=False):
         timed_events (list(TimedEvent)): A list of found events with their component log lines
     """
     queues = create_queues(events, log_msgs)
-    event_dict = {event.id:event for event in events}
+    event_dict = {event.id: event for event in events}
 
     def apply_single_tuple_generator(events, queues):
         """

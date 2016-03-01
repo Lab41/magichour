@@ -1,7 +1,8 @@
 from collections import defaultdict
-from magichour.api.local.util.namedtuples import Event, TimedEvent
+from magichour.api.local.util.namedtuples import Event
 from magichour.api.local.util.log import log_time
 from magichour.api.local.modeleval.apply import apply_queue
+import math
 
 
 def event_window(line, window_length, window_overlap=None):
@@ -17,22 +18,24 @@ def event_window(line, window_length, window_overlap=None):
         retval(tuple(window,DistributedLogLine))
     '''
     output = []
-    window = float(line.ts)/window_length
+    window = float(line.ts) / window_length
 
-    output.append((int(window), line))
+    key = (line.templateId, (int(window)))
+    output.append((key, line))
     if window_overlap:
-        delta = window - floor(window)
+        delta = window - math.floor(window)
         # Since we are truncating near the window boundary can can be close
         # to zero or close to 1
-        if delta <= window_overlap or delta >= 1-window_overlap:
+        if delta <= window_overlap or delta >= 1 - window_overlap:
             if delta > 0:
                 # Also output to previous window
-                output.append((int(window)-1, line))
+                key = (line.templateId, (int(window) - 1))
+                output.append((key, line))
             elif delta < 0:
                 # Also output to next window
-                output.append((int(window)+1, line))
+                key = (line.templateId, (int(window) + 1))
+                output.append((key, line))
     return output
-
 
 
 def ship_events(line, t2e):
@@ -45,7 +48,7 @@ def ship_events(line, t2e):
 
     Args:
         line(DistributedLogLine)
-        t23(Broadcast(defaultDict(set))): maps a template to the
+        t2e(Broadcast(defaultDict(set))): maps a template to the
                                      sensitized events
 
     Returns:
@@ -53,6 +56,7 @@ def ship_events(line, t2e):
 
     '''
     outList = list()
+    print line
     key, value = line
     templateId, timeBucket = key
     for event in t2e.value[int(templateId)]:
@@ -141,7 +145,7 @@ def event_eval_rdd(sc, rdd_log_lines, event_list,
     event2template_broadcast = sc.broadcast(event2template)
 
     # fraction of window to push to adjacent windows
-    window_overlap = float(window_length)/window_length_distributed
+    window_overlap = float(window_length) / window_length_distributed
 
     windowed = rdd_log_lines.map(
         lambda line: event_window(
