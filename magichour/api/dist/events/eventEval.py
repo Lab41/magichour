@@ -147,7 +147,7 @@ def event_eval_rdd(sc, rdd_log_lines, event_list,
     # fraction of window to push to adjacent windows
     window_overlap = float(window_length) / window_length_distributed
 
-    windowed = rdd_log_lines.map(
+    windowed = rdd_log_lines.flatMap(
         lambda line: event_window(
             line, window_length_distributed, window_overlap=window_overlap))
     edist = windowed.flatMap(
