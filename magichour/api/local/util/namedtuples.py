@@ -75,5 +75,5 @@ def strTimedEvent(timed_event):
     dt_duration = dt_end - dt_start
     dt_median_offset = dt_median - dt_start
 
-    return "TimedEvent: event_id=%s, start=%14.3f, end=%14.3f, median=%14.3f, duration=%10.3f, median_offset=%10.3f; s=%s, e=%s, m=%s, d=%s, mo=%s" % (
+    return "TimedEvent: event_id=%-36s, start=%14.3f, end=%14.3f, median=%14.3f, duration=%10.3f, median_offset=%10.3f; s=%s, e=%s, m=%s, d=%s, mo=%s" % (
         timed_event.event_id, t_start, t_end, t_median, duration, median_offset, dt_start, dt_end, dt_median, dt_duration, dt_median_offset)
