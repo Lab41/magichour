@@ -203,8 +203,11 @@ def create_queues(events, log_lines):
 
     event_template_streams = defaultdict(list)
     for log_line in log_lines:
-        for event_id in template2event[log_line.templateId]:
-            event_template_streams[event_id].append(log_line)
+        if log_line.templateId in template2event:
+            # only look up templates that are part of an event 
+            #    to avoid updating template2event with [new_temlateId] = empty_set()
+            for event_id in template2event[log_line.templateId]:
+                event_template_streams[event_id].append(log_line)
 
     return event_template_streams
 
@@ -240,43 +243,42 @@ def calc_similarity(msg1, msg2):
     # TODO: Look at adding tempalte_dict to proc_dict
     candidate = msg1.proc_dict
     orig = msg2.proc_dict
-    return jaccard_dicts(candidate, orig) if candidate and orig and len(
-        candidate) > 0 and len(orig) > 0 else 0
+    return jaccard_dicts(candidate, orig) if candidate and orig else 0
 
 
 def get_start_index(idx, log_msgs, start_time):
     """
-    Function that searches for the index of the log message that is just before the start_time (starting from idx)
+    Function that searches for the index of the oldest log message whose ts >= start_time (starting from idx)
     Args:
         idx (int): Index to start from
         log_msgs (list(DistributedLogLines)): List of messages to process
         start_time (float): The start time to search for
 
     Returns:
-        idx (int): The index that is just before the start_time (or the start)
+        idx (int): The lowest index whose ts >= start_time (or the start)
     """
     while idx > 0 and log_msgs[idx - 1].ts >= start_time:
         idx -= 1
 
-    assert log_msgs[idx].ts >= start_time
+    assert log_msgs[idx].ts >= start_time and (idx == 0 or log_msgs[idx-1].ts < start_time)
     return idx
 
 
 def get_end_index(idx, log_msgs, end_time):
     """
-    Function that searches for the index of the log message that is just after the end_time (starting from idx)
+    Function that searches for the index of the newest log message whose ts <= end_time (starting from idx)
     Args:
         idx (int): Index to start from
         log_msgs (list(DistributedLogLines)): List of messages to process
         end_time (float): The end time to search for
 
     Returns:
-        idx (int): The index that is just after the end_time (or the end)
+        idx (int): The highest index whose ts <= end_time (or the end)
     """
     while idx < len(log_msgs) - 1 and log_msgs[idx + 1].ts <= end_time:
         idx += 1
 
-    assert log_msgs[idx].ts <= end_time
+    assert log_msgs[idx].ts <= end_time and (idx+1 == len(log_msgs) or log_msgs[idx+1].ts > end_time)
     return idx
 
 
@@ -448,11 +450,15 @@ def apply_events(events, log_msgs, window_time=60, mp=False):
         # Use multiprocessing pool to process in parallel
         logger.info('Using multiprocessing to apply events')
         p = Pool()  # Note: must define pool after functions
-        timed_events = p.map(
+        timed_events_list = p.map(
             apply_w_defaults,
             apply_single_tuple_generator(
                 event_dict,
                 queues))
+        # collapse list of lists to match single threaded processing output
+        timed_events = []
+        for te_list in timed_events_list:
+            timed_events.extend(te_list)
     else:
         # Single threaded processing
         logger.info('Using single-thread to apply events')
