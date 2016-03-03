@@ -1,3 +1,4 @@
+import collections
 import distance
 import itertools
 import numpy as np
@@ -20,7 +21,7 @@ def mean(l):
 
 
 def logline_distance(logline1, logline2):
-    return distance.levenshtein(
+    return distance.nlevenshtein(
         logline1.text.strip().split(),
         logline2.text.strip().split())
 
@@ -43,217 +44,100 @@ def one_to_others_iter(values):
         yield (cur_value, others)
 
 
-def silhouette_coefficient(val, same_cluster_vals, closest_cluster_vals):
-    """
-    The Silhouette Coefficient is defined for each sample and is composed of two scores:
-        a: The mean distance between a sample and all other points in the same class.
-        b: The mean distance between a sample and all other points in the next nearest cluster.
-
-    The Silhouette Coefficient s for a single sample is then given as:
-        s = b - a / max(a, b)
-
-    The score is bounded between -1 for incorrect clustering and +1 for highly dense clustering.
-    Scores around zero indicate overlapping clusters.
-    The score is higher when clusters are dense and well separated, which relates to a standard concept of a cluster.
-    The Silhouette Coefficient is generally higher for convex clusters than other concepts of clusters,
-        such as density based clusters like those obtained through DBSCAN.
-
-    See http://scikit-learn.org/stable/modules/clustering.html#silhouette-coefficient for more details.
-
-    Args:
-        val: the value for which to calculate the silhouette coefficient
-        same_cluster_vals: list of other values in the same cluster as val
-        closest_cluster_vals: list of values in the closest other cluster to val
-
-    Returns:
-        s: the silhouette coefficient for val
-    """
-    a = mean_distance(val, same_cluster_vals)
-    b = mean_distance(val, closest_cluster_vals)
-    try:
-        s = (b - a) / max(a, b)
-        return s
-    except ZeroDivisionError as zde:
-        logger.info("A: %s, B: %s", str(a), str(b))
-        logger.error("Val: %s", str(val))
-        logger.error("Same cluster: %s", str(same_cluster_vals))
-        logger.error("Closest cluster: %s", str(closest_cluster_vals))
-        raise zde
-
-
-def cluster_silhouette_coefficient(
-        cluster,
-        data_dict,
-        closest_cluster_map,
-        cluster_sample_ratio=None,
-        cluster_sampling_seed=None,
-        closest_cluster_sample_ratio=None,
-        closest_cluster_sampling_seed=None):
-    scores = []
-
-    if cluster_sample_ratio:
-        cluster = sample(cluster, cluster_sample_ratio, cluster_sampling_seed)
-
-    #logger.info("Cluster size: %s..." % len(cluster))
-
+def intracluster_dists(cluster):
+    intra_scores = []
     for val, others in one_to_others_iter(cluster):
-        closest_cluster_vals = data_dict[closest_cluster_map[val.processed]]
-
-        if closest_cluster_sample_ratio:
-            closest_cluster_vals = sample(
-                closest_cluster_vals,
-                closest_cluster_sample_ratio,
-                closest_cluster_sampling_seed)
-
-        #logger.info("Closest cluster size: %s..." % len(closest_cluster_vals))
-
-        s = silhouette_coefficient(val, others, closest_cluster_vals)
-        scores.append(s)
-    return scores
+        intra = mean_distance(val, others) # mean intracluster distance
+        intra_scores.append(intra)
+    return mean(intra_scores)
 
 
-def multicluster_silhouette_coefficient(
-        data_dict,
-        closest_cluster_map,
-        multicluster_sample_ratio=None,
-        multicluster_sampling_seed=None,
-        *args,
-        **kwargs):
-    coefficients = []
+def multiintracluster_dists(data_dict):
+    intra_scores = []
     keys_to_use = data_dict.keys()
-
-    if multicluster_sample_ratio:
-        keys_to_use = sample(
-            data_dict.keys(),
-            multicluster_sample_ratio,
-            multicluster_sampling_seed)
 
     logger.info("Processing %s clusters..." % len(keys_to_use))
 
     for key in keys_to_use:
-        values = data_dict[key]
-        #logger.info("Processing cluster %s..." % (key))
-        silhouette = cluster_silhouette_coefficient(
-            values, data_dict, closest_cluster_map, *args, **kwargs)
-        coefficients.extend(silhouette)
-    return coefficients
+        cluster = data_dict[key]
+        mean_intra = intracluster_dists(cluster)
+        intra_scores.append(mean_intra)
+    return mean(intra_scores)
 
 
-def validate_templates(
-        data_dict,
-        closest_cluster_map,
-        junk_drawer,
-        multicluster_sample_ratio=None,
-        multicluster_sampling_seed=None,
-        cluster_sample_ratio=None,
-        cluster_sampling_seed=None,
-        closest_cluster_sample_ratio=None,
-        closest_cluster_sampling_seed=None,
-        jd_cluster_sample_ratio=None,
-        jd_cluster_sampling_seed=None,
-        jd_closest_cluster_sample_ratio=None,
-        jd_closest_cluster_sampling_seed=None):
-    """
-    Calculates a performance metric for the results of template generation.
-    Higher performance metrics are desirable.
+def validate_intracluster(data_dict, junk_drawer):
+    logger.info("Processing regular clusters...")
+    mean_intra = multiintracluster_dists(data_dict)
 
-    Args:
-        data_dict: mapping from template_id to list of original logline messages representing a cluster grouping
-        closest_cluster_map: a map from a logline message to a template_id representing the next closest cluster
-        junk_drawer: all logline messages which were mapped to template_id = -1
+    logger.info("Processing junk drawer...")
+    mean_jd_intra = intracluster_dists(junk_drawer)
 
-    Returns:
-        The performance score, calculated as the mean of the silhouette coefficients of non-junk drawer entries
-        and the inverse (i.e. multiplied by -1) silhouette coefficient of the junk drawer.
-    """
-
-    logger.info("Processing regular silhouettes...")
-    silhouettes = multicluster_silhouette_coefficient(
-        data_dict,
-        closest_cluster_map,
-        multicluster_sample_ratio=multicluster_sample_ratio,
-        multicluster_sampling_seed=multicluster_sampling_seed,
-        cluster_sample_ratio=cluster_sample_ratio,
-        cluster_sampling_seed=cluster_sampling_seed,
-        closest_cluster_sample_ratio=closest_cluster_sample_ratio,
-        closest_cluster_sampling_seed=closest_cluster_sampling_seed)
-
-    logger.info("Processing junk drawer silhouettes...")
-    jd_silhouette = cluster_silhouette_coefficient(
-        junk_drawer,
-        data_dict,
-        closest_cluster_map,
-        cluster_sample_ratio=jd_cluster_sample_ratio,
-        cluster_sampling_seed=jd_cluster_sampling_seed,
-        closest_cluster_sample_ratio=jd_closest_cluster_sample_ratio,
-        closest_cluster_sampling_seed=jd_closest_cluster_sampling_seed)
-
-    # A lower silhouette coefficient for the junk drawer means that it is more dispersed (this is good!)
-    # Multiply jd_silhouette by -1 because we are trying to maximize the
-    # template validation score.
-    validation_score = mean(silhouettes)
-    logger.info("Mean regular silhouette score: %s" % validation_score)
-    jd_validation_score = mean(jd_silhouette)
-    logger.info("Mean JD silhouette score: %s" % jd_validation_score)
-    validation_score = mean(silhouettes + [(-1.0) * jd_validation_score])
-    logger.info("Mean regular + JD silhouette score: %s" % validation_score)
-    return validation_score
+    return (mean_intra, mean_jd_intra)
 
 
-def validation_distribution(
-        eval_loglines,
-        gen_templates,
-        iterations,
-        sampling_ratio=None,
-        sampling_seed=None,
-        *args,
-        **kwargs):
-    scores = []
+def dist_stats(arr):
+    np_arr = np.array(arr)
+    return (np_arr.mean(), np_arr.std())
+
+
+def template_distance(template1, template2):
+    return distance.nlevenshtein(
+        template1.raw_str.strip().split(),
+        template2.raw_str.strip().split()
+    )
+
+
+def intercluster_dists(templates):
+    inter_dists = []
+    for cur_template, other_templates in one_to_others_iter(templates):
+        results = [(template_distance(cur_template, other_template), other_template) for other_template in other_templates]
+        results = sorted(results, key=lambda r: r[0]) # sort by distance
+        best = results[0] # take best one (i.e. distance to the closest template)
+        inter_dists.append(best[0])
+    return mean(inter_dists)
+
+
+def validation_sample(eval_loglines, gen_templates, iterations, sampling_ratio=None, sampling_seed=None):
+    sample_mean_intras = []
+    sample_mean_jd_intra = []
+    sample_mean_inters = []
+
     orig_eval_loglines = eval_loglines
     orig_gen_templates = gen_templates
 
-    for x in xrange(iterations):
-        logger.info("Running iteration %s..." % str(x + 1))
+    #logger.info("Creating closest cluster map... (eval_loglines = %s, gen_templates = %s)" % (eval_loglines, gen_templates))
+    #closest_cluster_map = find_closest_templates(eval_loglines, gen_templates)
+
+    for itr in xrange(1, iterations+1):
+        logger.info("Running iteration %s..." % str(itr))
 
         if sampling_ratio:
-            eval_loglines = sample(
-                orig_eval_loglines,
-                sampling_ratio,
-                sampling_seed)
-            relevant_templates = set(
-                [eval_logline.templateId for eval_logline in eval_loglines])
-            gen_templates = [
-                template for template in orig_gen_templates if template.id in relevant_templates]
-            logger.info("Sampled %s of %s loglines." %
-                        (len(eval_loglines), len(orig_eval_loglines)))
+            eval_loglines = sample(orig_eval_loglines, sampling_ratio, sampling_seed)
+            relevant_templates = set([eval_logline.templateId for eval_logline in eval_loglines])
+            gen_templates = [template for template in orig_gen_templates if template.id in relevant_templates]
+            logger.info("Sampled %s of %s loglines." % (len(eval_loglines), len(orig_eval_loglines)))
+
+        logger.info("Calling intercluster_dists()...")
+        mean_inter = intercluster_dists(gen_templates)
 
         logger.info("Creating data dictionary and junk drawer...")
-        data_dict, junk_drawer = get_data_dict(eval_loglines)
+        data_dict, junk_drawer = get_data_dict_and_jd(eval_loglines)
 
-        logger.info("Creating closest cluster map...")
-        closest_cluster_map = find_closest_templates(
-            eval_loglines, gen_templates)
+        logger.info("Calling validate_intracluster()...")
+        mean_intra, mean_jd_intra = validate_intracluster(data_dict, junk_drawer)
 
-        logger.info("Calling validate_templates()...")
-        score = validate_templates(
-            data_dict,
-            closest_cluster_map,
-            junk_drawer,
-            *args,
-            **kwargs)
+        sample_mean_intras.append(mean_intra)
+        sample_mean_jd_intra.append(mean_jd_intra)
+        sample_mean_inters.append(mean_inter)
 
-        scores.append(score)
-        logger.info("Score: %s" % score)
-    np_scores = np.array(scores)
-    m = np_scores.mean()
-    std = np_scores.std()
-    logger.info("Mean: %s, Stdev: %s" % (m, std))
-    return (m, std)
+    return (dist_stats(sample_mean_intras),
+            dist_stats(sample_mean_jd_intra),
+            dist_stats(sample_mean_inters))
 
 ###
 
 
-def closest_template_dist(logline, template, distance_fn=distance.levenshtein):
+def closest_template_dist(logline, template, distance_fn=distance.nlevenshtein):
     return distance_fn(
         logline.processed.strip().split(),
         template.raw_str.strip().split())
@@ -263,23 +147,17 @@ def find_closest_templates(eval_loglines, templates):
     closest_template_map = {}
     for eval_logline in eval_loglines:
         if eval_logline.processed not in closest_template_map:
-            scores = sorted(
-                templates,
-                key=lambda template: closest_template_dist(
-                    eval_logline,
-                    template))
-
-            # Store template id of the NEXT closest cluster
-            next_closest_id = 1
-            while eval_logline.templateId == scores[next_closest_id].id:
-                #logger.info("INCREMENTING NEXT_CLOSEST_ID")
-                next_closest_id += 1
-            closest_template_map[
-                eval_logline.processed] = scores[next_closest_id].id
+            scores = []
+            for template in templates:
+                if eval_logline.templateId != template.id:
+                    score = closest_template_dist(eval_logline, template)
+                    scores.append((score, template))
+            scores = sorted(scores, key=lambda x: x[0])
+            closest_template_map[eval_logline.processed] = scores
     return closest_template_map
 
 
-def get_data_dict(eval_loglines):
+def get_data_dict_and_jd(eval_loglines):
     data_dict = defaultdict(list)
     for eval_logline in eval_loglines:
         data_dict[eval_logline.templateId].append(eval_logline)
