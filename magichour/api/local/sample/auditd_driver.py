@@ -1,21 +1,18 @@
-import os
 import glob
 import operator
+import os
 
 from magichour.api.local.modelgen.preprocess import log_cardinality
-
 from magichour.api.local.sample.steps.evalapply import evalapply_step
 from magichour.api.local.sample.steps.event import event_step
 from magichour.api.local.sample.steps.genapply import genapply_step
 from magichour.api.local.sample.steps.genwindow import genwindow_step
 from magichour.api.local.sample.steps.preprocess import preprocess_step
 from magichour.api.local.sample.steps.template import template_step
-
 from magichour.api.local.util.log import get_logger, log_time
 from magichour.api.local.util.namedtuples import strTimedEvent
-from magichour.api.local.util.pickl import read_pickle_file, write_pickle_file
-
-from magichour.validate.eventgen import auditd
+from magichour.api.local.util.pickl import write_pickle_file
+from magichour.validate.datagen.eventgen import auditd
 
 logger = get_logger(__name__)
 
