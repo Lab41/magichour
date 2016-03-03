@@ -24,7 +24,7 @@ def paris(windows, r_slack, num_iterations, tau=1.0):
     return ret
 
 
-def glove(windows, num_components=16, glove_window=10, epochs=20):
+def glove(windows, num_components=16, glove_window=10, epochs=20, verbose=False):
     import glove
     import hdbscan
     import multiprocessing
@@ -38,7 +38,7 @@ def glove(windows, num_components=16, glove_window=10, epochs=20):
         corpus.matrix,
         epochs=epochs,
         no_threads=multiprocessing.cpu_count(),
-        verbose=False)
+        verbose=verbose)
     glove_model.add_dictionary(corpus.dictionary)
 
     labels = []

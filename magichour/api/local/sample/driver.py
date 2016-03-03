@@ -1,5 +1,7 @@
 import os
+import operator
 
+from magichour.api.local.modelgen.preprocess import log_cardinality
 from magichour.api.local.sample.steps.evalapply import evalapply_step
 from magichour.api.local.sample.steps.event import event_step
 from magichour.api.local.sample.steps.genapply import genapply_step
@@ -38,6 +40,9 @@ transforms_file = os.path.join(data_dir, "sample.transforms")
 write_to_pickle_file = True
 read_lines_args = [{}, 0, 10]
 read_lines_kwargs = {"skip_num_chars": 22}
+# Use below if tbird.log.500k already has skips applied
+#read_lines_args = [{}, 0, 12]
+#read_lines_kwargs = {"skip_num_chars": 0}
 
 logcluster_kwargs = {"support": "50"}
 
@@ -67,6 +72,12 @@ def main():
         write_pickle_file(loglines, loglines_file)
     #loglines = read_pickle_file(loglines_file)
 
+    # count cardinality; print unique lines if verbose and there are actually transforms to apply
+    log_cardinality(loglines, 
+                    get_item=operator.attrgetter('processed'), 
+                    item_title='Transform', 
+                    verbose=False)
+
     gen_templates = template_step(loglines, "logcluster", **logcluster_kwargs)
     # gen_templates = template_step(loglines, "stringmatch") # WIP
     if write_to_pickle_file:
@@ -83,7 +94,7 @@ def main():
         write_pickle_file(gen_windows, gen_windows_file)
     #gen_windows = read_pickle_file(modelgen_windows_file)
 
-    #gen_events = event_step(gen_windows, "fp-growth", **fp_growth_kwargs)
+    #gen_events = event_step(gen_windows, "fp_growth", **fp_growth_kwargs)
     #gen_events = event_step(gen_windows, "paris", **paris_kwargs)
     gen_events = event_step(gen_windows, "glove", **glove_kwargs)
     if write_to_pickle_file:
@@ -97,8 +108,7 @@ def main():
     for event in gen_events:
         ts = []
         for template_id in event.template_ids:
-            #ts.append(template_id)
-            ts.append("%s: %s" % (template_id, template_d[template_id].str))
+            ts.append("%s: %s" % (template_id, template_d[template_id]))
         e.append(ts)
     from pprint import pformat
     logger.info("Discovered events:")

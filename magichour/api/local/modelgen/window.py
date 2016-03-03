@@ -18,6 +18,8 @@ def modelgen_window(eval_loglines, window_size=60, remove_junk_drawer=False):
 
     Returns:
         windows: list of sets containing TimedTemplate named tuples
+        # TODO: either change window() to return sets if that is best, or fix documentation to say list of lists
+        #       NOTE: tf_idf_filter() and genwindow_step()::modelgen.uniqify_windows() assumes it is a list
     """
 
     windows = window(
