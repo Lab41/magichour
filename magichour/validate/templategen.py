@@ -1,3 +1,4 @@
+import collections
 import distance
 import itertools
 import numpy as np
@@ -43,8 +44,77 @@ def one_to_others_iter(values):
         yield (cur_value, others)
 
 
+def inter_intra_dists(val, same_cluster_vals, closest_cluster_vals):
+    # mean intracluster distance
+    a = mean_distance(val, same_cluster_vals)
+    # mean intercluster distance
+    b = mean_distance(val, closest_cluster_vals)
+    return (a, b)
+
+
+def cluster_dists(
+        cluster,
+        data_dict,
+        closest_cluster_map,
+        cluster_sample_ratio=None,
+        cluster_sampling_seed=None,
+        closest_cluster_sample_ratio=None,
+        closest_cluster_sampling_seed=None):
+    scores = []
+
+    if cluster_sample_ratio:
+        cluster = sample(cluster, cluster_sample_ratio, cluster_sampling_seed)
+
+    #logger.info("Cluster size: %s..." % len(cluster))
+
+    for val, others in one_to_others_iter(cluster):
+        closest_cluster_vals = data_dict[closest_cluster_map[val.processed]]
+
+        if closest_cluster_sample_ratio:
+            closest_cluster_vals = sample(
+                closest_cluster_vals,
+                closest_cluster_sample_ratio,
+                closest_cluster_sampling_seed)
+
+        #logger.info("Closest cluster size: %s..." % len(closest_cluster_vals))
+
+        intra, inter = inter_intra_dists(val, others, closest_cluster_vals)
+        scores.append((intra, inter))
+    return scores
+
+
+def multicluster_dists(
+        data_dict,
+        closest_cluster_map,
+        multicluster_sample_ratio=None,
+        multicluster_sampling_seed=None,
+        *args,
+        **kwargs):
+    coefficients = []
+    keys_to_use = data_dict.keys()
+
+    if multicluster_sample_ratio:
+        keys_to_use = sample(
+            data_dict.keys(),
+            multicluster_sample_ratio,
+            multicluster_sampling_seed)
+
+    logger.info("Processing %s clusters..." % len(keys_to_use))
+
+    for key in keys_to_use:
+        values = data_dict[key]
+        #logger.info("Processing cluster %s..." % (key))
+        silhouette = cluster_dists(
+            values, data_dict, closest_cluster_map, *args, **kwargs)
+        coefficients.extend(silhouette)
+    return coefficients
+
+
+######
+
+"""
 def silhouette_coefficient(val, same_cluster_vals, closest_cluster_vals):
-    """
+
     The Silhouette Coefficient is defined for each sample and is composed of two scores:
         a: The mean distance between a sample and all other points in the same class.
         b: The mean distance between a sample and all other points in the next nearest cluster.
@@ -67,9 +137,13 @@ def silhouette_coefficient(val, same_cluster_vals, closest_cluster_vals):
 
     Returns:
         s: the silhouette coefficient for val
-    """
+
+    # mean intracluster distance
     a = mean_distance(val, same_cluster_vals)
+
+    # mean intercluster distance
     b = mean_distance(val, closest_cluster_vals)
+
     try:
         s = (b - a) / max(a, b)
         return s
@@ -138,6 +212,9 @@ def multicluster_silhouette_coefficient(
         coefficients.extend(silhouette)
     return coefficients
 
+"""
+#####
+
 
 def validate_templates(
         data_dict,
@@ -168,7 +245,7 @@ def validate_templates(
     """
 
     logger.info("Processing regular silhouettes...")
-    silhouettes = multicluster_silhouette_coefficient(
+    silhouettes = multicluster_dists(
         data_dict,
         closest_cluster_map,
         multicluster_sample_ratio=multicluster_sample_ratio,
@@ -179,7 +256,7 @@ def validate_templates(
         closest_cluster_sampling_seed=closest_cluster_sampling_seed)
 
     logger.info("Processing junk drawer silhouettes...")
-    jd_silhouette = cluster_silhouette_coefficient(
+    jd_silhouette = cluster_dists(
         junk_drawer,
         data_dict,
         closest_cluster_map,
@@ -211,6 +288,8 @@ def validation_distribution(
     scores = []
     orig_eval_loglines = eval_loglines
     orig_gen_templates = gen_templates
+
+
 
     for x in xrange(iterations):
         logger.info("Running iteration %s..." % str(x + 1))
@@ -257,6 +336,21 @@ def closest_template_dist(logline, template, distance_fn=distance.levenshtein):
     return distance_fn(
         logline.processed.strip().split(),
         template.raw_str.strip().split())
+
+
+def find_closest_templates_overall(eval_loglines, templates):
+    closest_template_map = {}
+    for eval_logline in eval_loglines:
+        if eval_logline.processed not in closest_template_map:
+            scores = []
+            for template in templates:
+                if eval_logline.templateId != template.id:
+                    score = closest_template_dist(eval_logline, template)
+                    scores.append((score, template))
+            scores = sorted(scores, key=lambda x: x[0])
+            closest_template_map[eval_logline.processed] = scores
+            print scores
+    return closest_template_map
 
 
 def find_closest_templates(eval_loglines, templates):
