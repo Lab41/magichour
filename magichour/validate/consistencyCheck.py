@@ -86,8 +86,9 @@ def consistencyCheck(timed_events, madThreshold=3, verbose=False):
           madWorked = True
           for item in timingArray:
              if item  > median + madThreshold*mad or item < median - madThreshold*mad: outlierCounter += 1
-                               
-       eventScoreList.append(eventScore(event.event_id,mostFreqOrder.split('*'), orderScore, kurtosisScore, outlierCounter)) 
+       if outlierCounter != -1: madScore = float(outlierCounter)/float(len(timingArray))
+       else: madScore = None
+       eventScoreList.append(eventScore(event.event_id,mostFreqOrder.split('*'), orderScore, kurtosisScore, madScore)) 
        
        # Optional summary output for each event   
        if verbose:
