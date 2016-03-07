@@ -72,10 +72,11 @@ def main():
         write_pickle_file(loglines, loglines_file)
     #loglines = read_pickle_file(loglines_file)
 
-    # count cardinality; print unique lines if verbose and there are actually transforms to apply
-    log_cardinality(loglines, 
-                    get_item=operator.attrgetter('processed'), 
-                    item_title='Transform', 
+    # count cardinality; print unique lines if verbose and there are actually
+    # transforms to apply
+    log_cardinality(loglines,
+                    get_item=operator.attrgetter('processed'),
+                    item_title='Transform',
                     verbose=False)
 
     gen_templates = template_step(loglines, "logcluster", **logcluster_kwargs)
