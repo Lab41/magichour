@@ -1,6 +1,6 @@
 name: magichour
 dependencies:
-- cython=0.23.4=py27_1
+- cython=0.23.4=py27_0
 - mkl=11.3.1=0
 - numpy=1.10.4=py27_0
 - openssl=1.0.2f=0
