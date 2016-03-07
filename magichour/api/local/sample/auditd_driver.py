@@ -31,13 +31,13 @@ def get_auditd_templates(auditd_templates_file):
 @log_time
 def run_pipeline(options):
     read_lines_kwargs = {'transforms_file': options.transforms_file,
-                         'gettime_auditd': options.auditd, 
+                         'gettime_auditd': options.auditd,
                          'type_template_auditd': options.auditd_templates_file,
-                         'ts_start_index': options.ts_start_index, 
+                         'ts_start_index': options.ts_start_index,
                          'ts_end_index': options.ts_end_index,
                          'ts_format': options.ts_format,
                          'skip_num_chars': options.skip_num_chars,
-                         'mp': options.mp,}
+                         'mp': options.mp, }
 
     loglines = []
 
@@ -57,9 +57,9 @@ def run_pipeline(options):
 
     # count cardinality; print unique lines if verbose and there are actually
     # transforms to apply
-    log_cardinality(loglines, 
-                    get_item=operator.attrgetter('processed'), 
-                    item_title='Transform', 
+    log_cardinality(loglines,
+                    get_item=operator.attrgetter('processed'),
+                    item_title='Transform',
                     verbose=options.verbose and options.transforms_file)
 
     if options.save_intermediate:
@@ -88,9 +88,9 @@ def run_pipeline(options):
                 options.pickle_cache_dir, "templates.pickle")
             write_pickle_file(templates, templates_file)
 
-        log_cardinality(templates, 
-                        item_key=operator.attrgetter('id'), 
-                        item_title='Template', 
+        log_cardinality(templates,
+                        item_key=operator.attrgetter('id'),
+                        item_title='Template',
                         verbose=options.verbose)
 
     timed_templates = genapply_step(loglines, templates, **read_lines_kwargs)
@@ -99,8 +99,8 @@ def run_pipeline(options):
             options.pickle_cache_dir, "timed_templates.pickle")
         write_pickle_file(timed_templates, timed_templates_file)
 
-    modelgen_windows = genwindow_step(timed_templates, 
-                                      window_size=options.gwindow_time, 
+    modelgen_windows = genwindow_step(timed_templates,
+                                      window_size=options.gwindow_time,
                                       tfidf_threshold=options.gtfidf_threshold)
     if options.save_intermediate:
         modelgen_windows_file = os.path.join(
@@ -127,16 +127,17 @@ def run_pipeline(options):
             **paris_kwargs)  # WIP
     elif options.event_gen == 'glove':
         glove_kwargs = {
-            'num_components': options.num_components, 
-            'glove_window': options.glove_window, 
+            'num_components': options.num_components,
+            'glove_window': options.glove_window,
             'epochs': options.epochs}
         gen_events = event_step(
-            modelgen_windows, 
-            "glove", 
-            verbose=options.verbose, 
+            modelgen_windows,
+            "glove",
+            verbose=options.verbose,
             **glove_kwargs)
     elif options.event_gen == 'auditd':
-        # ignore timed_templates and modelgen_window and pass templates to auditd-specific event generator
+        # ignore timed_templates and modelgen_window and pass templates to
+        # auditd-specific event generator
         gen_events = auditd.event_gen(templates)
     else:
         raise NotImplementedError('%s Not implemented' % options.event_gen)
@@ -149,7 +150,7 @@ def run_pipeline(options):
     if options.verbose:
         # Print events and their templates
         if read_lines_kwargs.get('type_template_auditd'):
-            template_list = [(templates[template], template) 
+            template_list = [(templates[template], template)
                              for template in templates]
         else:
             template_list = [(template.id, template) for template in templates]
@@ -159,7 +160,7 @@ def run_pipeline(options):
                 template_id,
                 template) in template_list}
         e = []
-        for event in sorted(gen_events, key=lambda event:event.id):
+        for event in sorted(gen_events, key=lambda event: event.id):
             ts = ["event_id: %s" % event.id]
             for template_id in sorted(event.template_ids):
                 ts.append("%s: %s" % (template_id, template_d[template_id]))
@@ -167,17 +168,21 @@ def run_pipeline(options):
         from pprint import pformat
         logger.info("\n" + pformat(e))
 
-        # compute how many times each template was used (i.e. how many events each template appears in)
+        # compute how many times each template was used (i.e. how many events
+        # each template appears in)
         event_templates = (
             template_d[template_id] for event in gen_events for template_id in event.template_ids)
         log_cardinality(
-            event_templates, 
-            item_title='EventTemplate', 
-            item_key=operator.attrgetter('id'), 
+            event_templates,
+            item_title='EventTemplate',
+            item_key=operator.attrgetter('id'),
             verbose=options.verbose)
 
     timed_events = evalapply_step(
-        gen_events, timed_templates, window_time=options.awindow_time, mp=options.mp)
+        gen_events,
+        timed_templates,
+        window_time=options.awindow_time,
+        mp=options.mp)
     if options.save_intermediate:
         timed_events_file = os.path.join(
             options.pickle_cache_dir, "timed_events.pickle")
@@ -185,23 +190,25 @@ def run_pipeline(options):
 
     logger.info("Timed events: %d" % len(timed_events))
     log_cardinality(
-        timed_events, 
-        item_title='TimedEvent', 
-        get_item=operator.attrgetter('event_id'), 
+        timed_events,
+        item_title='TimedEvent',
+        get_item=operator.attrgetter('event_id'),
         verbose=options.verbose)
     if options.verbose > 1:
         # Print timed event summary for -vv
-        
+
         # sort timed_templates in ascending time order
         for te in timed_events:
             te.timed_templates.sort(key=lambda tt: tt.ts)
 
-        if options.sort_events_key=='time':
-            # sort timed events in ascending time order (of their first occurring timed_template)
+        if options.sort_events_key == 'time':
+            # sort timed events in ascending time order (of their first
+            # occurring timed_template)
             timed_event_key = lambda te: te.timed_templates[0].ts
         else:
             # sort timed events by event id, then by time order
-            timed_event_key = lambda te: (te.event_id, te.timed_templates[0].ts)
+            timed_event_key = lambda te: (
+                te.event_id, te.timed_templates[0].ts)
         timed_events.sort(key=timed_event_key)
 
         e = []
@@ -261,43 +268,43 @@ def main():
         dest="auditd_templates_file",
         help="CSV Mapping Auditd types to ids (if not specified Templates will be auto-generated)")
     source_args.add_argument(
-        '--skip_num_chars', 
-        default=0, 
+        '--skip_num_chars',
+        default=0,
         help='skip characters at beginning of each line')
     source_args.add_argument(
-        '--ts_start_index', 
-        default=0, 
+        '--ts_start_index',
+        default=0,
         help='start of timestamp (after skipping)')
     source_args.add_argument(
-        '--ts_end_index', 
-        default=12, 
+        '--ts_end_index',
+        default=12,
         help='end of timestamp (after skipping)')
     source_args.add_argument(
-        '--ts_format', 
+        '--ts_format',
         help='datetime.strptime() format string')
 
     control_args = parser.add_argument_group('General Control Parameters')
     control_args.add_argument(
-        '-w', 
-        '--gwindow_time', 
-        default=60, 
+        '-w',
+        '--gwindow_time',
+        default=60,
         help='Event model generate window size (seconds)')
     control_args.add_argument(
         '--gtfidf_threshold',
-        default=None, # default = don't apply tfidf to model generation
+        default=None,  # default = don't apply tfidf to model generation
         help='Event model generation tf_idf threshold')
     control_args.add_argument(
-        '--awindow_time', 
-        default=60, 
+        '--awindow_time',
+        default=60,
         help='Event application window size (seconds)')
     control_args.add_argument(
-        '--template-support', 
-        default=50, 
+        '--template-support',
+        default=50,
         help='# occurrences required to generate a Template')
     control_args.add_argument(
-        '--mp', 
-        default=False, 
-        help='Turn on multi-processing', 
+        '--mp',
+        default=False,
+        help='Turn on multi-processing',
         action='store_true')
 
     fp_growth_args = parser.add_argument_group('FP-Growth Control Parameters')
@@ -321,18 +328,18 @@ def main():
 
     glove_args = parser.add_argument_group('Glove Control Parameters')
     glove_args.add_argument(
-        '--num_components', 
-        default=16, 
+        '--num_components',
+        default=16,
         help='?')
     glove_args.add_argument(
-        '--glove_window', 
-        default=10, 
+        '--glove_window',
+        default=10,
         help='?')
     glove_args.add_argument(
-        '--epochs', 
-        default=20, 
+        '--epochs',
+        default=20,
         help='?')
-    
+
     optional_args = parser.add_argument_group('Debug Arguments')
     optional_args.add_argument(
         '-v',
@@ -347,7 +354,7 @@ def main():
             'time',
             'event'],
         default='time',
-        help="Sort events by time or event-id.")    
+        help="Sort events by time or event-id.")
     optional_args.add_argument(
         "--save-intermediate",
         dest="save_intermediate",

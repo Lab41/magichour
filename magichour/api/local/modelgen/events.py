@@ -24,7 +24,12 @@ def paris(windows, r_slack, num_iterations, tau=1.0):
     return ret
 
 
-def glove(windows, num_components=16, glove_window=10, epochs=20, verbose=False):
+def glove(
+        windows,
+        num_components=16,
+        glove_window=10,
+        epochs=20,
+        verbose=False):
     import glove
     import hdbscan
     import multiprocessing

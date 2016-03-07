@@ -17,7 +17,9 @@ import re
 
 from magichour.api.local.util.namedtuples import Event
 
-ManualEvent = namedtuple('ManualEvent', ['id', 'template_ids', 'template_regex_pattern', 'template_regex'])
+ManualEvent = namedtuple(
+    'ManualEvent', [
+        'id', 'template_ids', 'template_regex_pattern', 'template_regex'])
 
 simple_ssh_events = [
     ('ssh.login', r'type=(LOGIN|USER_LOGIN.*? id=\S+)'),
@@ -27,7 +29,7 @@ simple_ssh_events = [
     ('ssh.logout', r'type=(USER_LOGOUT)'),
     ('ssh.session', None),
     ('ssh', None),
-    ]
+]
 
 
 def create_manual_events(manual_events):
@@ -35,23 +37,27 @@ def create_manual_events(manual_events):
     result = []
     for name, pattern in manual_events:
         if not pattern:
-            # Allow hierarchical events; concat all patterns from events starting with 'name'
-            pattern = r'|'.join(p for n, p in manual_events if p and n.startswith(name))
+            # Allow hierarchical events; concat all patterns from events
+            # starting with 'name'
+            pattern = r'|'.join(
+                p for n, p in manual_events if p and n.startswith(name))
         mevent = ManualEvent(
-                id=name,
-                template_ids=None,
-                template_regex_pattern=pattern,
-                template_regex=re.compile(pattern))
+            id=name,
+            template_ids=None,
+            template_regex_pattern=pattern,
+            template_regex=re.compile(pattern))
         result.append(mevent)
     return result
 
-    
+
 def event_gen(templates, manual_list=simple_ssh_events):
     """Generate events manually against the automatically discovered templates."""
     result = []
     manual_events = create_manual_events(manual_list)
     for mevent in manual_events:
-        template_ids = [t.id for t in templates if mevent.template_regex.search(t.raw_str)]
+        template_ids = [
+            t.id for t in templates if mevent.template_regex.search(
+                t.raw_str)]
         if template_ids:
             event = Event(id=mevent.id, template_ids=template_ids)
             result.append(event)

@@ -204,8 +204,9 @@ def create_queues(events, log_lines):
     event_template_streams = defaultdict(list)
     for log_line in log_lines:
         if log_line.templateId in template2event:
-            # only look up templates that are part of an event 
-            #    to avoid updating template2event with [new_temlateId] = empty_set()
+            # only look up templates that are part of an event
+            # to avoid updating template2event with [new_temlateId] =
+            # empty_set()
             for event_id in template2event[log_line.templateId]:
                 event_template_streams[event_id].append(log_line)
 
@@ -260,7 +261,8 @@ def get_start_index(idx, log_msgs, start_time):
     while idx > 0 and log_msgs[idx - 1].ts >= start_time:
         idx -= 1
 
-    assert log_msgs[idx].ts >= start_time and (idx == 0 or log_msgs[idx-1].ts < start_time)
+    assert log_msgs[idx].ts >= start_time and (
+        idx == 0 or log_msgs[idx - 1].ts < start_time)
     return idx
 
 
@@ -278,7 +280,8 @@ def get_end_index(idx, log_msgs, end_time):
     while idx < len(log_msgs) - 1 and log_msgs[idx + 1].ts <= end_time:
         idx += 1
 
-    assert log_msgs[idx].ts <= end_time and (idx+1 == len(log_msgs) or log_msgs[idx+1].ts > end_time)
+    assert log_msgs[idx].ts <= end_time and (
+        idx + 1 == len(log_msgs) or log_msgs[idx + 1].ts > end_time)
     return idx
 
 

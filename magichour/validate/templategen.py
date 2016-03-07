@@ -47,7 +47,7 @@ def one_to_others_iter(values):
 def intracluster_dists(cluster):
     intra_scores = []
     for val, others in one_to_others_iter(cluster):
-        intra = mean_distance(val, others) # mean intracluster distance
+        intra = mean_distance(val, others)  # mean intracluster distance
         intra_scores.append(intra)
     return mean(intra_scores)
 
@@ -90,14 +90,21 @@ def template_distance(template1, template2):
 def intercluster_dists(templates):
     inter_dists = []
     for cur_template, other_templates in one_to_others_iter(templates):
-        results = [(template_distance(cur_template, other_template), other_template) for other_template in other_templates]
-        results = sorted(results, key=lambda r: r[0]) # sort by distance
-        best = results[0] # take best one (i.e. distance to the closest template)
+        results = [(template_distance(cur_template, other_template),
+                    other_template) for other_template in other_templates]
+        results = sorted(results, key=lambda r: r[0])  # sort by distance
+        # take best one (i.e. distance to the closest template)
+        best = results[0]
         inter_dists.append(best[0])
     return mean(inter_dists)
 
 
-def validation_sample(eval_loglines, gen_templates, iterations, sampling_ratio=None, sampling_seed=None):
+def validation_sample(
+        eval_loglines,
+        gen_templates,
+        iterations,
+        sampling_ratio=None,
+        sampling_seed=None):
     sample_mean_intras = []
     sample_mean_jd_intra = []
     sample_mean_inters = []
@@ -108,14 +115,20 @@ def validation_sample(eval_loglines, gen_templates, iterations, sampling_ratio=N
     #logger.info("Creating closest cluster map... (eval_loglines = %s, gen_templates = %s)" % (eval_loglines, gen_templates))
     #closest_cluster_map = find_closest_templates(eval_loglines, gen_templates)
 
-    for itr in xrange(1, iterations+1):
+    for itr in xrange(1, iterations + 1):
         logger.info("Running iteration %s..." % str(itr))
 
         if sampling_ratio:
-            eval_loglines = sample(orig_eval_loglines, sampling_ratio, sampling_seed)
-            relevant_templates = set([eval_logline.templateId for eval_logline in eval_loglines])
-            gen_templates = [template for template in orig_gen_templates if template.id in relevant_templates]
-            logger.info("Sampled %s of %s loglines." % (len(eval_loglines), len(orig_eval_loglines)))
+            eval_loglines = sample(
+                orig_eval_loglines,
+                sampling_ratio,
+                sampling_seed)
+            relevant_templates = set(
+                [eval_logline.templateId for eval_logline in eval_loglines])
+            gen_templates = [
+                template for template in orig_gen_templates if template.id in relevant_templates]
+            logger.info("Sampled %s of %s loglines." %
+                        (len(eval_loglines), len(orig_eval_loglines)))
 
         logger.info("Calling intercluster_dists()...")
         mean_inter = intercluster_dists(gen_templates)
@@ -124,7 +137,8 @@ def validation_sample(eval_loglines, gen_templates, iterations, sampling_ratio=N
         data_dict, junk_drawer = get_data_dict_and_jd(eval_loglines)
 
         logger.info("Calling validate_intracluster()...")
-        mean_intra, mean_jd_intra = validate_intracluster(data_dict, junk_drawer)
+        mean_intra, mean_jd_intra = validate_intracluster(
+            data_dict, junk_drawer)
 
         sample_mean_intras.append(mean_intra)
         sample_mean_jd_intra.append(mean_jd_intra)
@@ -137,7 +151,10 @@ def validation_sample(eval_loglines, gen_templates, iterations, sampling_ratio=N
 ###
 
 
-def closest_template_dist(logline, template, distance_fn=distance.nlevenshtein):
+def closest_template_dist(
+        logline,
+        template,
+        distance_fn=distance.nlevenshtein):
     return distance_fn(
         logline.processed.strip().split(),
         template.raw_str.strip().split())
