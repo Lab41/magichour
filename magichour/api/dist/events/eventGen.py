@@ -1,5 +1,4 @@
 from collections import defaultdict
-import hdbscan
 
 from pyspark.mllib.feature import Word2Vec
 
@@ -67,6 +66,7 @@ def event_gen_fp_growth(sc, log_lines,
 
 @log_time
 def event_gen_word2vec(sc, log_lines, window_size=60):
+    import hdbscan
     D = log_lines.map(
         lambda logline: (
             int(logline.ts / window_size),
