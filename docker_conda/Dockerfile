@@ -3,5 +3,5 @@ MAINTAINER Lab41
 
 RUN git clone https://github.com/Lab41/magichour.git
 WORKDIR magichour
-RUN conda env create -f build/environment.yml && \
+RUN conda env create -f docker_conda/environment.yml && \
 	conda install -c anaconda-nb-extensions nb_conda_kernels
