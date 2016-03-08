@@ -437,7 +437,9 @@ def apply_events(events, log_msgs, window_time=60, mp=False):
         timed_events (list(TimedEvent)): A list of found events with their component log lines
     """
     queues = create_queues(events, log_msgs)
-    event_dict = {event.id: event for event in events}
+    event_dict = {}
+    for event in events:
+        event_dict[event.id] = event
 
     def apply_single_tuple_generator(events, queues):
         """
