@@ -54,6 +54,77 @@ git clone https://github.com/Lab41/magichour.git
 cd magichour
 ```
 
+##### Kicking the tires
+
+Below we've provided three different ways that you can get set up with MagicHour in order to get it running on your data.
+
+###### Pip
+
+We have dependencies like scikit-learn and hdbscan. scikit-learn requires Numpy and scipy, while hdbscan will require cython. These dependencies will likely need to be installed separately. From the scikit-learn website: We don’t recommend installing scipy or numpy using pip on linux, as this will involve a lengthy build-process with many dependencies. Without careful configuration, building numpy yourself can lead to an installation that is much slower than it should be.)
+
+For Fedora/Debian/CentOS:
+
+yum install -y numpy scipy cython
+
+For Ubuntu/Debian:
+
+apt-get install -y python-numpy python-scipy cython
+
+Note that using Linux package managers to install python dependencies typically installs them in a different location from where pip places packages. Double-check to ensure that the installed location is in your $PYTHONPATH (especially if you are using a virtual environment!)
+
+After doing the above, you should be able to install the dependencies for magichour
+
+pip install -r requirements.txt
+
+If you just want to play around with the codebase and make changes interactively, simply cd into the MagicHour root directory and start the Python REPL. The Python REPL always appends the current directory to PYTHONPATH. Alternatively, you can manually add it into your PYTHONPATH, or use something like virtualenvwrapper’s add2virtualenv command to add it to your environment’s PYTHONPATH.
+
+If you want to install the MagicHour package into your python environment, cd into the MagicHour root directory and call:
+
+pip install .
+
+###### Conda
+
+Anaconda is a completely free Python distribution. It includes more than 400 of the most popular Python packages for science, math, engineering, and data analysis. Anaconda includes conda, a cross-platform package manager and environment manager and seen by some as the successor to pip.
+
+Before getting started, you’ll need both conda and gcc installed on your system.
+
+Once that’s done, if you’re looking to just kick the tires and get a development environment set up as fast as possible, you can create an new environment on your system by calling:
+
+conda env create -f environment.yml
+
+After it finishes, you should have a new conda environment named magichour containing all of the dependencies. Activate it by calling
+
+source activate magichour
+
+if you want to install the MagicHour package into an already existing conda environment, first install conda-build by calling:
+
+conda install conda-build
+
+then cd into the deploy/ directory. Build and install the MagicHour package and its dependencies:
+
+conda build .
+
+conda install —use-local magichour
+
+
+
+
+
+
+
+
+
+
+
+Using Docker
+
+We are including a Dockerfile to get you a development environment up and running really quickly. 
+
+
+
+pip install environment_kernels
+
+
 ##### Using Docker
 Dockerfiles are available in deploy/local/ or deploy/dist/. The primary difference is that the distributed Docker image is based on jupyter/pyspark-notebook, which allows you to take advantage of the pyspark code in the distributed version.
 
