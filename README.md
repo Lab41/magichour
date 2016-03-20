@@ -54,60 +54,94 @@ git clone https://github.com/Lab41/magichour.git
 cd magichour
 ```
 
-##### Using Docker
-Dockerfiles are available in deploy/local/ or deploy/dist/. The primary difference is that the distributed Docker image is based on jupyter/pyspark-notebook, which allows you to take advantage of the pyspark code in the distributed version.
+##### Kicking the tires
 
-The local version is based on continuumio/miniconda, which is sufficient if you are only going to use the local implementation of MagicHour.
+Below we've provided three different ways that you can get set up with MagicHour in order to get it running on your data.
 
-Navigate to the appropriate deploy directory
+###### Pip
+
+We have dependencies like scikit-learn and hdbscan. scikit-learn requires Numpy and scipy, while hdbscan will require cython. These dependencies will likely need to be installed separately. From the scikit-learn website: We don’t recommend installing scipy or numpy using pip on linux, as this will involve a lengthy build-process with many dependencies. Without careful configuration, building numpy yourself can lead to an installation that is much slower than it should be.)
+
+For Fedora/Debian/CentOS:
+
+yum install -y numpy scipy cython
+
+For Ubuntu/Debian:
+
+apt-get install -y python-numpy python-scipy cython
+
+Note that using Linux package managers to install python dependencies typically installs them in a different location from where pip places packages. Double-check to ensure that the installed location is in your $PYTHONPATH (especially if you are using a virtual environment!)
+
+After doing the above, you should be able to install the dependencies for magichour
+
+pip install -r requirements.txt
+
+If you just want to play around with the codebase and make changes interactively, simply cd into the MagicHour root directory and start the Python REPL. The Python REPL always appends the current directory to PYTHONPATH. Alternatively, you can manually add it into your PYTHONPATH, or use something like virtualenvwrapper’s add2virtualenv command to add it to your environment’s PYTHONPATH.
+
+If you want to install the MagicHour package into your python environment, cd into the MagicHour root directory and call:
+
+pip install .
+
+###### Conda
+
+Anaconda is a completely free Python distribution. It includes more than 400 of the most popular Python packages for science, math, engineering, and data analysis. Anaconda includes conda, a cross-platform package manager and environment manager and seen by some as the successor to pip.
+
+Before getting started, you’ll need both conda and gcc installed on your system.
+
+Once that’s done, if you’re looking to just kick the tires and get a development environment set up as fast as possible, you can create an new environment on your system by calling:
+
+conda env create -f environment.yml
+
+After it finishes, you should have a new conda environment named magichour containing all of the dependencies. Activate it by calling
+
+source activate magichour
+
+if you want to install the MagicHour package into an already existing conda environment, first install conda-build by calling:
+
+conda install conda-build
+
+then cd into the deploy/ directory. Build and install the MagicHour package and its dependencies:
+
+conda build .
+
+conda install —use-local magichour
+
+###### Docker
+
+We are including a Dockerfile to get you a development environment up and running really quickly. Ensure that Docker is installed on your machine before continuing.
+
+Once you have installed Docker on your machine, navigate to the docker_conda/ directory and run the docker build command:
+
 ```
-cd deploy/local/
-```
-or
-```
-cd deploy/dist/
-```
-then
-```
+cd docker_conda/
 docker build -t lab41/magichour .
 ```
-This will build the MagicHour image and include the appropriate dependencies. This method will go out and pull the latest version of the source code from GitHub.
 
-##### Using conda
-Install conda-build if it isn't already installed
-```
-conda install conda-build
-```
+This will build to the Docker image containing all of the dependencies. This Docker image is based on jupyter/pyspark-notebook, maintained by the Jupyter project. It contains Python, Jupyter, as well as a single-node pyspark cluster.
 
-We recommend creating a conda environment instead of installing into your global distribution
-```
-conda create --name magichour python
-source activate magichour
-```
+It uses the docker_conda/environment.yml file in order to reproduce a conda environment containing all of the correct dependencies.
 
-Navigate to the appropriate deploy folder (deploy/local/ or deploy/dist/) and use conda-build to install MagicHour packages from the command line
-```
-cd deploy/local/
-```
-or
-```
-cd deploy/dist/
-```
-then
-```
-conda build .
-conda install --use-local magichour
-```
+Finally, the last step in the Dockerfile is adding a line to the .bashrc file in order to ensure that the newly created magichour environment is used as the default environment whenever the container is started.
 
-##### Using pip
-We recommend using conda to install this package due to its dependencies on cython, scipy, numpy, and scikit-learn. However, if you are able to install these dependencies via another method, you can use pip to install the magichour package.
+Once the image is finished building, you should be able to verify that it exists by running:
 
 ```
-pip install .
-```
-or
-```
-python setup.py install
+docker images
 ```
 
+Start the docker image by running:
+
+```
+docker run -d -p 8888:8888 lab41/magichour
+```
+
+This starts the container as a daemon running Jupyter notebook on port 8888 of your machine. Navigate to the appropriate URL (likely 192.168.99.100:8888) in order to view the Jupyter interface.
+
+Alternatively, you can also run:
+
+```
+docker run -it -p 8888:8888 lab41/magichour /bin/bash
+```
+
+to drop into a bash shell for other commands.
 
